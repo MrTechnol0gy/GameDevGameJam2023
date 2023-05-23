@@ -935,6 +935,7 @@ GameObject:
   - component: {fileID: 7692981389004998428}
   - component: {fileID: 249892482282149809}
   - component: {fileID: 160722672072472009}
+  - component: {fileID: 6756142481440002086}
   m_Layer: 0
   m_Name: Mugger
   m_TagString: Untagged
@@ -1073,6 +1074,36 @@ MonoBehaviour:
   grandma: {fileID: 0}
   stoppedTime: 3
   searchTime: 12
+  searchRadius: 30
+  launchForce: 10
+  spinForce: 100
+--- !u!54 &6756142481440002086
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7154359449824147763}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &9142859718224644195
 GameObject:
   m_ObjectHideFlags: 0

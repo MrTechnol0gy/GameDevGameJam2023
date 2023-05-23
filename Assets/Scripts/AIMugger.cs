@@ -14,15 +14,20 @@ public class AIMugger : MonoBehaviour
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain stopped
     [SerializeField] float searchTime = 12f;    // how long the agent will search
     [SerializeField] float searchRadius = 30f;  // how large an area the agent will search in
+    [SerializeField] float launchForce = 10f;   // how fast the agent is launched
+    [SerializeField] float spinForce = 100f;    // how fast the agent is spun after being launched
     private bool isGrandmaVisible = false;      // can the mugger see grandma
+    private bool isLaunched = false;            // has the mugger got gotted
     private Vector3 destination;                // placeholder for any destination the mugger needs
+    private Rigidbody agentRigidbody;           // placeholder for the mugger's rigidbody
     
     public enum States
     {
         stopped,       // stopped = 0
         searching,     // searching = 1
         chasing,       // chasing = 2
-        escaping        // escaping = 3
+        escaping,      // escaping = 3
+        launched       // launched = 4
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
@@ -63,6 +68,9 @@ public class AIMugger : MonoBehaviour
             case States.escaping:
                 Debug.Log("I am " + currentState);
                 break;
+            case States.launched:
+                Debug.Log("I am " + currentState);
+                break;
         }
     }
     // OnUpdatedState is for things that occur during the state (main actions)
@@ -74,6 +82,10 @@ public class AIMugger : MonoBehaviour
                 if (TimeElapsedSince(TimeStartedState, stoppedTime))
                 {
                     currentState = States.searching;
+                }
+                else if (isLaunched)
+                {
+                    currentState = States.launched;
                 }
                 break;
             case States.searching:
@@ -98,6 +110,8 @@ public class AIMugger : MonoBehaviour
                 break; 
             case States.escaping:
                 break;
+            case States.launched:
+                break;
         }
     }
     // OnEndedState is for things that should end or change when a state ends; for cleanup
@@ -119,6 +133,7 @@ public class AIMugger : MonoBehaviour
     void Start()
     {
         grandma = GameObject.FindWithTag("Player");
+        agentRigidbody = GetComponent<Rigidbody>();
         OnStartedState(currentState);
     }
 
@@ -137,16 +152,33 @@ public class AIMugger : MonoBehaviour
         // Try to find a valid point on the NavMesh using the generated position
         if (NavMesh.SamplePosition(transform.position + randomDirection, out NavMeshHit hit, searchRadius, NavMesh.AllAreas))
         {
-            Debug.Log("Random point found.");
+            //Debug.Log("Random point found.");
             randomPoint = hit.position;
         }
         else
         {
-            Debug.Log("Random point not found.");
+            //Debug.Log("Random point not found.");
             randomPoint = transform.position;
         }
         
         return randomPoint;
+    }
+
+    public void Gottem()
+    {
+        Debug.Log("Got me.");
+        isLaunched = true;
+        // Disable NavMeshAgent to allow manual control
+        mugger.enabled = false;
+
+        // Disable rigidbody gravity to ensure it launches upwards
+        agentRigidbody.useGravity = false;
+
+        // Apply a vertical force to launch the agent into the air
+        agentRigidbody.AddForce(Vector3.up * launchForce, ForceMode.Impulse);
+
+        // Apply a torque to make the agent spin wildly
+        agentRigidbody.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
     }
     
     // This method can be used to test if a certain time has elapsed since we registered an event time. 
