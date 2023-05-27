@@ -1072,12 +1072,14 @@ MonoBehaviour:
     m_Bits: 1
   mugger: {fileID: 249892482282149809}
   grandma: {fileID: 0}
+  escapePoint: {fileID: 0}
   stoppedTime: 3
   searchTime: 12
   searchRadius: 30
   searchTimer: 3
   launchForce: 10
   spinForce: 100
+  destructDelay: 3
 --- !u!54 &6756142481440002086
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -154,6 +154,8 @@ public class AIMugger : MonoBehaviour
                 break;
             case States.escaping:
                 break;
+            case States.launched:
+                break;
         }
     }
     
