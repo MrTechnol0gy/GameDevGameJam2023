@@ -4,20 +4,32 @@ using UnityEngine;
 
 public class Clickable : MonoBehaviour
 {
+    Camera[] cameras;
+
+    void Start()
+    {
+        cameras = MainCamera.get.cameraList();
+    }
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            foreach (Camera camera in cameras)
             {
-                // Check if the clicked object has the desired script/component
-                AIMugger aIMugger = hit.collider.GetComponent<AIMugger>();
-                if (aIMugger != null)
+                Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    // Invoke the method on the clicked object
-                    aIMugger.Gottem();
+                    Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
+                    Debug.DrawRay(ray.origin, ray.direction * 1000f, Color.red);
+
+                    // Check if the clicked object has the desired script/component
+                    AIMugger aIMugger = hit.collider.GetComponent<AIMugger>();
+                    if (aIMugger != null)
+                    {
+                        // Invoke the method on the clicked object
+                        aIMugger.Gottem();
+                    }
                 }
             }
         }
