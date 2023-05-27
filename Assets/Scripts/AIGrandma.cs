@@ -10,12 +10,12 @@ public class AIGrandma : MonoBehaviour
 
     [Header("Agent")]
     public NavMeshAgent grandma;
-    public GameObject[] shops;
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain in a shop
     [SerializeField] float shopTime = 12f;      // how long the agent will shop
     private bool isencouraged = false;          // is grandma encouraged
     private Vector3 destination;                // placeholder for any destination the grandma needs
     private float timer;                        // placeholder for timer
+    private List<Vector3> shops;
     
     public enum States
     {
@@ -85,6 +85,10 @@ public class AIGrandma : MonoBehaviour
                 {
                     currentState = States.stopped;
                 }
+                else
+                {
+                    grandma.SetDestination(destination);
+                }
                 break;
             case States.chasing:
                 break; 
@@ -114,6 +118,7 @@ public class AIGrandma : MonoBehaviour
     
     void Start()
     {
+        shops = GameManager.get.shopPositions;
         OnStartedState(currentState);
     }
 
@@ -124,7 +129,15 @@ public class AIGrandma : MonoBehaviour
 
     private Vector3 ShopDestination()
     {
-        return transform.position;
+        if (shops.Count == 0)
+        {
+            return transform.position;
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, shops.Count);
+            return shops[randomIndex];
+        }
     }
 
     // This method can be used to test if a certain time has elapsed since we registered an event time. 

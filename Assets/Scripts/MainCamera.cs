@@ -8,9 +8,12 @@ public class MainCamera : MonoBehaviour
     [Header("Cameras")]
     [SerializeField] Camera[] cameras;
 
-    void Start()
+    void Awake()
     {
         get = this;
+    }
+    void Start()
+    {
         // Set the viewport rect for each camera view
         int numCameras = cameras.Length;
         int numRows = Mathf.CeilToInt(Mathf.Sqrt(numCameras));

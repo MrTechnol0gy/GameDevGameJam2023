@@ -9,6 +9,7 @@ public class Clickable : MonoBehaviour
     void Start()
     {
         cameras = MainCamera.get.cameraList();
+        //Debug.Log("Camera list is this long " + cameras.Length);
     }
     void Update()
     {
