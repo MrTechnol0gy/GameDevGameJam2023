@@ -11,15 +11,19 @@ public class AIMugger : MonoBehaviour
     [Header("Agent")]
     public NavMeshAgent mugger;
     public GameObject grandma;
+    public GameObject escapePoint;
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain stopped
     [SerializeField] float searchTime = 12f;    // how long the agent will search
     [SerializeField] float searchRadius = 30f;  // how large an area the agent will search in
+    [SerializeField] float searchTimer = 3f;    // how often the mugger searches for grandma
     [SerializeField] float launchForce = 10f;   // how fast the agent is launched
     [SerializeField] float spinForce = 100f;    // how fast the agent is spun after being launched
+    [SerializeField] float destructDelay = 3f;  // how soon after being launched the mugger is destroyed
     private bool isGrandmaVisible = false;      // can the mugger see grandma
     private bool isLaunched = false;            // has the mugger got gotted
     private Vector3 destination;                // placeholder for any destination the mugger needs
     private Rigidbody agentRigidbody;           // placeholder for the mugger's rigidbody
+    private float timer;                        // placeholder for timer
     
     public enum States
     {
@@ -70,6 +74,7 @@ public class AIMugger : MonoBehaviour
                 break;
             case States.launched:
                 Debug.Log("I am " + currentState);
+                DestroyMe();
                 break;
         }
     }
@@ -93,7 +98,17 @@ public class AIMugger : MonoBehaviour
                 {
                     currentState = States.stopped;
                 }
-                else if (!isGrandmaVisible)
+                else if (isLaunched)
+                {
+                    currentState = States.launched;
+                }
+                timer -= Time.deltaTime;
+                if (timer <= 0f)
+                {
+                    timer = searchTimer;
+                    isGrandmaVisible = CheckForGrandma();
+                }
+                if (!isGrandmaVisible)
                 {
                     mugger.SetDestination(destination);
                 }
@@ -103,12 +118,24 @@ public class AIMugger : MonoBehaviour
                 }
                 break;
             case States.chasing:
-                if (isGrandmaVisible)
+                if (isLaunched)
+                {
+                    currentState = States.launched;
+                }
+                else if (isGrandmaVisible)
                 {
                     mugger.SetDestination(grandma.transform.position);
                 }
                 break; 
             case States.escaping:
+                if (isLaunched)
+                {
+                    currentState = States.launched;
+                }
+                else
+                {
+                    mugger.SetDestination(escapePoint.transform.position);
+                }
                 break;
             case States.launched:
                 break;
@@ -133,6 +160,7 @@ public class AIMugger : MonoBehaviour
     void Start()
     {
         grandma = GameObject.FindWithTag("Player");
+        escapePoint = GameObject.FindWithTag("EscapePoint");
         agentRigidbody = GetComponent<Rigidbody>();
         OnStartedState(currentState);
     }
@@ -179,6 +207,22 @@ public class AIMugger : MonoBehaviour
 
         // Apply a torque to make the agent spin wildly
         agentRigidbody.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
+    }
+    private bool CheckForGrandma()
+    {
+        float distance = Vector3.Distance(transform.position, grandma.transform.position);
+        if (distance <= searchRadius/2)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    private void DestroyMe()
+    {
+        Destroy(gameObject, destructDelay);
     }
     
     // This method can be used to test if a certain time has elapsed since we registered an event time. 

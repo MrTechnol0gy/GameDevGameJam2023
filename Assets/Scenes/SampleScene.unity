@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -704,7 +704,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1348
+  m_Name: pb_Mesh-1386
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1110,7 +1110,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-60112
+  m_Name: pb_Mesh-1304
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1290,7 +1290,7 @@ PrefabInstance:
     - target: {fileID: 2842992996660469602, guid: 55931377813fed842844870a07e81023,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 497
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 3288733556059566352, guid: 55931377813fed842844870a07e81023,
         type: 3}
@@ -1310,7 +1310,7 @@ PrefabInstance:
     - target: {fileID: 3878152505602227348, guid: 55931377813fed842844870a07e81023,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.1355
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3878152505602227348, guid: 55931377813fed842844870a07e81023,
         type: 3}
@@ -1401,7 +1401,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh39384
+  m_Name: pb_Mesh29376
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1663,7 +1663,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1368
+  m_Name: pb_Mesh-1274
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1900,6 +1900,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 904335602}
+    - target: {fileID: 5428990320019293627, guid: 0350e59eb99c2a44bb63c9a25484e399,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5428990320019293627, guid: 0350e59eb99c2a44bb63c9a25484e399,
         type: 3}
       propertyPath: m_NavMeshData
