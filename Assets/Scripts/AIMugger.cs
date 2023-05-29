@@ -64,25 +64,26 @@ public class AIMugger : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
+                mugger.isStopped = true;
                 break;
             case States.searching:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 destination = SearchDestination();                    // gets a destination to search towards
                 break;
             case States.chasing:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 break;
             case States.escaping:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 break;
             case States.launched:
-                Debug.Log("I am " + currentState);                
+                //Debug.Log("I am " + currentState);                
                 purse.SetActive(false);
                 DestroyMe();
                 break;
             case States.mugged:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 purse.SetActive(true);
                 break;
         }
@@ -157,6 +158,10 @@ public class AIMugger : MonoBehaviour
                 else
                 {
                     mugger.SetDestination(escapePoint.transform.position);
+                    if (DistanceCheck(muggerGO, escapePoint) < 3)
+                    {
+                        UIManager.get.YouLose();
+                    }
                 }
                 break;
             case States.mugged:
@@ -175,6 +180,7 @@ public class AIMugger : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
+                mugger.isStopped = false;
                 break;
             case States.searching:
                 break;
@@ -196,6 +202,7 @@ public class AIMugger : MonoBehaviour
         escapePoint = GameObject.FindWithTag("EscapePoint");
         agentRigidbody = GetComponent<Rigidbody>();
         OnStartedState(currentState);
+        AudioManager.get.MuggerSpawn();
     }
 
     void Update()
@@ -244,11 +251,14 @@ public class AIMugger : MonoBehaviour
         // Apply a torque to make the agent spin wildly
         agentRigidbody.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
 
+        // Play sfx
+        AudioManager.get.MuggerCaught();
+        
         if (hasMugged)
         {
             // Let Grandma know she's got her purse back
-            grandma.GetComponent<AIGrandma>().GotMugged();
-            Debug.Log("Grandma can have her purse back.");
+            grandma.GetComponent<AIGrandma>().isMugged = false;
+            //Debug.Log("Grandma can have her purse back.");
         }
             
     }

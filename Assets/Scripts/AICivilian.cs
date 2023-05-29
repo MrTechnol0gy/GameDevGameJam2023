@@ -51,6 +51,7 @@ public class AICivilian : MonoBehaviour
         {
             case States.stopped:
                 //Debug.Log("I am " + currentState);
+                Civilian.isStopped = true;
                 break;
             case States.shopping:
                 //Debug.Log("I am " + currentState);
@@ -76,7 +77,7 @@ public class AICivilian : MonoBehaviour
                 }
                 break;
             case States.shopping:
-                if (TimeElapsedSince(TimeStartedState, shopTime))
+                if (TimeElapsedSince(TimeStartedState, Random.Range(shopTime - 10, shopTime + 10)))
                 {
                     currentState = States.stopped;
                 }
@@ -97,6 +98,8 @@ public class AICivilian : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
+            //AudioManager.get.CivilianClips();
+            Civilian.isStopped = false;
                 break;
             case States.shopping:
                 break;

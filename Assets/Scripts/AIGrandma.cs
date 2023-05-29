@@ -15,11 +15,12 @@ public class AIGrandma : MonoBehaviour
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain in a shop
     [SerializeField] float shopTime = 12f;      // how long the agent will shop
     [SerializeField] int shopList = 5;          // how many shops grandma needs to visit before she's done shopping
-    private bool isMugged = false;
+    public bool isMugged = false;
     private Vector3 destination;                // placeholder for any destination the grandma needs
     private float timer;                        // placeholder for timer
     private List<Vector3> shops;
     private int shopsVisited = 0;              // counter for amount of shops grandma has visited
+    private GameObject grandmaGO;
     
     public enum States
     {
@@ -69,6 +70,7 @@ public class AIGrandma : MonoBehaviour
                 Debug.Log("I am " + currentState);
                 grandma.isStopped = true;
                 purse.SetActive(false);
+                AudioManager.get.GrandmaMugged();
                 break;
         }
     }
@@ -94,6 +96,9 @@ public class AIGrandma : MonoBehaviour
                 }
                 else if (TimeElapsedSince(TimeStartedState, shopTime))
                 {
+                    shopsVisited++;
+                    Debug.Log("Shops visited is " + shopsVisited);
+                    AudioManager.get.GrandmaShops();
                     currentState = States.stopped;
                 }
                 else if (shopsVisited == shopList)
@@ -113,6 +118,10 @@ public class AIGrandma : MonoBehaviour
                 else
                 {
                     grandma.SetDestination(escapePoint.transform.position);
+                    if (DistanceCheck(grandmaGO, escapePoint) < 3)
+                    {
+                        UIManager.get.YouWin();
+                    }
                 }
                 break;
             case States.mugged:
@@ -132,8 +141,6 @@ public class AIGrandma : MonoBehaviour
                 grandma.isStopped = false;
                 break;
             case States.shopping:
-                shopsVisited++;
-                Debug.Log("Shops visited is " + shopsVisited);
                 break;
             case States.goinghome:
                 break;
@@ -148,6 +155,7 @@ public class AIGrandma : MonoBehaviour
     {
         shops = GameManager.get.shopPositions;
         escapePoint = GameObject.FindWithTag("EscapePoint");
+        grandmaGO = gameObject;
         OnStartedState(currentState);
     }
 
@@ -174,14 +182,18 @@ public class AIGrandma : MonoBehaviour
         if (!isMugged)
         {
             isMugged = true;
-            return true;
+            return false;
         }
         else if (isMugged)
         {
-            isMugged = false;
-            return false;
+            return true;
         }
         return false;
+    }
+    public float DistanceCheck(GameObject checker, GameObject target)
+    {
+        float distance = Vector3.Distance(checker.transform.position, target.transform.position);
+        return distance;
     }
 
     // This method can be used to test if a certain time has elapsed since we registered an event time. 
