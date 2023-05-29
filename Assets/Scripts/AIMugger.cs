@@ -7,9 +7,11 @@ public class AIMugger : MonoBehaviour
 {
     private float TimeStartedState;             // timer to know when we started a state
     public LayerMask wallLayer;
+    public GameObject purse;
 
     [Header("Agent")]
     public NavMeshAgent mugger;
+    public GameObject muggerGO;
     public GameObject grandma;
     public GameObject escapePoint;
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain stopped
@@ -21,6 +23,7 @@ public class AIMugger : MonoBehaviour
     [SerializeField] float destructDelay = 3f;  // how soon after being launched the mugger is destroyed
     private bool isGrandmaVisible = false;      // can the mugger see grandma
     private bool isLaunched = false;            // has the mugger got gotted
+    private bool hasMugged = false;             // has the mugger got the purse
     private Vector3 destination;                // placeholder for any destination the mugger needs
     private Rigidbody agentRigidbody;           // placeholder for the mugger's rigidbody
     private float timer;                        // placeholder for timer
@@ -31,7 +34,8 @@ public class AIMugger : MonoBehaviour
         searching,     // searching = 1
         chasing,       // chasing = 2
         escaping,      // escaping = 3
-        launched       // launched = 4
+        launched,      // launched = 4
+        mugged         // mugged = 5
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
@@ -73,8 +77,13 @@ public class AIMugger : MonoBehaviour
                 Debug.Log("I am " + currentState);
                 break;
             case States.launched:
-                Debug.Log("I am " + currentState);
+                Debug.Log("I am " + currentState);                
+                purse.SetActive(false);
                 DestroyMe();
+                break;
+            case States.mugged:
+                Debug.Log("I am " + currentState);
+                purse.SetActive(true);
                 break;
         }
     }
@@ -126,6 +135,19 @@ public class AIMugger : MonoBehaviour
                 {
                     mugger.SetDestination(grandma.transform.position);
                 }
+                if (DistanceCheck(muggerGO, grandma) < 3)
+                {
+                    if (!grandma.GetComponent<AIGrandma>().GotMugged())
+                    {
+                        hasMugged = true;
+                        Debug.Log("grandma is mugged");
+                        currentState = States.mugged;
+                    }
+                    else
+                    {
+                        currentState = States.searching;
+                    }
+                }
                 break; 
             case States.escaping:
                 if (isLaunched)
@@ -135,6 +157,12 @@ public class AIMugger : MonoBehaviour
                 else
                 {
                     mugger.SetDestination(escapePoint.transform.position);
+                }
+                break;
+            case States.mugged:
+                if (hasMugged)
+                {
+                    currentState = States.escaping;
                 }
                 break;
             case States.launched:
@@ -156,12 +184,15 @@ public class AIMugger : MonoBehaviour
                 break;
             case States.launched:
                 break;
+            case States.mugged:
+                break;
         }
     }
     
     void Start()
     {
         grandma = GameObject.FindWithTag("Player");
+        muggerGO = gameObject;
         escapePoint = GameObject.FindWithTag("EscapePoint");
         agentRigidbody = GetComponent<Rigidbody>();
         OnStartedState(currentState);
@@ -204,11 +235,22 @@ public class AIMugger : MonoBehaviour
         // Disable rigidbody gravity to ensure it launches upwards
         agentRigidbody.useGravity = false;
 
+        // Disable the kinematics so that force can be applied directly
+        agentRigidbody.isKinematic = false;
+
         // Apply a vertical force to launch the agent into the air
         agentRigidbody.AddForce(Vector3.up * launchForce, ForceMode.Impulse);
 
         // Apply a torque to make the agent spin wildly
         agentRigidbody.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
+
+        if (hasMugged)
+        {
+            // Let Grandma know she's got her purse back
+            grandma.GetComponent<AIGrandma>().GotMugged();
+            Debug.Log("Grandma can have her purse back.");
+        }
+            
     }
     private bool CheckForGrandma()
     {
@@ -221,6 +263,11 @@ public class AIMugger : MonoBehaviour
         {
             return false;
         }
+    }
+    public float DistanceCheck(GameObject checker, GameObject target)
+    {
+        float distance = Vector3.Distance(checker.transform.position, target.transform.position);
+        return distance;
     }
     private void DestroyMe()
     {

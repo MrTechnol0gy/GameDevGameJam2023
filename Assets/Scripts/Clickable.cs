@@ -21,15 +21,17 @@ public class Clickable : MonoBehaviour
 
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
-                    Debug.DrawRay(ray.origin, ray.direction * 1000f, Color.red);
+                    //Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
+                    //Debug.DrawRay(ray.origin, ray.direction * 1000f, Color.red);
 
-                    // Check if the clicked object has the desired script/component
-                    AIMugger aIMugger = hit.collider.GetComponent<AIMugger>();
-                    if (aIMugger != null)
+                    if (hit.collider.CompareTag("Mugger"))
                     {
                         // Invoke the method on the clicked object
-                        aIMugger.Gottem();
+                        AIMugger aIMugger = hit.collider.GetComponent<AIMugger>();
+                        if (aIMugger != null)
+                        {
+                            aIMugger.Gottem();
+                        }
                     }
                 }
             }

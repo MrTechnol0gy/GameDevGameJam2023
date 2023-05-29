@@ -3,30 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIGrandma : MonoBehaviour
+public class AICivilian : MonoBehaviour
 {
     private float TimeStartedState;             // timer to know when we started a state
     public LayerMask wallLayer;
-    public GameObject escapePoint;
 
     [Header("Agent")]
-    public NavMeshAgent grandma;
-    public GameObject purse;
+    public NavMeshAgent Civilian;
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain in a shop
     [SerializeField] float shopTime = 12f;      // how long the agent will shop
-    [SerializeField] int shopList = 5;          // how many shops grandma needs to visit before she's done shopping
-    private bool isMugged = false;
-    private Vector3 destination;                // placeholder for any destination the grandma needs
+    private Vector3 destination;                // placeholder for any destination the Civilian needs
     private float timer;                        // placeholder for timer
     private List<Vector3> shops;
-    private int shopsVisited = 0;              // counter for amount of shops grandma has visited
     
     public enum States
     {
         stopped,       // stopped = 0
         shopping,     // shopping = 1
-        goinghome,      // goinghome = 2
-        mugged      // mugged = 3
+        chasing,       // chasing = 2
+        goinghome,      // goinghome = 3
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
@@ -55,20 +50,17 @@ public class AIGrandma : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
-                Debug.Log("I am " + currentState);
-                grandma.isStopped = true;
+                //Debug.Log("I am " + currentState);
                 break;
             case States.shopping:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 destination = ShopDestination();                    // gets a destination to go shopping
                 break;
-            case States.goinghome:
-                Debug.Log("I am " + currentState);
+            case States.chasing:
+                //Debug.Log("I am " + currentState);
                 break;
-            case States.mugged:
-                Debug.Log("I am " + currentState);
-                grandma.isStopped = true;
-                purse.SetActive(false);
+            case States.goinghome:
+                //Debug.Log("I am " + currentState);
                 break;
         }
     }
@@ -78,48 +70,24 @@ public class AIGrandma : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
-                if (isMugged)
-                {
-                    currentState = States.mugged;
-                }
-                else if (TimeElapsedSince(TimeStartedState, stoppedTime))
+                if (TimeElapsedSince(TimeStartedState, stoppedTime))
                 {
                     currentState = States.shopping;
                 }
                 break;
             case States.shopping:
-                if (isMugged)
-                {
-                    currentState = States.mugged;
-                }
-                else if (TimeElapsedSince(TimeStartedState, shopTime))
+                if (TimeElapsedSince(TimeStartedState, shopTime))
                 {
                     currentState = States.stopped;
                 }
-                else if (shopsVisited == shopList)
-                {
-                    currentState = States.goinghome;
-                }
                 else
                 {
-                    grandma.SetDestination(destination);
+                    Civilian.SetDestination(destination);
                 }
                 break;
+            case States.chasing:
+                break; 
             case States.goinghome:
-                if (isMugged)
-                {
-                    currentState = States.mugged;
-                }
-                else
-                {
-                    grandma.SetDestination(escapePoint.transform.position);
-                }
-                break;
-            case States.mugged:
-                if (!isMugged)
-                {
-                    currentState = States.stopped;
-                }
                 break;
         }
     }
@@ -129,17 +97,12 @@ public class AIGrandma : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
-                grandma.isStopped = false;
                 break;
             case States.shopping:
-                shopsVisited++;
-                Debug.Log("Shops visited is " + shopsVisited);
+                break;
+            case States.chasing:
                 break;
             case States.goinghome:
-                break;
-            case States.mugged:
-                grandma.isStopped = false;
-                purse.SetActive(true);
                 break;
         }
     }
@@ -147,7 +110,6 @@ public class AIGrandma : MonoBehaviour
     void Start()
     {
         shops = GameManager.get.shopPositions;
-        escapePoint = GameObject.FindWithTag("EscapePoint");
         OnStartedState(currentState);
     }
 
@@ -167,21 +129,6 @@ public class AIGrandma : MonoBehaviour
             int randomIndex = Random.Range(0, shops.Count);
             return shops[randomIndex];
         }
-    }
-
-    public bool GotMugged()
-    {
-        if (!isMugged)
-        {
-            isMugged = true;
-            return true;
-        }
-        else if (isMugged)
-        {
-            isMugged = false;
-            return false;
-        }
-        return false;
     }
 
     // This method can be used to test if a certain time has elapsed since we registered an event time. 
