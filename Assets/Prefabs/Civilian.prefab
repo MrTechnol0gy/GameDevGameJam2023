@@ -280,8 +280,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   Civilian: {fileID: 3554470757939090951}
-  stoppedTime: 3
-  shopTime: 12
+  stoppedTime: 2
+  shopTime: 18
 --- !u!82 &3278551053194263930
 AudioSource:
   m_ObjectHideFlags: 0

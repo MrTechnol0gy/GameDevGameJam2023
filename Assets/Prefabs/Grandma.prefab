@@ -151,6 +151,7 @@ GameObject:
   - component: {fileID: 2145983293399378403}
   - component: {fileID: 3554470757939090951}
   - component: {fileID: 159991308146825876}
+  - component: {fileID: 1791118833256527590}
   m_Layer: 0
   m_Name: Grandma
   m_TagString: Player
@@ -291,6 +292,25 @@ MonoBehaviour:
   stoppedTime: 3
   shopTime: 12
   shopList: 5
+  isMugged: 0
+--- !u!114 &1791118833256527590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3292484367672847996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.9245283, g: 0.7429009, b: 0.12646852, a: 1}
+  outlineWidth: 2.3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5153075370390780277
 GameObject:
   m_ObjectHideFlags: 0
