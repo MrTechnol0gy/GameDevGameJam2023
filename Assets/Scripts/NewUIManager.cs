@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class NewUIManager : MonoBehaviour
 {   
+    public static NewUIManager instance;
     // reference to the Main Menu UI
     public GameObject mainMenuUI;
     // reference to the Pause Menu UI
@@ -243,6 +244,9 @@ public class NewUIManager : MonoBehaviour
             currentState = States.credits;
         }
     }
+
+    // Returns the current state
+    public States GetCurrentState() => currentState;
 
     // This method can be used to test if a certain time has elapsed since we registered an event time. 
     public bool TimeElapsedSince(float timeEventHappened, float testingTimeElapsed) => !(timeEventHappened + testingTimeElapsed > Time.time);

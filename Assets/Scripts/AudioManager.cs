@@ -12,11 +12,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip grandmaMugged;
     [SerializeField] AudioClip[] grandmaShops;
     [SerializeField] AudioClip[] civilians;
-    public AudioSource mainAudioSource;
-    public AudioSource civilianAudioSource;
-    void Awake()
+    private AudioSource mainAudioSource;
+
+    void Start()
     {
-        get = this;
+        mainAudioSource = GetComponent<AudioSource>();
     }
     
     public void MuggerSpawn()

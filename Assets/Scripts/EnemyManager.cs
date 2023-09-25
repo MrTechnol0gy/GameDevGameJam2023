@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyManager : MonoBehaviour
 {
+    public static EnemyManager instance;
     [Header("Mugger Stats")]
     public GameObject muggerPrefab; // Prefab to instantiate
     public float spawnIntervalFloor = 6f; // Interval between spawns
@@ -13,15 +14,18 @@ public class EnemyManager : MonoBehaviour
     public GameObject civilianPrefab;   // Prefab to instantiate
     public int amountOfCivvies = 30;    // amount of civvies
     [Header("Other Components")]
-    public GameObject mallFloor;
-
+    public GameObject mallFloor;        // Reference to the mall floor object
     private void Start()
     {
-        InvokeRepeating(nameof(SpawnMugger), 0f, Random.Range(spawnIntervalFloor, spawnIntervalCeiling));
-        while (amountOfCivvies != 0)
+        // If the current scene is the gameplay scene, start spawning
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Gameplay")
         {
-            SpawnCivvie();
-            amountOfCivvies--;
+            InvokeRepeating(nameof(SpawnMugger), 0f, Random.Range(spawnIntervalFloor, spawnIntervalCeiling));
+            while (amountOfCivvies != 0)
+            {
+                SpawnCivvie();
+                amountOfCivvies--;
+            }
         }
     }
 

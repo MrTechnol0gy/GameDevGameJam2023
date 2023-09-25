@@ -153,7 +153,7 @@ public class AIGrandma : MonoBehaviour
     
     void Start()
     {
-        shops = GameManager.get.shopPositions;
+        shops = ShopManager.instance.shopPositions;
         escapePoint = GameObject.FindWithTag("EscapePoint");
         grandmaGO = gameObject;
         OnStartedState(currentState);

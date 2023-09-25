@@ -112,7 +112,7 @@ public class AICivilian : MonoBehaviour
     
     void Start()
     {
-        shops = GameManager.get.shopPositions;
+        shops = ShopManager.instance.shopPositions;
         OnStartedState(currentState);
     }
 
