@@ -33,7 +33,7 @@ public class ShopManager : MonoBehaviour
             CollectshopPositions();
         }
     }
-    void CollectshopPositions()
+    public void CollectshopPositions()
     {
         // Find all objects with the "ShopStop" tag
         GameObject[] shopObjects = GameObject.FindGameObjectsWithTag("ShopStop");
@@ -47,7 +47,7 @@ public class ShopManager : MonoBehaviour
         // Raise the ShopPositionsCollected event
         ShopPositionsCollected?.Invoke();
 
-        Debug.Log("Shop positions collected: " + shopPositions.Count);
+        //Debug.Log("Shop positions collected: " + shopPositions.Count);
     }
 
     // helper method to print out the shop positions
@@ -62,6 +62,7 @@ public class ShopManager : MonoBehaviour
     // returns the list of shop positions
     public List<Vector3> GetShopPositions()
     {
+        Debug.Log("Returning shop positions...");
         return shopPositions;
     }
 }

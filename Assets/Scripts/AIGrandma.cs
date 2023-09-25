@@ -21,7 +21,6 @@ public class AIGrandma : MonoBehaviour
     private List<Vector3> shops;
     private int shopsVisited = 0;              // counter for amount of shops grandma has visited
     private GameObject grandmaGO;
-    private ShopManager shopManager;
     
     public enum States
     {
@@ -121,7 +120,7 @@ public class AIGrandma : MonoBehaviour
                     grandma.SetDestination(escapePoint.transform.position);
                     if (DistanceCheck(grandmaGO, escapePoint) < 3)
                     {
-                        UIManager.get.YouWin();
+                        Singleton.instance.GetComponentInChildren<NewUIManager>().Results();
                     }
                 }
                 break;
@@ -152,13 +151,15 @@ public class AIGrandma : MonoBehaviour
         }
     }
     
-    void Start()
-    {        
+    void Awake()
+    {
         // Subscribe to the ShopManager.ShopPositionsCollected event
         // This exists to assist with a timing issue where Grandma was trying to get the list of shops before they were ready
         
         Singleton.instance.GetComponentInChildren<ShopManager>().ShopPositionsCollected += OnShopPositionsCollected;
-        
+    }
+    void Start()
+    {
         escapePoint = GameObject.FindWithTag("EscapePoint");
         grandmaGO = gameObject;
         OnStartedState(currentState);
@@ -169,12 +170,12 @@ public class AIGrandma : MonoBehaviour
         OnUpdatedState(currentState);
     }
 
-    void OnShopPositionsCollected()
+    public void OnShopPositionsCollected()
     {
         // Get the list of shop positions from the ShopManager script
-        List<Vector3> shops = shopManager.GetShopPositions();
+        shops = Singleton.instance.GetComponentInChildren<ShopManager>().GetShopPositions();
 
-        Debug.Log("Shop positions collected: " + shops.Count);
+        Debug.Log("Shop positions for grandma collected: " + shops.Count);
     }
     private Vector3 ShopDestination()
     {
