@@ -1,41 +1,56 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ShopManager : MonoBehaviour
 {
     public static ShopManager instance;
     // list of all shop positions
     public List<Vector3> shopPositions = new List<Vector3>();
-    
-    // Start is called before the first frame update
-    void Start()
+    // Declare a public event that will be raised when the shop positions are collected
+    public event Action ShopPositionsCollected;
+    private void OnEnable()
     {
-       // if the current scene is the main menu, don't do anything
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MainMenu")
-        {
-            return;
-        }
-        else
+        // Subscribe to the SceneManager.sceneLoaded event
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe from the SceneManager.sceneLoaded event
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Check if the loaded scene is one where we should collect shop positions
+        if (scene.name == "Gameplay")
         {
             // Collect all shop positions
-            CollectshopPositionsRecursive(transform);            
-        } 
-    }
-
-    void CollectshopPositionsRecursive(Transform parent)
-    {
-        int childCount = parent.childCount;
-        for (int i = 0; i < childCount; i++)
-        {
-            Transform child = parent.GetChild(i);
-            shopPositions.Add(child.position);
-
-            // Recursively collect positions of child's children
-            CollectshopPositionsRecursive(child);
+            Debug.Log("Collecting shop positions...");
+            CollectshopPositions();
         }
     }
+    void CollectshopPositions()
+    {
+        // Find all objects with the "ShopStop" tag
+        GameObject[] shopObjects = GameObject.FindGameObjectsWithTag("ShopStop");
 
+        // Collect the position of each shop object
+        foreach (GameObject shopObject in shopObjects)
+        {
+            shopPositions.Add(shopObject.transform.position);
+        }
+
+        // Raise the ShopPositionsCollected event
+        ShopPositionsCollected?.Invoke();
+
+        Debug.Log("Shop positions collected: " + shopPositions.Count);
+    }
+
+    // helper method to print out the shop positions
     void PrintshopPositions()
     {
         foreach (Vector3 position in shopPositions)
@@ -44,6 +59,7 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    // returns the list of shop positions
     public List<Vector3> GetShopPositions()
     {
         return shopPositions;

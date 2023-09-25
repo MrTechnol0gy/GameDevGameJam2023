@@ -7,6 +7,9 @@ TagManager:
   - EscapePoint
   - Mugger
   - Civilian
+  - ShopStop
+  - Floor
+  - Managers
   layers:
   - Default
   - TransparentFX

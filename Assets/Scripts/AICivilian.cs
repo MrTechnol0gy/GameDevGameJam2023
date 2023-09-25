@@ -18,9 +18,9 @@ public class AICivilian : MonoBehaviour
     
     public enum States
     {
-        stopped,       // stopped = 0
-        shopping,     // shopping = 1
-        chasing,       // chasing = 2
+        stopped,        // stopped = 0
+        shopping,       // shopping = 1
+        chasing,        // chasing = 2
         goinghome,      // goinghome = 3
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
@@ -112,7 +112,18 @@ public class AICivilian : MonoBehaviour
     
     void Start()
     {
-        shops = ShopManager.instance.shopPositions;
+        // gets the shop manager instance
+        ShopManager shopManager = Singleton.instance.GetComponentInChildren<ShopManager>();
+        // Subscribe to the ShopManager.ShopPositionsCollected event
+        // This exists to assist with a timing issue with regards to when the list of shops was being created
+        if (shopManager != null)
+        {
+            shopManager.ShopPositionsCollected += OnShopPositionsCollected;
+        }
+        else
+        {
+            Debug.LogError("ShopManager.instance is null!");
+        }
         OnStartedState(currentState);
     }
 
@@ -121,9 +132,13 @@ public class AICivilian : MonoBehaviour
         OnUpdatedState(currentState);
     }
 
+    void OnShopPositionsCollected()
+    {
+        shops = Singleton.instance.GetComponentInChildren<ShopManager>().GetShopPositions();
+    }
     private Vector3 ShopDestination()
     {
-        if (shops.Count == 0)
+        if (shops == null || shops.Count == 0)
         {
             return transform.position;
         }

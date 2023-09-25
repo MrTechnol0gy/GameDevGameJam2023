@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -17,15 +18,39 @@ public class EnemyManager : MonoBehaviour
     public GameObject mallFloor;        // Reference to the mall floor object
     private void Start()
     {
-        // If the current scene is the gameplay scene, start spawning
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Gameplay")
+        // Listen for the GameStarted event
+        // This expression is used to make sure the scene is loaded before the event is invoked
+        GameManager.GameStarted += () => StartCoroutine(OnGameStarted());
+    }
+    private IEnumerator OnGameStarted()
+    {
+        Debug.Log("Game Started event received by the enemy manager!");
+
+        // Wait for the next frame to ensure that the scene is loaded
+        yield return null;
+
+        // Find the floor object by tag
+        mallFloor = GameObject.FindGameObjectWithTag("Floor");
+
+        if (mallFloor != null)
         {
-            InvokeRepeating(nameof(SpawnMugger), 0f, Random.Range(spawnIntervalFloor, spawnIntervalCeiling));
-            while (amountOfCivvies != 0)
-            {
-                SpawnCivvie();
-                amountOfCivvies--;
-            }
+            Debug.Log("Floor found!");
+        }
+        else
+        {
+            Debug.LogError("Floor not found!");
+        }
+
+        // Start spawning enemies
+        StartSpawning();
+    }
+    private void StartSpawning()
+    {
+        InvokeRepeating(nameof(SpawnMugger), 0f, Random.Range(spawnIntervalFloor, spawnIntervalCeiling));
+        while (amountOfCivvies != 0)
+        {
+            SpawnCivvie();
+            amountOfCivvies--;
         }
     }
 

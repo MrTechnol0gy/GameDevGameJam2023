@@ -14,12 +14,16 @@ public class NewUIManager : MonoBehaviour
     public GameObject optionsMenuUI;
     // reference to the Gameplay UI
     public GameObject gameplayUI;
-    // reference to the Win Screen UI
-    public GameObject winScreenUI;
-    // reference to the Lose Screen UI
-    public GameObject loseScreenUI;
+    // reference to the results screen UI
+    public GameObject resultsScreenUI;
     // reference to the credits UI
     public GameObject creditsUI;
+    // reference to the level select UI
+    public GameObject levelSelectUI;
+    // reference to the upgrades UI
+    public GameObject upgradesUI;
+    // reference to the glossary UI
+    public GameObject glossaryUI;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -31,9 +35,11 @@ public class NewUIManager : MonoBehaviour
         pausemenu = 1,
         options = 2,
         gameplay = 3,
-        winscreen = 4,
-        losescreen = 5,
+        results = 4,
+        glossary = 5,
         credits = 6,
+        upgrades = 7,
+        levelselect = 8
     }
     private States _currentState = States.mainmenu;       //sets the starting state    
     public States currentState 
@@ -77,17 +83,25 @@ public class NewUIManager : MonoBehaviour
                 //Debug.Log("I am gameplay.");
                 gameplayUI.SetActive(true);       
                 break;
-            case States.winscreen:
+            case States.results:
                 //Debug.Log("I am winscreen."); 
-                winScreenUI.SetActive(true);      
+                resultsScreenUI.SetActive(true);      
                 break;
-            case States.losescreen:
+            case States.glossary:
                 //Debug.Log("I am losescreen.");   
-                loseScreenUI.SetActive(true);  
+                glossaryUI.SetActive(true);  
                 break;
             case States.credits:
                 //Debug.Log("I am credits.");   
                 creditsUI.SetActive(true);  
+                break;
+            case States.upgrades:
+                //Debug.Log("I am upgrades.");   
+                upgradesUI.SetActive(true);  
+                break;
+            case States.levelselect:
+                //Debug.Log("I am level select.");   
+                levelSelectUI.SetActive(true);  
                 break;
         }
     }
@@ -121,23 +135,35 @@ public class NewUIManager : MonoBehaviour
                 // Sets the previous state variable to this state
                 previousState = States.gameplay;          
                 break;
-            case States.winscreen:
+            case States.results:
                 //Debug.Log("I am winscreen.");
-                winScreenUI.SetActive(false); 
+                resultsScreenUI.SetActive(false); 
                 // Sets the previous state variable to this state
-                previousState = States.winscreen;               
+                previousState = States.results;               
                 break;
-            case States.losescreen:
+            case States.glossary:
                 //Debug.Log("I am losescreen.");
-                loseScreenUI.SetActive(false); 
+                glossaryUI.SetActive(false); 
                 // Sets the previous state variable to this state
-                previousState = States.losescreen;             
+                previousState = States.glossary;             
                 break;
             case States.credits:
                 //Debug.Log("I am credits.");
                 creditsUI.SetActive(false); 
                 // Sets the previous state variable to this state
                 previousState = States.credits;             
+                break;
+            case States.upgrades:
+                //Debug.Log("I am upgrades.");
+                upgradesUI.SetActive(false); 
+                // Sets the previous state variable to this state
+                previousState = States.upgrades;             
+                break;
+            case States.levelselect:
+                //Debug.Log("I am level select.");
+                levelSelectUI.SetActive(false); 
+                // Sets the previous state variable to this state
+                previousState = States.levelselect;             
                 break;
         }
     }
@@ -153,6 +179,11 @@ public class NewUIManager : MonoBehaviour
         OnStartedState(currentState);
     }
 
+    void Update()
+    {
+        GameManager.GameStarted += GameplayUI;
+    }
+
     // Sets all Ui elements to inactive
     public void SetAllUIToFalse()
     {
@@ -160,9 +191,11 @@ public class NewUIManager : MonoBehaviour
         pauseMenuUI.SetActive(false);
         optionsMenuUI.SetActive(false);
         gameplayUI.SetActive(false);
-        winScreenUI.SetActive(false);
-        loseScreenUI.SetActive(false);
+        resultsScreenUI.SetActive(false);
         creditsUI.SetActive(false);
+        upgradesUI.SetActive(false);
+        levelSelectUI.SetActive(false);
+        glossaryUI.SetActive(false);
     }
 
     // This method activates the main menu UI
@@ -194,15 +227,15 @@ public class NewUIManager : MonoBehaviour
     }
 
     // This method activates the win screen UI
-    public void WinScreen()
+    public void Results()
     {
-        currentState = States.winscreen;
+        currentState = States.results;
     }
 
     // This method activates the lose screen UI
-    public void LoseScreen()
+    public void Glossary()
     {
-        currentState = States.losescreen;
+        currentState = States.glossary;
     }
 
     // This method activates the credits UI
@@ -231,17 +264,25 @@ public class NewUIManager : MonoBehaviour
         {
             currentState = States.options;
         }
-        else if (previousState == States.winscreen)
+        else if (previousState == States.results)
         {
-            currentState = States.winscreen;
+            currentState = States.results;
         }
-        else if (previousState == States.losescreen)
+        else if (previousState == States.glossary)
         {
-            currentState = States.losescreen;
+            currentState = States.glossary;
         }
         else if (previousState == States.credits)
         {
             currentState = States.credits;
+        }
+        else if (previousState == States.upgrades)
+        {
+            currentState = States.upgrades;
+        }
+        else if (previousState == States.levelselect)
+        {
+            currentState = States.levelselect;
         }
     }
 

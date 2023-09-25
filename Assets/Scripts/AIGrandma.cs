@@ -21,6 +21,7 @@ public class AIGrandma : MonoBehaviour
     private List<Vector3> shops;
     private int shopsVisited = 0;              // counter for amount of shops grandma has visited
     private GameObject grandmaGO;
+    private ShopManager shopManager;
     
     public enum States
     {
@@ -70,7 +71,7 @@ public class AIGrandma : MonoBehaviour
                 Debug.Log("I am " + currentState);
                 grandma.isStopped = true;
                 purse.SetActive(false);
-                AudioManager.get.GrandmaMugged();
+                Singleton.instance.GetComponentInChildren<AudioManager>().GrandmaMugged();
                 break;
         }
     }
@@ -98,7 +99,7 @@ public class AIGrandma : MonoBehaviour
                 {
                     shopsVisited++;
                     Debug.Log("Shops visited is " + shopsVisited);
-                    AudioManager.get.GrandmaShops();
+                    Singleton.instance.GetComponentInChildren<AudioManager>().GrandmaShops();
                     currentState = States.stopped;
                 }
                 else if (shopsVisited == shopList)
@@ -152,8 +153,12 @@ public class AIGrandma : MonoBehaviour
     }
     
     void Start()
-    {
-        shops = ShopManager.instance.shopPositions;
+    {        
+        // Subscribe to the ShopManager.ShopPositionsCollected event
+        // This exists to assist with a timing issue where Grandma was trying to get the list of shops before they were ready
+        
+        Singleton.instance.GetComponentInChildren<ShopManager>().ShopPositionsCollected += OnShopPositionsCollected;
+        
         escapePoint = GameObject.FindWithTag("EscapePoint");
         grandmaGO = gameObject;
         OnStartedState(currentState);
@@ -164,10 +169,25 @@ public class AIGrandma : MonoBehaviour
         OnUpdatedState(currentState);
     }
 
+    void OnShopPositionsCollected()
+    {
+        // Get the list of shop positions from the ShopManager script
+        List<Vector3> shops = shopManager.GetShopPositions();
+
+        Debug.Log("Shop positions collected: " + shops.Count);
+    }
     private Vector3 ShopDestination()
     {
-        if (shops.Count == 0)
+        if (shops == null || shops.Count == 0)
         {
+            if (shops == null)
+            {
+                Debug.Log("Shops is null");
+            }
+            else if (shops.Count == 0)
+            {
+                Debug.Log("Shops is empty");
+            }
             return transform.position;
         }
         else

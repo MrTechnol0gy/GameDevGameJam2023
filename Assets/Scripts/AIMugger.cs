@@ -160,7 +160,7 @@ public class AIMugger : MonoBehaviour
                     mugger.SetDestination(escapePoint.transform.position);
                     if (DistanceCheck(muggerGO, escapePoint) < 3)
                     {
-                        UIManager.get.YouLose();
+                        Singleton.instance.GetComponentInChildren<NewUIManager>().Results();
                     }
                 }
                 break;
@@ -202,9 +202,8 @@ public class AIMugger : MonoBehaviour
         escapePoint = GameObject.FindWithTag("EscapePoint");
         agentRigidbody = GetComponent<Rigidbody>();
         OnStartedState(currentState);
-        AudioManager.get.MuggerSpawn();
+        Singleton.instance.GetComponentInChildren<AudioManager>().MuggerSpawn();
     }
-
     void Update()
     {
         OnUpdatedState(currentState);
@@ -252,7 +251,7 @@ public class AIMugger : MonoBehaviour
         agentRigidbody.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
 
         // Play sfx
-        AudioManager.get.MuggerCaught();
+        Singleton.instance.GetComponentInChildren<AudioManager>().MuggerCaught();
         
         if (hasMugged)
         {
