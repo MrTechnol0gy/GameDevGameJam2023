@@ -110,20 +110,12 @@ public class AICivilian : MonoBehaviour
         }
     }
     
-    void Start()
+    void Awake()
     {
-        // gets the shop manager instance
-        ShopManager shopManager = Singleton.instance.GetComponentInChildren<ShopManager>();
-        // Subscribe to the ShopManager.ShopPositionsCollected event
-        // This exists to assist with a timing issue with regards to when the list of shops was being created
-        if (shopManager != null)
-        {
-            shopManager.ShopPositionsCollected += OnShopPositionsCollected;
-        }
-        else
-        {
-            Debug.LogError("ShopManager.instance is null!");
-        }
+       
+    }
+    void Start()
+    {        
         OnStartedState(currentState);
     }
 
@@ -131,15 +123,22 @@ public class AICivilian : MonoBehaviour
     {
         OnUpdatedState(currentState);
     }
-
-    void OnShopPositionsCollected()
-    {
-        shops = Singleton.instance.GetComponentInChildren<ShopManager>().GetShopPositions();
-    }
+    
     private Vector3 ShopDestination()
     {
         if (shops == null || shops.Count == 0)
         {
+            if (shops == null)
+            {
+                Debug.Log("Shops is null, getting shops");
+                shops = Singleton.instance.GetComponentInChildren<ShopManager>().GetShopPositions();
+                int randomIndex = Random.Range(0, shops.Count);
+                return shops[randomIndex];
+            }
+            else if (shops.Count == 0)
+            {
+                Debug.Log("Shops is empty");
+            }
             return transform.position;
         }
         else

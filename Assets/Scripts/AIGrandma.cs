@@ -24,10 +24,10 @@ public class AIGrandma : MonoBehaviour
     
     public enum States
     {
-        stopped,       // stopped = 0
-        shopping,     // shopping = 1
+        stopped,        // stopped = 0
+        shopping,       // shopping = 1
         goinghome,      // goinghome = 2
-        mugged      // mugged = 3
+        mugged          // mugged = 3
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
@@ -56,18 +56,18 @@ public class AIGrandma : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 grandma.isStopped = true;
                 break;
             case States.shopping:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 destination = ShopDestination();                    // gets a destination to go shopping
                 break;
             case States.goinghome:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 break;
             case States.mugged:
-                Debug.Log("I am " + currentState);
+                //Debug.Log("I am " + currentState);
                 grandma.isStopped = true;
                 purse.SetActive(false);
                 Singleton.instance.GetComponentInChildren<AudioManager>().GrandmaMugged();
@@ -97,7 +97,7 @@ public class AIGrandma : MonoBehaviour
                 else if (TimeElapsedSince(TimeStartedState, shopTime))
                 {
                     shopsVisited++;
-                    Debug.Log("Shops visited is " + shopsVisited);
+                    // Debug.Log("Shops visited is " + shopsVisited);
                     Singleton.instance.GetComponentInChildren<AudioManager>().GrandmaShops();
                     currentState = States.stopped;
                 }

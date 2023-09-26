@@ -449,7 +449,6 @@ Shader  /*ase_name*/"Hidden/Universal/Decal"/*end*/
 
 			HLSLPROGRAM
 
-			#pragma only_renderers gles gles3 glcore d3d11
 			#pragma vertex Vert
 			#pragma fragment Frag
 			#pragma multi_compile_instancing
@@ -740,7 +739,6 @@ Shader  /*ase_name*/"Hidden/Universal/Decal"/*end*/
 
 			HLSLPROGRAM
 
-			#pragma only_renderers gles gles3 glcore d3d11
 			#pragma vertex Vert
 			#pragma fragment Frag
 			#pragma multi_compile_instancing
@@ -1181,7 +1179,6 @@ Shader  /*ase_name*/"Hidden/Universal/Decal"/*end*/
 
 			HLSLPROGRAM
 
-			#pragma only_renderers gles gles3 glcore d3d11
 			#pragma vertex Vert
 			#pragma fragment Frag
 			#pragma multi_compile_instancing
@@ -1628,7 +1625,6 @@ Shader  /*ase_name*/"Hidden/Universal/Decal"/*end*/
 
 			HLSLPROGRAM
 
-			#pragma only_renderers gles gles3 glcore d3d11
 			#pragma vertex Vert
 			#pragma fragment Frag
 			#pragma multi_compile_instancing
@@ -1950,7 +1946,6 @@ Shader  /*ase_name*/"Hidden/Universal/Decal"/*end*/
 
 			HLSLPROGRAM
 
-			#pragma only_renderers gles gles3 glcore d3d11
 			#pragma vertex Vert
 			#pragma fragment Frag
 			#pragma multi_compile_instancing
@@ -2271,7 +2266,6 @@ Shader  /*ase_name*/"Hidden/Universal/Decal"/*end*/
 
 			HLSLPROGRAM
 
-			#pragma only_renderers gles gles3 glcore d3d11
 			#pragma vertex Vert
 			#pragma fragment Frag
 			#pragma multi_compile_instancing
@@ -2714,7 +2708,6 @@ Shader  /*ase_name*/"Hidden/Universal/Decal"/*end*/
 
 			HLSLPROGRAM
 
-			#pragma only_renderers gles gles3 glcore d3d11
 			#pragma vertex Vert
 			#pragma fragment Frag
 			#pragma multi_compile_instancing
@@ -3167,7 +3160,6 @@ Shader  /*ase_name*/"Hidden/Universal/Decal"/*end*/
 
 			HLSLPROGRAM
 
-			#pragma only_renderers gles gles3 glcore d3d11
 			#pragma multi_compile_instancing
 			#pragma editor_sync_compilation
 			#pragma vertex Vert

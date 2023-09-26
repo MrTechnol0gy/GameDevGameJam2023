@@ -46,6 +46,7 @@ public class ShopManager : MonoBehaviour
 
         // Raise the ShopPositionsCollected event
         ShopPositionsCollected?.Invoke();
+        Debug.Log("Shop positions collected by the manager. Event invoked.");
 
         //Debug.Log("Shop positions collected: " + shopPositions.Count);
     }

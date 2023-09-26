@@ -172,6 +172,7 @@ public class NewUIManager : MonoBehaviour
     {
         // Sets all UI to false
         SetAllUIToFalse();
+        GameManager.GameStarted += GameplayUI;
     }
     void Start()
     {
@@ -181,7 +182,7 @@ public class NewUIManager : MonoBehaviour
 
     void Update()
     {
-        GameManager.GameStarted += GameplayUI;
+        
     }
 
     // Sets all Ui elements to inactive

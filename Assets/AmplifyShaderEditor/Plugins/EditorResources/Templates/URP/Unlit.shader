@@ -17,6 +17,8 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
         [HideInInspector][NoScaleOffset] unity_Lightmaps("unity_Lightmaps", 2DArray) = "" {}
         [HideInInspector][NoScaleOffset] unity_LightmapsInd("unity_LightmapsInd", 2DArray) = "" {}
         [HideInInspector][NoScaleOffset] unity_ShadowMasks("unity_ShadowMasks", 2DArray) = "" {}
+
+		[HideInInspector][ToggleOff] _ReceiveShadows("Receive Shadows", Float) = 1.0
 	}
 
 	SubShader
@@ -55,8 +57,10 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			Option:Forward Only:false,true:false
 				false,disable:SetPropertyOnPass:Forward:ChangeTagValue,LightMode,UniversalForward
 				false,disable:SetPropertyOnPass:DepthNormals:ChangeTagValue,LightMode,DepthNormals
+				false,disable:IncludePass:GBuffer
 				true:SetPropertyOnPass:Forward:ChangeTagValue,LightMode,UniversalForwardOnly
 				true:SetPropertyOnPass:DepthNormals:ChangeTagValue,LightMode,DepthNormalsOnly
+				true:ExcludePass:GBuffer
 			Option:Cast Shadows:false,true:true
 				true:IncludePass:ShadowCaster
 				false,disable:ExcludePass:ShadowCaster
@@ -68,31 +72,49 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				false,disable:RemoveDefine:_ALPHATEST_SHADOW_ON 1
 				false,disable:HidePort:Forward:Alpha Clip Threshold Shadow
 			Option:Receive Shadows:false,true:true
-				true:RemoveDefine:_RECEIVE_SHADOWS_OFF 1
-				false:SetDefine:_RECEIVE_SHADOWS_OFF 1
+				true:RemoveDefine:shader_feature_local _RECEIVE_SHADOWS_OFF
+				false:SetDefine:shader_feature_local _RECEIVE_SHADOWS_OFF
 			Option:GPU Instancing:false,true:true
-				true:SetDefine:pragma multi_compile_instancing
-				false:RemoveDefine:pragma multi_compile_instancing
-			Option:LOD CrossFade:false,true:false
+				true:SetDefine:Forward:pragma multi_compile_instancing
+				true:SetDefine:GBuffer:pragma multi_compile_instancing
+				true:SetDefine:ShadowCaster:pragma multi_compile_instancing
+				true:SetDefine:DepthOnly:pragma multi_compile_instancing
+				true:SetDefine:DepthNormals:pragma multi_compile_instancing
+				false:RemoveDefine:Forward:pragma multi_compile_instancing
+				false:RemoveDefine:GBuffer:pragma multi_compile_instancing
+				false:RemoveDefine:ShadowCaster:pragma multi_compile_instancing
+				false:RemoveDefine:DepthOnly:pragma multi_compile_instancing
+				false:RemoveDefine:DepthNormals:pragma multi_compile_instancing
+				true:SetDefine:Forward:pragma instancing_options renderinglayer
+				true:SetDefine:GBuffer:pragma instancing_options renderinglayer
+				false:RemoveDefine:Forward:pragma instancing_options renderinglayer
+				false:RemoveDefine:GBuffer:pragma instancing_options renderinglayer
+			Option:LOD CrossFade:false,true:true
 				true:SetDefine:Forward:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+				true:SetDefine:GBuffer:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 				true:SetDefine:ShadowCaster:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 				true:SetDefine:DepthOnly:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 				true:SetDefine:DepthNormals:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 				false:RemoveDefine:Forward:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
+				false:RemoveDefine:GBuffer:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 				false:RemoveDefine:ShadowCaster:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 				false:RemoveDefine:DepthOnly:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
 				false:RemoveDefine:DepthNormals:pragma multi_compile_fragment _ LOD_FADE_CROSSFADE
-			Option:Built-in Fog:false,true:false
-				true:SetDefine:pragma multi_compile_fog
-				false:RemoveDefine:pragma multi_compile_fog
+			Option:Built-in Fog:false,true:true
+				true:SetDefine:Forward:pragma multi_compile_fog
+				true:SetDefine:GBuffer:pragma multi_compile_fog
+				false:RemoveDefine:Forward:pragma multi_compile_fog
+				false:RemoveDefine:GBuffer:pragma multi_compile_fog
 				true:SetDefine:ASE_FOG 1
 				false:RemoveDefine:ASE_FOG 1
 			Option:DOTS Instancing:false,true:false
 				true:SetDefine:Forward:pragma multi_compile _ DOTS_INSTANCING_ON
+				true:SetDefine:GBuffer:pragma multi_compile _ DOTS_INSTANCING_ON
 				true:SetDefine:ShadowCaster:pragma multi_compile _ DOTS_INSTANCING_ON
 				true:SetDefine:DepthOnly:pragma multi_compile _ DOTS_INSTANCING_ON
 				true:SetDefine:DepthNormals:pragma multi_compile _ DOTS_INSTANCING_ON
 				false:RemoveDefine:Forward:pragma multi_compile _ DOTS_INSTANCING_ON
+				false:RemoveDefine:GBuffer:pragma multi_compile _ DOTS_INSTANCING_ON
 				false:RemoveDefine:ShadowCaster:pragma multi_compile _ DOTS_INSTANCING_ON
 				false:RemoveDefine:DepthOnly:pragma multi_compile _ DOTS_INSTANCING_ON
 				false:RemoveDefine:DepthNormals:pragma multi_compile _ DOTS_INSTANCING_ON
@@ -241,17 +263,17 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			float4 planeTest;
 			planeTest.x = (( DistanceFromPlane(wpos0, planes[0]) > -cullEps) ? 1.0f : 0.0f ) +
-						  (( DistanceFromPlane(wpos1, planes[0]) > -cullEps) ? 1.0f : 0.0f ) +
-						  (( DistanceFromPlane(wpos2, planes[0]) > -cullEps) ? 1.0f : 0.0f );
+							(( DistanceFromPlane(wpos1, planes[0]) > -cullEps) ? 1.0f : 0.0f ) +
+							(( DistanceFromPlane(wpos2, planes[0]) > -cullEps) ? 1.0f : 0.0f );
 			planeTest.y = (( DistanceFromPlane(wpos0, planes[1]) > -cullEps) ? 1.0f : 0.0f ) +
-						  (( DistanceFromPlane(wpos1, planes[1]) > -cullEps) ? 1.0f : 0.0f ) +
-						  (( DistanceFromPlane(wpos2, planes[1]) > -cullEps) ? 1.0f : 0.0f );
+							(( DistanceFromPlane(wpos1, planes[1]) > -cullEps) ? 1.0f : 0.0f ) +
+							(( DistanceFromPlane(wpos2, planes[1]) > -cullEps) ? 1.0f : 0.0f );
 			planeTest.z = (( DistanceFromPlane(wpos0, planes[2]) > -cullEps) ? 1.0f : 0.0f ) +
-						  (( DistanceFromPlane(wpos1, planes[2]) > -cullEps) ? 1.0f : 0.0f ) +
-						  (( DistanceFromPlane(wpos2, planes[2]) > -cullEps) ? 1.0f : 0.0f );
+							(( DistanceFromPlane(wpos1, planes[2]) > -cullEps) ? 1.0f : 0.0f ) +
+							(( DistanceFromPlane(wpos2, planes[2]) > -cullEps) ? 1.0f : 0.0f );
 			planeTest.w = (( DistanceFromPlane(wpos0, planes[3]) > -cullEps) ? 1.0f : 0.0f ) +
-						  (( DistanceFromPlane(wpos1, planes[3]) > -cullEps) ? 1.0f : 0.0f ) +
-						  (( DistanceFromPlane(wpos2, planes[3]) > -cullEps) ? 1.0f : 0.0f );
+							(( DistanceFromPlane(wpos1, planes[3]) > -cullEps) ? 1.0f : 0.0f ) +
+							(( DistanceFromPlane(wpos2, planes[3]) > -cullEps) ? 1.0f : 0.0f );
 			return !all (planeTest);
 		}
 
@@ -313,6 +335,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			ZTest LEqual
 			Offset 0,0
 			ColorMask RGBA
+
 			/*ase_stencil*/
 
 			HLSLPROGRAM
@@ -469,7 +492,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			[outputcontrolpoints(3)]
 			VertexControl HullFunction(InputPatch<VertexControl, 3> patch, uint id : SV_OutputControlPointID)
 			{
-			   return patch[id];
+				return patch[id];
 			}
 
 			[domain("tri")]
@@ -525,12 +548,12 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 					clip( Alpha - AlphaClipThreshold );
 				#endif
 
-				#ifdef LOD_FADE_CROSSFADE
-					LODFadeCrossFade( IN.clipPos );
-				#endif
-
 				#ifdef ASE_FOG
 					Color = MixFog( Color, IN.fogFactor );
+				#endif
+
+				#ifdef LOD_FADE_CROSSFADE
+					LODFadeCrossFade( IN.clipPos );
 				#endif
 
 				return half4( Color, Alpha );
@@ -543,7 +566,10 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_main_pass*/
 			Name "Forward"
-			Tags { "LightMode" = "UniversalForwardOnly" }
+			Tags 
+			{ 
+				"LightMode" = "UniversalForwardOnly" 
+		    }
 
 			Blend One Zero
 			ZWrite On
@@ -555,14 +581,14 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 
 			HLSLPROGRAM
 
-			#pragma instancing_options renderinglayer
-
-			#pragma multi_compile _ LIGHTMAP_ON
-			#pragma multi_compile _ DIRLIGHTMAP_COMBINED
+			#pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
 			#pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
-        	#pragma multi_compile_fragment _ DEBUG_DISPLAY
-        	#pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
-        	#pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS
+
+			#pragma multi_compile _ DIRLIGHTMAP_COMBINED
+			#pragma multi_compile _ LIGHTMAP_ON
+			#pragma multi_compile _ DYNAMICLIGHTMAP_ON
+			#pragma multi_compile_fragment _ DEBUG_DISPLAY
+			#pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -625,7 +651,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 
 			/*ase_funcs*/
 
-			VertexOutput VertexFunction ( VertexInput v /*ase_vert_input*/ )
+			VertexOutput VertexFunction( VertexInput v /*ase_vert_input*/ )
 			{
 				VertexOutput o = (VertexOutput)0;
 				UNITY_SETUP_INSTANCE_ID(v);
@@ -725,7 +751,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			[outputcontrolpoints(3)]
 			VertexControl HullFunction(InputPatch<VertexControl, 3> patch, uint id : SV_OutputControlPointID)
 			{
-			   return patch[id];
+				return patch[id];
 			}
 
 			[domain("tri")]
@@ -818,7 +844,10 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_hide_pass*/
 			Name "ShadowCaster"
-			Tags { "LightMode" = "ShadowCaster" }
+			Tags 
+			{ 
+				"LightMode" = "ShadowCaster" 
+		    }
 
 			ZWrite On
 			ZTest LEqual
@@ -830,7 +859,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#pragma multi_compile _ _CASTING_PUNCTUAL_LIGHT_SHADOW
+			#pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
 
 			#define SHADERPASS SHADERPASS_SHADOWCASTER
 
@@ -993,7 +1022,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			[outputcontrolpoints(3)]
 			VertexControl HullFunction(InputPatch<VertexControl, 3> patch, uint id : SV_OutputControlPointID)
 			{
-			   return patch[id];
+				return patch[id];
 			}
 
 			[domain("tri")]
@@ -1056,6 +1085,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				#ifdef LOD_FADE_CROSSFADE
 					LODFadeCrossFade( IN.clipPos );
 				#endif
+
 				return 0;
 			}
 			ENDHLSL
@@ -1066,7 +1096,10 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_hide_pass*/
 			Name "DepthOnly"
-			Tags { "LightMode" = "DepthOnly" }
+			Tags 
+			{ 
+				"LightMode" = "DepthOnly" 
+		    }
 
 			ZWrite On
 			ColorMask 0
@@ -1216,7 +1249,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 			[outputcontrolpoints(3)]
 			VertexControl HullFunction(InputPatch<VertexControl, 3> patch, uint id : SV_OutputControlPointID)
 			{
-			   return patch[id];
+				return patch[id];
 			}
 
 			[domain("tri")]
@@ -1249,7 +1282,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX( IN );
 
 				#if defined(ASE_NEEDS_FRAG_WORLD_POSITION)
-					/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
+				/*ase_local_var:wp*/float3 WorldPosition = IN.worldPos;
 				#endif
 
 				/*ase_local_var:sc*/float4 ShadowCoords = float4( 0, 0, 0, 0 );
@@ -1284,7 +1317,10 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_hide_pass*/
 			Name "Meta"
-			Tags { "LightMode" = "Meta" }
+			Tags 
+			{ 
+				"LightMode" = "Meta" 
+		    }
 
 			Cull Off
 
@@ -1415,7 +1451,10 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		{
 			/*ase_hide_pass:SyncP*/
 			Name "Universal2D"
-			Tags { "LightMode" = "Universal2D" }
+			Tags 
+			{ 
+				"LightMode" = "Universal2D"
+		    }
 
 			Blend One Zero
 			ZWrite On
@@ -1583,10 +1622,14 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		Pass
 		{
 			/*ase_hide_pass*/
-            Name "SceneSelectionPass"
-            Tags { "LightMode" = "SceneSelectionPass" }
+			Name "SceneSelectionPass"
+			Tags
+			{ 
+				"LightMode" = "SceneSelectionPass" 
+		    }
 
 			Cull Off
+			AlphaToMask Off
 
 			HLSLPROGRAM
 
@@ -1675,6 +1718,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				v.ase_normal = /*ase_vert_out:Vertex Normal;Float3;3;-1;_Normal*/v.ase_normal/*end*/;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
+
 				o.clipPos = TransformWorldToHClip(positionWS);
 
 				return o;
@@ -1786,8 +1830,13 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		Pass
 		{
 			/*ase_hide_pass*/
-            Name "ScenePickingPass"
-            Tags { "LightMode" = "Picking" }
+			Name "ScenePickingPass"
+			Tags
+			{ 
+				"LightMode" = "Picking"
+		    }
+
+			AlphaToMask Off
 
 			HLSLPROGRAM
 
@@ -1841,7 +1890,6 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 
 			float4 _SelectionID;
 
-
 			struct SurfaceDescription
 			{
 				float Alpha;
@@ -1858,17 +1906,21 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
 					float3 defaultVertexValue = float3(0, 0, 0);
 				#endif
+
 				float3 vertexValue = /*ase_vert_out:Vertex Offset;Float3;2;-1;_Vertex*/defaultVertexValue/*end*/;
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					v.vertex.xyz = vertexValue;
 				#else
 					v.vertex.xyz += vertexValue;
 				#endif
+
 				v.ase_normal = /*ase_vert_out:Vertex Normal;Float3;3;-1;_Normal*/v.ase_normal/*end*/;
 
 				float3 positionWS = TransformObjectToWorld( v.vertex.xyz );
@@ -1985,12 +2037,14 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		Pass
 		{
 			/*ase_hide_pass*/
-            Name "DepthNormals"
-            Tags { "LightMode" = "DepthNormalsOnly" }
+			Name "DepthNormals"
+			Tags 
+			{ 
+				"LightMode" = "DepthNormalsOnly" 
+		    }
 
 			ZTest LEqual
 			ZWrite On
-
 
 			HLSLPROGRAM
 
@@ -2055,7 +2109,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				float AlphaClipThreshold;
 			};
 
-			VertexOutput VertexFunction(VertexInput v /*ase_vert_input*/ )
+			VertexOutput VertexFunction( VertexInput v /*ase_vert_input*/ )
 			{
 				VertexOutput o;
 				ZERO_INITIALIZE(VertexOutput, o);
@@ -2065,6 +2119,7 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				/*ase_vert_code:v=VertexInput;o=VertexOutput*/
+
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
@@ -2215,8 +2270,11 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 		Pass // -- DEPRECATED --
 		{
 			/*ase_hide_pass*/
-            Name "DepthNormalsOnly"
-            Tags { "LightMode" = "DepthNormalsOnly" }
+			Name "DepthNormalsOnly"
+			Tags 
+			{ 
+				"LightMode" = "DepthNormalsOnly" 
+		    }
 
 			ZTest LEqual
 			ZWrite On
@@ -2413,6 +2471,48 @@ Shader /*ase_name*/ "Hidden/Universal/Unlit" /*end*/
 
 				return half4(NormalizeNormalPerPixel(normalWS), 0.0);
 			}
+
+			ENDHLSL
+		}
+
+		/*ase_pass*/
+		Pass
+		{
+			PackageRequirements
+			{
+				"com.unity.render-pipelines.universal": "unity=[2022.3.10,2022.3.45]"
+			}
+
+			/*ase_hide_pass:SyncP*/
+			Name "GBuffer"
+			Tags 
+			{
+				"LightMode" = "UniversalGBuffer" 
+			}
+
+			HLSLPROGRAM
+			#pragma exclude_renderers gles3 glcore
+
+			#pragma vertex UnlitPassVertex
+			#pragma fragment UnlitPassFragment
+
+			//#pragma shader_feature_local_fragment _ALPHATEST_ON
+			//#pragma shader_feature_local_fragment _ALPHAMODULATE_ON
+
+			//#pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+			#pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
+
+			#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+
+			#include "Packages/com.unity.render-pipelines.universal/Shaders/UnlitInput.hlsl"
+			#include "Packages/com.unity.render-pipelines.universal/Shaders/UnlitGBufferPass.hlsl"
+
+			/*ase_pragma*/
+
+			/*ase_globals*/
+
+			/*ase_funcs*/
 
 			ENDHLSL
 		}
