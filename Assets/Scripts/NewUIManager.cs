@@ -112,7 +112,7 @@ public class NewUIManager : MonoBehaviour
         switch (state) 
         {
             case States.mainmenu:
-                //Debug.Log("I am leaving the main menu.");
+                Debug.Log("I am leaving the main menu.");
                 mainMenuUI.SetActive(false);
                 // Sets the previous state variable to this state
                 previousState = States.mainmenu;
