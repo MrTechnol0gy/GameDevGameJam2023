@@ -23,6 +23,12 @@ public class GameManager : MonoBehaviour
             GameStarted();
         }
     }
+
+    public void MainMenu()
+    {
+        // Loads the main menu scene
+        SceneManager.LoadScene("MainMenu");
+    }
     
     // Quits the application
     public void QuitGame()

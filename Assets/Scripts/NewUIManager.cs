@@ -74,10 +74,14 @@ public class NewUIManager : MonoBehaviour
             case States.pausemenu:
                 //Debug.Log("I am paused.");   
                 pauseMenuUI.SetActive(true);  
+                // stop time
+                Time.timeScale = 0f;
                 break;
             case States.options:
                 //Debug.Log("I am options.");
-                optionsMenuUI.SetActive(true);    
+                optionsMenuUI.SetActive(true);  
+                // stop time
+                Time.timeScale = 0f;  
                 break;
             case States.gameplay:
                 //Debug.Log("I am gameplay.");
@@ -85,7 +89,9 @@ public class NewUIManager : MonoBehaviour
                 break;
             case States.results:
                 //Debug.Log("I am winscreen."); 
-                resultsScreenUI.SetActive(true);      
+                resultsScreenUI.SetActive(true); 
+                // stop time
+                Time.timeScale = 0f;     
                 break;
             case States.glossary:
                 //Debug.Log("I am losescreen.");   
@@ -121,13 +127,17 @@ public class NewUIManager : MonoBehaviour
                 //Debug.Log("I am paused."); 
                 pauseMenuUI.SetActive(false);  
                 // Sets the previous state variable to this state
-                previousState = States.pausemenu;            
+                previousState = States.pausemenu;  
+                // resume time
+                Time.timeScale = 1f;          
                 break;
             case States.options:
                 //Debug.Log("I am options."); 
                 optionsMenuUI.SetActive(false);  
                 // Sets the previous state variable to this state
-                previousState = States.options;            
+                previousState = States.options; 
+                // resume time
+                Time.timeScale = 1f;           
                 break;
             case States.gameplay:
                 //Debug.Log("I am gameplay.");
@@ -139,7 +149,9 @@ public class NewUIManager : MonoBehaviour
                 //Debug.Log("I am winscreen.");
                 resultsScreenUI.SetActive(false); 
                 // Sets the previous state variable to this state
-                previousState = States.results;               
+                previousState = States.results; 
+                // resume time
+                Time.timeScale = 1f;              
                 break;
             case States.glossary:
                 //Debug.Log("I am losescreen.");
