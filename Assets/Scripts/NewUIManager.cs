@@ -91,7 +91,9 @@ public class NewUIManager : MonoBehaviour
                 //Debug.Log("I am winscreen."); 
                 resultsScreenUI.SetActive(true); 
                 // stop time
-                Time.timeScale = 0f;     
+                Time.timeScale = 0f;   
+                // Listen for the event
+                GameManager.LevelLoaded += MainMenuFromResults;  
                 break;
             case States.glossary:
                 //Debug.Log("I am losescreen.");   
@@ -151,7 +153,9 @@ public class NewUIManager : MonoBehaviour
                 // Sets the previous state variable to this state
                 previousState = States.results; 
                 // resume time
-                Time.timeScale = 1f;              
+                Time.timeScale = 1f;    
+                // Stop listening for the event
+                GameManager.LevelLoaded -= MainMenuFromResults;          
                 break;
             case States.glossary:
                 //Debug.Log("I am losescreen.");
@@ -239,13 +243,13 @@ public class NewUIManager : MonoBehaviour
         currentState = States.gameplay;
     }
 
-    // This method activates the win screen UI
+    // This method activates the results screen UI
     public void Results()
     {
         currentState = States.results;
     }
 
-    // This method activates the lose screen UI
+    // This method activates the glossary screen UI
     public void Glossary()
     {
         currentState = States.glossary;
@@ -297,6 +301,12 @@ public class NewUIManager : MonoBehaviour
         {
             currentState = States.levelselect;
         }
+    }
+
+    // Activates the Main Menu UI when leaving the results screen
+    public void MainMenuFromResults()
+    {
+        currentState = States.mainmenu;
     }
 
     // Returns the current state

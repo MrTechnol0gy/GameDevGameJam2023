@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public delegate void GameStartedEventHandler();
     // Declare the event using the delegate type
     public static event GameStartedEventHandler GameStarted;
+    public delegate void LevelLoadedEventHandler();
+    public static event LevelLoadedEventHandler LevelLoaded;
 
     public void StartGame()
     {
@@ -28,6 +30,11 @@ public class GameManager : MonoBehaviour
     {
         // Loads the main menu scene
         SceneManager.LoadScene("MainMenu");
+        // Invoke the event
+        if (LevelLoaded != null)
+        {
+            LevelLoaded();
+        }
     }
     
     // Quits the application
