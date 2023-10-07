@@ -4,40 +4,36 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
+    // Nested class definition
+    [System.Serializable]
+    public class Upgrade
+    {
+        public string name;
+        public int cost;
+        public int maxUpgrade;
+        public int amount;
+        public bool isUnlocked = false;
+
+        public Upgrade(string name, int cost, int maxUpgrade, int amount, bool isUnlocked)
+        {
+            this.name = name;
+            this.cost = cost;
+            this.maxUpgrade = maxUpgrade;
+            this.amount = amount;
+            this.isUnlocked = isUnlocked;
+        }
+    }
     [Header("Cash")]
     // int to store cash amount
     public static int cash = 0;
     [Header("Upgrades")]
-    // string to store the name of the upgrade
-    public string upgradeOneName = "GrandmaSpritzer";
-    // int to store the cost of the upgrade
-    public int upgradeOneCost = 100;
-    // int to store the max amount of upgrades
-    public int upgradeOneMaxUpgrade = 10;
-    // int to store the amount of upgrades
-    public int upgradeOneAmount = 0;
-    // string to store the name of the upgrade
-    public string upgradeTwoName = "SecurityGuard";
-    // int to store the cost of the upgrade
-    public int upgradeTwoCost = 100;
-    // int to store the max amount of upgrades
-    public int upgradeTwoMaxUpgrade = 10;
-    // int to store the amount of upgrades
-    public int upgradeTwoAmount = 0;
-    // string to store the name of the upgrade
-    public string upgradeThreeName = "Wrestler";
-    // int to store the cost of the upgrade
-    public int upgradeThreeCost = 100;
-    // int to store the max amount of upgrades
-    public int upgradeThreeMaxUpgrade = 10;
-    // int to store the amount of upgrades
-    public int upgradeThreeAmount = 0;
+    // Array of upgrades
+    public Upgrade[] upgrades;
 
     void Awake()
     {
         // subscribe to the MuggerClicked event
-        AIMugger.muggerClicked += OnMuggerClicked;
-        
+        AIMugger.muggerClicked += OnMuggerClicked;        
     }
 
     // listener for the MuggerClicked event
@@ -48,143 +44,37 @@ public class UpgradeManager : MonoBehaviour
         cash+=10;
     }
     // listener for the upgrade button
+    // buttonName is the name of the button that was clicked
     public void OnUpgradeButtonClicked(string buttonName)
     {
-        // switch case for each button
-        switch (buttonName)
-        {
-            // if the upgrade is GrandmaSpritzer
-            case "GrandmaSpritzer":
-                // call the Upgrade function
-                Upgrade("GrandmaSpritzer");
-                break;
-            // if the upgrade is GrandpaSpritzer
-            case "SecurityGuard":
-                // call the Upgrade function
-                Upgrade("SecurityGuard");
-                break;
-            // if the upgrade is AuntSpritzer
-            case "Wrestler":
-                // call the Upgrade function
-                Upgrade("Wrestler");
-                break;
-        }
-    }
+        // Find the corresponding upgrade
+        Upgrade upgrade = GetUpgrade(buttonName);
 
-    private void Upgrade(string name)
-    {
-        // get the states for the passed through upgrade
-        int cost = GetUpgradeCost(name);
-        int maxUpgrade = GetUpgradeMax(name);
-        int amount = GetUpgradeAmount(name);
-
-        // if the amount is less than the max amount
-        if (amount < maxUpgrade)
+        if (upgrade.amount < upgrade.maxUpgrade && cash >= upgrade.cost)
         {
-            // if the cash is greater than or equal to the cost
-            if (cash >= cost)
+            cash -= upgrade.cost;
+            upgrade.amount++;
+            upgrade.cost *= 2;
+            Debug.Log("Upgraded " + upgrade.name + " to " + upgrade.amount);
+            if (upgrade.isUnlocked == false)
             {
-                // subtract the cost from the cash
-                cash -= cost;
-                // add one to the amount
-                amount++;
-                // set the amount
-                SetUpgradeAmount(name, amount);
+                upgrade.isUnlocked = true;
+                Debug.Log("Unlocked " + upgrade.name);
             }
         }
-    }
-
-    private int GetUpgradeCost(string name)
+    }    
+    private Upgrade GetUpgrade(string name)
     {
-        // switch case for each upgrade
-        switch (name)
+        foreach (Upgrade upgrade in upgrades)
         {
-            // if the upgrade is GrandmaSpritzer
-            case "GrandmaSpritzer":
-                // return the cost of the upgrade
-                return upgradeOneCost;
-            // if the upgrade is GrandpaSpritzer
-            case "SecurityGuard":
-                // return the cost of the upgrade
-                return upgradeTwoCost;
-            // if the upgrade is AuntSpritzer
-            case "Wrestler":
-                // return the cost of the upgrade
-                return upgradeThreeCost;
-            default:
-                // return 0
-                return 0;
+            Debug.Log("Checking upgrade " + upgrade.name);
+            if (upgrade.name == name)
+            {
+                Debug.Log("Found upgrade " + upgrade.name);
+                return upgrade;
+            }
         }
-    }
-
-    private int GetUpgradeMax(string name)
-    {
-        // switch case for each upgrade
-        switch (name)
-        {
-            // if the upgrade is GrandmaSpritzer
-            case "GrandmaSpritzer":
-                // return the max amount of the upgrade
-                return upgradeOneMaxUpgrade;
-            // if the upgrade is GrandpaSpritzer
-            case "SecurityGuard":
-                // return the max amount of the upgrade
-                return upgradeTwoMaxUpgrade;
-            // if the upgrade is AuntSpritzer
-            case "Wrestler":
-                // return the max amount of the upgrade
-                return upgradeThreeMaxUpgrade;
-            default:
-                // return 0
-                return 0;
-        }
-    }
-
-    private int GetUpgradeAmount(string name)
-    {
-        // switch case for each upgrade
-        switch (name)
-        {
-            // if the upgrade is GrandmaSpritzer
-            case "GrandmaSpritzer":
-                // return the amount of the upgrade
-                return upgradeOneAmount;
-            // if the upgrade is GrandpaSpritzer
-            case "SecurityGuard":
-                // return the amount of the upgrade
-                return upgradeTwoAmount;
-            // if the upgrade is AuntSpritzer
-            case "Wrestler":
-                // return the amount of the upgrade
-                return upgradeThreeAmount;
-            default:
-                // return 0
-                return 0;
-        }
-    }
-
-    private void SetUpgradeAmount(string name, int amount)
-    {
-        // switch case for each upgrade
-        switch (name)
-        {
-            // if the upgrade is GrandmaSpritzer
-            case "GrandmaSpritzer":
-                // set the amount of the upgrade
-                upgradeOneAmount = amount;
-                break;
-            // if the upgrade is GrandpaSpritzer
-            case "SecurityGuard":
-                // set the amount of the upgrade
-                upgradeTwoAmount = amount;
-                break;
-            // if the upgrade is AuntSpritzer
-            case "Wrestler":
-                // set the amount of the upgrade
-                upgradeThreeAmount = amount;
-                break;
-            default:
-                break;
-        }
+        Debug.Log("Upgrade " + name + " not found");
+        return null;
     }
 }

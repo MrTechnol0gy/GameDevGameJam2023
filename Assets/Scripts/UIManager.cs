@@ -241,6 +241,8 @@ public class UIManager : MonoBehaviour
     {
         //Debug.Log("Gameplay UI clicked");
         currentState = States.gameplay;
+        // change scene via the GameManager
+        GameManager.instance.StartGame();
     }
 
     // This method activates the results screen UI
@@ -259,6 +261,11 @@ public class UIManager : MonoBehaviour
     public void Credits()
     {
         currentState = States.credits;
+    }
+    // This method activates the upgrades UI
+    public void Upgrades()
+    {
+        currentState = States.upgrades;
     }
 
     // This method returns to the state prior to the current state
