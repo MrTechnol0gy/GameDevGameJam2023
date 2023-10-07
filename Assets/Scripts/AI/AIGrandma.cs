@@ -120,7 +120,7 @@ public class AIGrandma : MonoBehaviour
                     grandma.SetDestination(escapePoint.transform.position);
                     if (DistanceCheck(grandmaGO, escapePoint) < 3)
                     {
-                        Singleton.instance.GetComponentInChildren<NewUIManager>().Results();
+                        Singleton.instance.GetComponentInChildren<UIManager>().Results();
                     }
                 }
                 break;

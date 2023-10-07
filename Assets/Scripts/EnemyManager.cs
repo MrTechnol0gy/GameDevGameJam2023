@@ -63,6 +63,14 @@ public class EnemyManager : MonoBehaviour
         Instantiate(muggerPrefab, randomPosition, Quaternion.identity);
     }
 
+     private void SpawnCivvie()
+    {
+        // Get a random point on the NavMesh
+        Vector3 randomPosition = GetRandomNavMeshPosition();
+
+        // Instantiate the Mugger prefab at the random position
+        Instantiate(civilianPrefab, randomPosition, Quaternion.identity);
+    }
     private Vector3 GetRandomNavMeshPosition()
     {
         Vector3 randomPoint = Vector3.zero;
@@ -84,13 +92,5 @@ public class EnemyManager : MonoBehaviour
         }
 
         return randomPoint;
-    }
-     private void SpawnCivvie()
-    {
-        // Get a random point on the NavMesh
-        Vector3 randomPosition = GetRandomNavMeshPosition();
-
-        // Instantiate the Mugger prefab at the random position
-        Instantiate(civilianPrefab, randomPosition, Quaternion.identity);
     }
 }

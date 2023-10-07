@@ -27,7 +27,9 @@ public class AIMugger : MonoBehaviour
     private Vector3 destination;                // placeholder for any destination the mugger needs
     private Rigidbody agentRigidbody;           // placeholder for the mugger's rigidbody
     private float timer;                        // placeholder for timer
-    
+    // event for when the mugger is clicked
+    public delegate void MuggerClicked();
+    public static event MuggerClicked muggerClicked;
     public enum States
     {
         stopped,       // stopped = 0
@@ -160,7 +162,7 @@ public class AIMugger : MonoBehaviour
                     mugger.SetDestination(escapePoint.transform.position);
                     if (DistanceCheck(muggerGO, escapePoint) < 3)
                     {
-                        Singleton.instance.GetComponentInChildren<NewUIManager>().Results();
+                        Singleton.instance.GetComponentInChildren<UIManager>().Results();
                     }
                 }
                 break;
@@ -259,7 +261,8 @@ public class AIMugger : MonoBehaviour
             grandma.GetComponent<AIGrandma>().isMugged = false;
             //Debug.Log("Grandma can have her purse back.");
         }
-            
+        // Let the UpgradeManager know the Mugger has been clicked
+        muggerClicked?.Invoke();            
     }
     private bool CheckForGrandma()
     {
