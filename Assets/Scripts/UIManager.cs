@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {   
-    public static UIManager instance;
     // reference to the Main Menu UI
     public GameObject mainMenuUI;
     // reference to the Pause Menu UI
@@ -24,6 +23,10 @@ public class UIManager : MonoBehaviour
     public GameObject upgradesUI;
     // reference to the glossary UI
     public GameObject glossaryUI;
+    // Header
+    [Header("Upgrade Screen UI Elements")]
+    public TMPro.TextMeshProUGUI cashText;
+    public GameObject grandmaSpritzerButton;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -88,7 +91,7 @@ public class UIManager : MonoBehaviour
                 gameplayUI.SetActive(true);       
                 break;
             case States.results:
-                //Debug.Log("I am winscreen."); 
+                //Debug.Log("I am results."); 
                 resultsScreenUI.SetActive(true); 
                 // stop time
                 Time.timeScale = 0f;   
@@ -96,7 +99,7 @@ public class UIManager : MonoBehaviour
                 GameManager.LevelLoaded += MainMenuFromResults;  
                 break;
             case States.glossary:
-                //Debug.Log("I am losescreen.");   
+                //Debug.Log("I am glossary.");   
                 glossaryUI.SetActive(true);  
                 break;
             case States.credits:
@@ -106,6 +109,8 @@ public class UIManager : MonoBehaviour
             case States.upgrades:
                 //Debug.Log("I am upgrades.");   
                 upgradesUI.SetActive(true);  
+                // update the UI elements
+                UpdateUpgradeScreenUI();
                 break;
             case States.levelselect:
                 //Debug.Log("I am level select.");   
@@ -189,6 +194,7 @@ public class UIManager : MonoBehaviour
         // Sets all UI to false
         SetAllUIToFalse();
         GameManager.GameStarted += GameplayUI;
+        UpgradeManager.upgradeButtonClicked += UpdateUpgradeScreenUI;
     }
     void Start()
     {
@@ -314,6 +320,15 @@ public class UIManager : MonoBehaviour
     public void MainMenuFromResults()
     {
         currentState = States.mainmenu;
+        // load the main menu scene
+        GameManager.instance.MainMenu();
+    }
+
+    // Updates the various UI elements on the upgrade screen
+    public void UpdateUpgradeScreenUI()
+    {
+        // update the cash text
+        cashText.text = "Cash: " + GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>().cash.ToString("D3");
     }
 
     // Returns the current state

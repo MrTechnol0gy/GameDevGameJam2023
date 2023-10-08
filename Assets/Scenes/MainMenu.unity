@@ -5687,6 +5687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40f4547419b5fe14b97d8be8eb5b7cb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cash: 0
   upgrades:
   - name: GrandmaSpritzer
     cost: 50
@@ -8721,6 +8722,8 @@ MonoBehaviour:
   levelSelectUI: {fileID: 310834241}
   upgradesUI: {fileID: 531987974}
   glossaryUI: {fileID: 612662250}
+  cashText: {fileID: 596756892}
+  grandmaSpritzerButton: {fileID: 768047881}
 --- !u!1 &1863349846
 GameObject:
   m_ObjectHideFlags: 0

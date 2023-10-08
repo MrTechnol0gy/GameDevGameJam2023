@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
-{
+{    
     // Nested class definition
     [System.Serializable]
     public class Upgrade
@@ -25,13 +25,17 @@ public class UpgradeManager : MonoBehaviour
     }
     [Header("Cash")]
     // int to store cash amount
-    public static int cash = 0;
+    public int cash = 0;
     [Header("Upgrades")]
     // Array of upgrades
     public Upgrade[] upgrades;
+    // event handler
+    public delegate void UpgradeButtonClicked();
+    // event
+    public static event UpgradeButtonClicked upgradeButtonClicked;
 
     void Awake()
-    {
+    {        
         // subscribe to the MuggerClicked event
         AIMugger.muggerClicked += OnMuggerClicked;        
     }
@@ -45,6 +49,7 @@ public class UpgradeManager : MonoBehaviour
     }
     // listener for the upgrade button
     // buttonName is the name of the button that was clicked
+    // must be manually set when you assign the button in the inspector
     public void OnUpgradeButtonClicked(string buttonName)
     {
         // Find the corresponding upgrade
@@ -53,6 +58,8 @@ public class UpgradeManager : MonoBehaviour
         if (upgrade.amount < upgrade.maxUpgrade && cash >= upgrade.cost)
         {
             cash -= upgrade.cost;
+            // announce that the upgrade click was successful
+            upgradeButtonClicked();
             upgrade.amount++;
             upgrade.cost *= 2;
             Debug.Log("Upgraded " + upgrade.name + " to " + upgrade.amount);
@@ -76,5 +83,11 @@ public class UpgradeManager : MonoBehaviour
         }
         Debug.Log("Upgrade " + name + " not found");
         return null;
+    }
+
+    // return the cash amount
+    public int GetCash()
+    {
+        return cash;
     }
 }
