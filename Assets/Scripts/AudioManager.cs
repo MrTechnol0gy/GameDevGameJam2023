@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager get;
+    public static AudioManager instance;
 
     [Header("Audio Tracks")]
     [SerializeField] AudioClip[] muggerSpawn;
@@ -14,6 +14,23 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip[] civilians;
     private AudioSource mainAudioSource;
 
+    private void Awake()
+    {
+        // Check if there is an instance of the AudioManager
+        if (instance == null)
+        {
+            // If not, set the instance to this
+            instance = this;
+        }
+        else
+        {
+            // If there is, destroy this object
+            Destroy(gameObject);
+        }
+
+        // Make sure this object persists between scenes
+        DontDestroyOnLoad(gameObject);
+    }
     void Start()
     {
         mainAudioSource = GetComponent<AudioSource>();

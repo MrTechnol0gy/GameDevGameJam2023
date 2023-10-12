@@ -13,9 +13,27 @@ public class GameManager : MonoBehaviour
     public static event GameStartedEventHandler GameStarted;
     public delegate void LevelLoadedEventHandler();
     public static event LevelLoadedEventHandler LevelLoaded;
-
+    
+    private void Awake()
+    {
+        // Check if there is an instance of the GameManager
+        if (instance == null)
+        {
+            // If not, set the instance to this
+            instance = this;
+        }
+        else
+        {
+            // If there is, destroy this object
+            Destroy(gameObject);
+        }
+        
+        // Make sure this object persists between scenes
+        DontDestroyOnLoad(gameObject);
+    }
     public void StartGame()
     {
+        Debug.Log("Starting the game");
         // Loads the gameplay scene
         SceneManager.LoadScene("Gameplay");
         

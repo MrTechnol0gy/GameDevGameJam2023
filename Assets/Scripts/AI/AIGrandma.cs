@@ -70,7 +70,7 @@ public class AIGrandma : MonoBehaviour
                 //Debug.Log("I am " + currentState);
                 grandma.isStopped = true;
                 purse.SetActive(false);
-                Singleton.instance.GetComponentInChildren<AudioManager>().GrandmaMugged();
+                AudioManager.instance.GrandmaMugged();
                 break;
         }
     }
@@ -156,7 +156,7 @@ public class AIGrandma : MonoBehaviour
         // Subscribe to the ShopManager.ShopPositionsCollected event
         // This exists to assist with a timing issue where Grandma was trying to get the list of shops before they were ready
         
-        Singleton.instance.GetComponentInChildren<ShopManager>().ShopPositionsCollected += OnShopPositionsCollected;
+        ShopManager.instance.ShopPositionsCollected += OnShopPositionsCollected;
     }
     void Start()
     {
@@ -170,10 +170,16 @@ public class AIGrandma : MonoBehaviour
         OnUpdatedState(currentState);
     }
 
+    void OnDisable()
+    {
+        // Unsubscribe from the ShopManager.ShopPositionsCollected event
+        ShopManager.instance.ShopPositionsCollected -= OnShopPositionsCollected;
+    }
+
     public void OnShopPositionsCollected()
     {
         // Get the list of shop positions from the ShopManager script
-        shops = Singleton.instance.GetComponentInChildren<ShopManager>().GetShopPositions();
+        shops = ShopManager.instance.GetShopPositions();
 
         Debug.Log("Shop positions for grandma collected: " + shops.Count);
     }

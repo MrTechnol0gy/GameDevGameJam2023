@@ -16,6 +16,23 @@ public class EnemyManager : MonoBehaviour
     public int amountOfCivvies = 30;    // amount of civvies
     [Header("Other Components")]
     public GameObject mallFloor;        // Reference to the mall floor object
+    private void Awake()
+    {
+        // Check if there is an instance of the EnemyManager
+        if (instance == null)
+        {
+            // If not, set the instance to this
+            instance = this;
+        }
+        else
+        {
+            // If there is, destroy this object
+            Destroy(gameObject);
+        }
+
+        // Make sure this object persists between scenes
+        DontDestroyOnLoad(gameObject);
+    }
     private void Start()
     {
         // Listen for the GameStarted event

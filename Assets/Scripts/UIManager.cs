@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {   
+    public static UIManager instance;
+
+    [Header("UI Elements")]
     // reference to the Main Menu UI
     public GameObject mainMenuUI;
     // reference to the Pause Menu UI
@@ -27,6 +30,7 @@ public class UIManager : MonoBehaviour
     [Header("Upgrade Screen UI Elements")]
     public TMPro.TextMeshProUGUI cashText;
     public GameObject grandmaSpritzerButton;
+    
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -191,6 +195,18 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
+        // Check if there is an instance of the UIManager
+        if (instance == null)
+        {
+            // If not, set the instance to this
+            instance = this;
+        }
+        else
+        {
+            // If there is, destroy this object
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
         // Sets all UI to false
         SetAllUIToFalse();
         GameManager.GameStarted += GameplayUI;
@@ -200,11 +216,6 @@ public class UIManager : MonoBehaviour
     {
         // Sets the current state to the default state
         OnStartedState(currentState);
-    }
-
-    void Update()
-    {
-        
     }
 
     // Sets all Ui elements to inactive
@@ -247,8 +258,6 @@ public class UIManager : MonoBehaviour
     {
         //Debug.Log("Gameplay UI clicked");
         currentState = States.gameplay;
-        // change scene via the GameManager
-        GameManager.instance.StartGame();
     }
 
     // This method activates the results screen UI
@@ -322,6 +331,12 @@ public class UIManager : MonoBehaviour
         currentState = States.mainmenu;
         // load the main menu scene
         GameManager.instance.MainMenu();
+    }
+
+    public void ContinueFromUpgrades()
+    {
+        GameManager.instance.StartGame();
+        currentState = States.gameplay;
     }
 
     // Updates the various UI elements on the upgrade screen

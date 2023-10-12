@@ -7,13 +7,13 @@ public class ShopPositionsListener : MonoBehaviour
     private void OnEnable()
     {
         // Subscribe to the ShopPositionsCollected event
-        Singleton.instance.GetComponentInChildren<ShopManager>().ShopPositionsCollected += OnShopPositionsCollected;
+        ShopManager.instance.ShopPositionsCollected += OnShopPositionsCollected;
     }
 
     private void OnDisable()
     {
         // Unsubscribe from the ShopPositionsCollected event
-        Singleton.instance.GetComponentInChildren<ShopManager>().ShopPositionsCollected -= OnShopPositionsCollected;
+        ShopManager.instance.ShopPositionsCollected -= OnShopPositionsCollected;
     }
 
     private void OnShopPositionsCollected()

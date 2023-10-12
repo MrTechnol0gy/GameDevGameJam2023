@@ -131,7 +131,7 @@ public class AICivilian : MonoBehaviour
             if (shops == null)
             {
                 Debug.Log("Shops is null, getting shops");
-                shops = Singleton.instance.GetComponentInChildren<ShopManager>().GetShopPositions();
+                shops = ShopManager.instance.GetShopPositions();
                 int randomIndex = Random.Range(0, shops.Count);
                 return shops[randomIndex];
             }

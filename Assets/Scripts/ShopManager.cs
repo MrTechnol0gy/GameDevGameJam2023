@@ -11,6 +11,24 @@ public class ShopManager : MonoBehaviour
     public List<Vector3> shopPositions = new List<Vector3>();
     // Declare a public event that will be raised when the shop positions are collected
     public event Action ShopPositionsCollected;
+
+    private void Awake()
+    {
+        // Check if there is an instance of the ShopManager
+        if (instance == null)
+        {
+            // If not, set the instance to this
+            instance = this;
+        }
+        else
+        {
+            // If there is, destroy this object
+            Destroy(gameObject);
+        }
+
+        // Make sure this object persists between scenes
+        DontDestroyOnLoad(gameObject);
+    }
     private void OnEnable()
     {
         // Subscribe to the SceneManager.sceneLoaded event
