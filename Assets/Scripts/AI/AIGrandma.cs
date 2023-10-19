@@ -98,7 +98,7 @@ public class AIGrandma : MonoBehaviour
                 {
                     shopsVisited++;
                     // Debug.Log("Shops visited is " + shopsVisited);
-                    Singleton.instance.GetComponentInChildren<AudioManager>().GrandmaShops();
+                    AudioManager.instance.GrandmaShops();
                     currentState = States.stopped;
                 }
                 else if (shopsVisited == shopList)
@@ -120,7 +120,7 @@ public class AIGrandma : MonoBehaviour
                     grandma.SetDestination(escapePoint.transform.position);
                     if (DistanceCheck(grandmaGO, escapePoint) < 3)
                     {
-                        Singleton.instance.GetComponentInChildren<UIManager>().Results();
+                        UIManager.instance.Results();
                     }
                 }
                 break;

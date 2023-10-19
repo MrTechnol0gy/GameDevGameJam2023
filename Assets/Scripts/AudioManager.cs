@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip[] grandmaShops;
     [SerializeField] AudioClip[] civilians;
     private AudioSource mainAudioSource;
+    [Header("Audio Sliders")]
+    [SerializeField] Slider masterVolumeSlider;
 
     private void Awake()
     {
@@ -136,5 +139,17 @@ public class AudioManager : MonoBehaviour
         }
         else
         return false;
+    }
+
+    public void ChangeVolumes()
+    {
+        if (masterVolumeSlider == null)
+        {
+            Debug.Log("master volume slider is null");
+            return;
+        }
+        Debug.Log("master volume is " + mainAudioSource.volume);
+        mainAudioSource.volume = masterVolumeSlider.value;
+        Debug.Log("master volume is " + mainAudioSource.volume);
     }
 }
