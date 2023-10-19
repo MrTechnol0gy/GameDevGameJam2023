@@ -214,6 +214,7 @@ public class UIManager : MonoBehaviour
         SetAllUIToFalse();
         GameManager.GameStarted += GameplayUI;
         UpgradeManager.upgradeButtonClicked += UpdateUpgradeScreenUI;
+        AIMugger.muggerClicked += UpdateGameplayUI;
     }
     void Start()
     {
@@ -371,7 +372,13 @@ public class UIManager : MonoBehaviour
     public void UpdateUpgradeScreenUI()
     {
         // update the cash text
-        cashText.text = "Cash: " + GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>().cash.ToString("D3");
+        cashText.text = "Cash: $" + GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>().cash.ToString("D3");
+    }
+
+    public void UpdateGameplayUI()
+    {
+        // update the cash text
+        cashTextGameplay.text = "Cash: $" + UpgradeManager.instance.cash.ToString("D3");
     }
 
     // Returns the current state

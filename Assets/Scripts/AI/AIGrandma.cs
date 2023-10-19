@@ -21,6 +21,7 @@ public class AIGrandma : MonoBehaviour
     private List<Vector3> shops;
     private int shopsVisited = 0;              // counter for amount of shops grandma has visited
     private GameObject grandmaGO;
+    public Outline outlineScript;
     
     public enum States
     {
@@ -162,6 +163,11 @@ public class AIGrandma : MonoBehaviour
     {
         escapePoint = GameObject.FindWithTag("EscapePoint");
         grandmaGO = gameObject;
+        Debug.Log("Grandma Spritzer is " + UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").isUnlocked);
+        if (UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").isUnlocked)
+        {
+            outlineScript.enabled = true;
+        }
         OnStartedState(currentState);
     }
 

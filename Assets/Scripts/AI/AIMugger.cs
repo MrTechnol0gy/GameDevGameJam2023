@@ -235,34 +235,37 @@ public class AIMugger : MonoBehaviour
 
     public void Gottem()
     {
-        Debug.Log("Got me.");
-        isLaunched = true;
-        // Disable NavMeshAgent to allow manual control
-        mugger.enabled = false;
-
-        // Disable rigidbody gravity to ensure it launches upwards
-        agentRigidbody.useGravity = false;
-
-        // Disable the kinematics so that force can be applied directly
-        agentRigidbody.isKinematic = false;
-
-        // Apply a vertical force to launch the agent into the air
-        agentRigidbody.AddForce(Vector3.up * launchForce, ForceMode.Impulse);
-
-        // Apply a torque to make the agent spin wildly
-        agentRigidbody.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
-
-        // Play sfx
-        AudioManager.instance.MuggerCaught();
-        
-        if (hasMugged)
+        if (!isLaunched)
         {
-            // Let Grandma know she's got her purse back
-            grandma.GetComponent<AIGrandma>().isMugged = false;
-            //Debug.Log("Grandma can have her purse back.");
-        }
-        // Let the UpgradeManager know the Mugger has been clicked
-        muggerClicked?.Invoke();            
+            Debug.Log("Got me.");
+            isLaunched = true;
+            // Disable NavMeshAgent to allow manual control
+            mugger.enabled = false;
+
+            // Disable rigidbody gravity to ensure it launches upwards
+            agentRigidbody.useGravity = false;
+
+            // Disable the kinematics so that force can be applied directly
+            agentRigidbody.isKinematic = false;
+
+            // Apply a vertical force to launch the agent into the air
+            agentRigidbody.AddForce(Vector3.up * launchForce, ForceMode.Impulse);
+
+            // Apply a torque to make the agent spin wildly
+            agentRigidbody.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
+
+            // Play sfx
+            AudioManager.instance.MuggerCaught();
+
+            // Let the UpgradeManager know the Mugger has been clicked
+            muggerClicked?.Invoke();            
+            if (hasMugged)
+            {
+                // Let Grandma know she's got her purse back
+                grandma.GetComponent<AIGrandma>().isMugged = false;
+                //Debug.Log("Grandma can have her purse back.");
+            }
+        }        
     }
     private bool CheckForGrandma()
     {

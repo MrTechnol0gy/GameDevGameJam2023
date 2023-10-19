@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {    
+    // Singleton pattern
+    public static UpgradeManager instance;
     // Nested class definition
     [System.Serializable]
     public class Upgrade
@@ -36,6 +38,19 @@ public class UpgradeManager : MonoBehaviour
 
     void Awake()
     {        
+        // Check if there is an instance of the UpgradeManager
+        if (instance == null)
+        {
+            // If not, set the instance to this
+            instance = this;
+        }
+        else
+        {
+            // If there is, destroy this object
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
+
         // subscribe to the MuggerClicked event
         AIMugger.muggerClicked += OnMuggerClicked;        
     }
@@ -70,7 +85,7 @@ public class UpgradeManager : MonoBehaviour
             }
         }
     }    
-    private Upgrade GetUpgrade(string name)
+    public Upgrade GetUpgrade(string name)
     {
         foreach (Upgrade upgrade in upgrades)
         {
