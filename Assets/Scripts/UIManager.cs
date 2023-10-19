@@ -32,7 +32,8 @@ public class UIManager : MonoBehaviour
     [Header("Upgrade Screen UI Elements")]
     public TMPro.TextMeshProUGUI cashText;
     public GameObject grandmaSpritzerButton;
-    
+    [Header("Gameplay UI Elements")]
+    public TMPro.TextMeshProUGUI cashTextGameplay;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
