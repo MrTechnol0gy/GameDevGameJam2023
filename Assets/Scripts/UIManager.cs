@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {   
@@ -232,6 +234,24 @@ public class UIManager : MonoBehaviour
         glossaryUI.SetActive(false);
     }
 
+    void Update()
+    {
+        // If the player presses escape, open the pause menu
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // If the current state is gameplay, open the pause menu
+            if (currentState == States.gameplay)
+            {
+                PauseMenu();
+            }
+            // If the current state is pause menu, return to gameplay
+            else if (currentState == States.pausemenu)
+            {
+                GameplayUI();
+            }
+        }
+    }
+
     // This method activates the main menu UI
     public void MainMenu()
     {
@@ -301,7 +321,14 @@ public class UIManager : MonoBehaviour
         }
         else if (previousState == States.options)
         {
-            currentState = States.options;
+            if (SceneManager.GetActiveScene().name == "MainMenu")
+            {
+                currentState = States.mainmenu;
+            }
+            else if (SceneManager.GetActiveScene().name == "Gameplay")
+            {
+                currentState = States.gameplay;
+            }
         }
         else if (previousState == States.results)
         {
