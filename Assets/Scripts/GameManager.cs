@@ -31,11 +31,21 @@ public class GameManager : MonoBehaviour
         // Make sure this object persists between scenes
         DontDestroyOnLoad(gameObject);
     }
+    private void Start()
+    {
+        // Load the game data
+        SaveLoadManager.instance.LoadGame();
+        Debug.Log("Game loaded");
+    }
     public void StartGame()
     {
         Debug.Log("Starting the game");
         // Loads the gameplay scene
         SceneManager.LoadScene("Gameplay");
+        
+        // Save the game
+        SaveLoadManager.instance.SaveGame();
+        Debug.Log("Game saved");
         
         // Invoke the event
         if (GameStarted != null)

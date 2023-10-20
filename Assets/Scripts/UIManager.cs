@@ -103,7 +103,7 @@ public class UIManager : MonoBehaviour
                 // stop time
                 Time.timeScale = 0f;   
                 // Listen for the event
-                GameManager.LevelLoaded += MainMenuFromResults;  
+                GameManager.LevelLoaded += MainMenuFromResults;
                 break;
             case States.glossary:
                 //Debug.Log("I am glossary.");   
@@ -167,7 +167,10 @@ public class UIManager : MonoBehaviour
                 // resume time
                 Time.timeScale = 1f;    
                 // Stop listening for the event
-                GameManager.LevelLoaded -= MainMenuFromResults;          
+                GameManager.LevelLoaded -= MainMenuFromResults;    
+                // Save the game
+                SaveLoadManager.instance.SaveGame();
+                Debug.Log("Game saved.");      
                 break;
             case States.glossary:
                 //Debug.Log("I am losescreen.");
