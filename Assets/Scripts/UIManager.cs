@@ -19,8 +19,6 @@ public class UIManager : MonoBehaviour
     public GameObject gameplayUI;
     // reference to the results screen UI
     public GameObject resultsScreenUI;
-    // reference to the credits UI
-    public GameObject creditsUI;
     // reference to the level select UI
     public GameObject levelSelectUI;
     // reference to the upgrades UI
@@ -46,9 +44,8 @@ public class UIManager : MonoBehaviour
         gameplay = 3,
         results = 4,
         glossary = 5,
-        credits = 6,
-        upgrades = 7,
-        levelselect = 8
+        upgrades = 6,
+        levelselect = 7
     }
     private States _currentState = States.mainmenu;       //sets the starting state    
     public States currentState 
@@ -107,10 +104,6 @@ public class UIManager : MonoBehaviour
             case States.glossary:
                 //Debug.Log("I am glossary.");   
                 glossaryUI.SetActive(true);  
-                break;
-            case States.credits:
-                //Debug.Log("I am credits.");   
-                creditsUI.SetActive(true);  
                 break;
             case States.upgrades:
                 //Debug.Log("I am upgrades.");   
@@ -177,12 +170,6 @@ public class UIManager : MonoBehaviour
                 // Sets the previous state variable to this state
                 previousState = States.glossary;             
                 break;
-            case States.credits:
-                //Debug.Log("I am credits.");
-                creditsUI.SetActive(false); 
-                // Sets the previous state variable to this state
-                previousState = States.credits;             
-                break;
             case States.upgrades:
                 //Debug.Log("I am upgrades.");
                 upgradesUI.SetActive(false); 
@@ -232,7 +219,6 @@ public class UIManager : MonoBehaviour
         optionsMenuUI.SetActive(false);
         gameplayUI.SetActive(false);
         resultsScreenUI.SetActive(false);
-        creditsUI.SetActive(false);
         upgradesUI.SetActive(false);
         levelSelectUI.SetActive(false);
         glossaryUI.SetActive(false);
@@ -296,11 +282,6 @@ public class UIManager : MonoBehaviour
         currentState = States.glossary;
     }
 
-    // This method activates the credits UI
-    public void Credits()
-    {
-        currentState = States.credits;
-    }
     // This method activates the upgrades UI
     public void Upgrades()
     {
@@ -341,10 +322,6 @@ public class UIManager : MonoBehaviour
         else if (previousState == States.glossary)
         {
             currentState = States.glossary;
-        }
-        else if (previousState == States.credits)
-        {
-            currentState = States.credits;
         }
         else if (previousState == States.upgrades)
         {

@@ -70,4 +70,18 @@ public class SaveLoadManager : MonoBehaviour
             Debug.LogWarning("No save data found.");
         }
     }
+
+    public void DeleteSave()
+    {
+        if (File.Exists(savePath))
+        {
+            File.Delete(savePath);
+            PlayerPrefs.DeleteAll();
+            Debug.Log("Save file deleted.");
+        }
+        else
+        {
+            Debug.Log("No save file found to delete.");
+        }
+    }
 }
