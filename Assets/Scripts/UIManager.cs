@@ -28,9 +28,17 @@ public class UIManager : MonoBehaviour
     // Header
     [Header("Upgrade Screen UI Elements")]
     public TMPro.TextMeshProUGUI cashText;
-    public GameObject grandmaSpritzerButton;
+    public TMPro.TextMeshProUGUI informationText;
+    public TMPro.TextMeshProUGUI grandmaSpritzerText;
+    public TMPro.TextMeshProUGUI securityGuardText;
+    public TMPro.TextMeshProUGUI rooftopSniperText;
+    public TMPro.TextMeshProUGUI rocketPoweredScooterText;
+    public TMPro.TextMeshProUGUI localWrestlerText;
     [Header("Gameplay UI Elements")]
     public TMPro.TextMeshProUGUI cashTextGameplay;
+    // event for when the state changes to upgrades
+    public delegate void UpgradesState();
+    public static event UpgradesState upgradesState;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -110,6 +118,10 @@ public class UIManager : MonoBehaviour
                 upgradesUI.SetActive(true);  
                 // update the UI elements
                 UpdateUpgradeScreenUI();
+                // announce that the upgrades state has started
+                upgradesState();
+                // listen for the hover event
+                HoverHandler.OnHoverEnter += UpgradeHover;
                 break;
             case States.levelselect:
                 //Debug.Log("I am level select.");   
@@ -174,7 +186,9 @@ public class UIManager : MonoBehaviour
                 //Debug.Log("I am upgrades.");
                 upgradesUI.SetActive(false); 
                 // Sets the previous state variable to this state
-                previousState = States.upgrades;             
+                previousState = States.upgrades;    
+                // Stop listening for the event
+                HoverHandler.OnHoverEnter -= UpgradeHover;         
                 break;
             case States.levelselect:
                 //Debug.Log("I am level select.");
@@ -351,13 +365,33 @@ public class UIManager : MonoBehaviour
     public void UpdateUpgradeScreenUI()
     {
         // update the cash text
-        cashText.text = "Cash: $" + GameObject.Find("UpgradeManager").GetComponent<UpgradeManager>().cash.ToString("D3");
+        cashText.text = "Cash: $" + UpgradeManager.instance.GetCash().ToString("D3");
+        // update the upgrade text
+        grandmaSpritzerText.text = "$" + UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").cost.ToString("D3");
+        securityGuardText.text = "$" + UpgradeManager.instance.GetUpgrade("SecurityGuard").cost.ToString("D3");
+        rooftopSniperText.text = "$" + UpgradeManager.instance.GetUpgrade("RooftopSniper").cost.ToString("D3");
+        rocketPoweredScooterText.text = "$" + UpgradeManager.instance.GetUpgrade("RocketPoweredScooter").cost.ToString("D3");
+        localWrestlerText.text = "$" + UpgradeManager.instance.GetUpgrade("LocalWrestler").cost.ToString("D3");
     }
 
     public void UpdateGameplayUI()
     {
         // update the cash text
         cashTextGameplay.text = "Cash: $" + UpgradeManager.instance.cash.ToString("D3");
+    }
+
+    // This method is called when the player hovers over an upgrade button, and displays the upgrade's description
+    void UpgradeHover(string elementName)
+    {
+        UpgradeManager.Upgrade upgrade = UpgradeManager.instance.GetUpgrade(elementName);
+        if (upgrade.description != null)
+        {
+            informationText.text = upgrade.description;
+        }
+        else
+        {
+            informationText.text = "No description available.";
+        }
     }
 
     // Returns the current state

@@ -39,6 +39,7 @@ public class SaveLoadManager : MonoBehaviour
     private void Start()
     {
         savePath = Application.persistentDataPath + "/save.json";
+        // Debug.Log("Application.persistentDataPath: " + Application.persistentDataPath);
         // Load the game
         LoadGame();
     }
@@ -78,10 +79,17 @@ public class SaveLoadManager : MonoBehaviour
             File.Delete(savePath);
             PlayerPrefs.DeleteAll();
             Debug.Log("Save file deleted.");
+            RestoreDefaults();
         }
         else
         {
             Debug.Log("No save file found to delete.");
         }
+    }
+
+    private void RestoreDefaults()
+    {
+        // Restores the default values of the game
+        Debug.Log("Restoring defaults...NOT IMPLEMENTED YET");
     }
 }

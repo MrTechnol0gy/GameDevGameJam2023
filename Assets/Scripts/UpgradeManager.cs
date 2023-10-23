@@ -15,14 +15,16 @@ public class UpgradeManager : MonoBehaviour
         public int maxUpgrade;
         public int amount;
         public bool isUnlocked = false;
+        public string description;
 
-        public Upgrade(string name, int cost, int maxUpgrade, int amount, bool isUnlocked)
+        public Upgrade(string name, int cost, int maxUpgrade, int amount, bool isUnlocked, string description)
         {
             this.name = name;
             this.cost = cost;
             this.maxUpgrade = maxUpgrade;
             this.amount = amount;
             this.isUnlocked = isUnlocked;
+            this.description = description;
         }
     }
     [Header("Cash")]
