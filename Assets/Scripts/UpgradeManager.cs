@@ -30,6 +30,10 @@ public class UpgradeManager : MonoBehaviour
     [Header("Cash")]
     // int to store cash amount
     public int cash = 0;
+    [Header("EnemyValues")]
+    public int muggerValue = 10;
+    public int cultistValue = 20;
+    public int clownValue = 30;
     [Header("Upgrades")]
     // Array of upgrades
     public Upgrade[] upgrades;
@@ -62,7 +66,7 @@ public class UpgradeManager : MonoBehaviour
     {
         Debug.Log("Mugger Clicked");
         // add 10 to the cash
-        cash+=10;
+        cash += muggerValue;
     }
     // listener for the upgrade button
     // buttonName is the name of the button that was clicked

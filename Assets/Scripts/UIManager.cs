@@ -36,6 +36,13 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI localWrestlerText;
     [Header("Gameplay UI Elements")]
     public TMPro.TextMeshProUGUI cashTextGameplay;
+    [Header("Results Screen UI Elements")]
+    public TMPro.TextMeshProUGUI muggersClickedText;
+    public TMPro.TextMeshProUGUI cultistsClickedText;
+    public TMPro.TextMeshProUGUI clownsClickedText;
+    public TMPro.TextMeshProUGUI finalResultsText;
+    public TMPro.TextMeshProUGUI villainVictoryText;
+    public TMPro.TextMeshProUGUI grandmaVictoryText;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -102,7 +109,9 @@ public class UIManager : MonoBehaviour
                 //Debug.Log("I am results."); 
                 resultsScreenUI.SetActive(true); 
                 // stop time
-                Time.timeScale = 0f;   
+                Time.timeScale = 0f;
+                // update the UI elements
+                UpdateResultsScreenUI();
                 // Listen for the event
                 GameManager.LevelLoaded += MainMenuFromResults;
                 break;
@@ -373,6 +382,17 @@ public class UIManager : MonoBehaviour
     {
         // update the cash text
         cashTextGameplay.text = "Cash: $" + UpgradeManager.instance.cash.ToString("D3");
+    }
+
+    public void UpdateResultsScreenUI()
+    {
+        int muggersClicked = ResultsManager.instance.GetScores();
+        int muggerValue = UpgradeManager.instance.muggerValue;
+        int totalMuggerValue = muggersClicked * muggerValue;
+        muggersClickedText.text = "$" + totalMuggerValue.ToString("D3");
+
+        int finalResultsValue = totalMuggerValue;
+        finalResultsText.text = "$" + finalResultsValue.ToString("D3");
     }
 
     // This method is called when the player hovers over an upgrade button, and displays the upgrade's description

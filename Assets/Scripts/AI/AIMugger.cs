@@ -30,6 +30,8 @@ public class AIMugger : MonoBehaviour
     // event for when the mugger is clicked
     public delegate void MuggerClicked();
     public static event MuggerClicked muggerClicked;
+    public delegate void MuggerEscaped();
+    public static event MuggerEscaped muggerEscaped;
     public enum States
     {
         stopped,       // stopped = 0
@@ -162,6 +164,7 @@ public class AIMugger : MonoBehaviour
                     mugger.SetDestination(escapePoint.transform.position);
                     if (DistanceCheck(muggerGO, escapePoint) < 3)
                     {
+                        muggerEscaped?.Invoke();
                         UIManager.instance.Results();
                     }
                 }
