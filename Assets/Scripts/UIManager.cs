@@ -36,9 +36,6 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI localWrestlerText;
     [Header("Gameplay UI Elements")]
     public TMPro.TextMeshProUGUI cashTextGameplay;
-    // event for when the state changes to upgrades
-    public delegate void UpgradesState();
-    public static event UpgradesState upgradesState;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -118,8 +115,6 @@ public class UIManager : MonoBehaviour
                 upgradesUI.SetActive(true);  
                 // update the UI elements
                 UpdateUpgradeScreenUI();
-                // announce that the upgrades state has started
-                upgradesState();
                 // listen for the hover event
                 HoverHandler.OnHoverEnter += UpgradeHover;
                 break;
@@ -216,7 +211,7 @@ public class UIManager : MonoBehaviour
         // Sets all UI to false
         SetAllUIToFalse();
         GameManager.GameStarted += GameplayUI;
-        UpgradeManager.upgradeButtonClicked += UpdateUpgradeScreenUI;
+        UpgradeManager.OnUpgradeButtonClickedEvent += UpdateUpgradeScreenUI;
         AIMugger.muggerClicked += UpdateGameplayUI;
     }
     void Start()

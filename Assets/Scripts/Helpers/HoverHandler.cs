@@ -11,7 +11,7 @@ public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         // Called when the mouse enters the UI element
         // Broadcast the name of the UI element
         string elementName = gameObject.name;
-        Debug.Log("Mouse entered: " + elementName);
+        // Debug.Log("Mouse entered: " + elementName);
         
         // Broadcast the name using the event
         OnHoverEnter?.Invoke(elementName);
@@ -21,6 +21,7 @@ public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         // Called when the mouse exits the UI element
         // You can perform actions when the pointer is no longer hovering over the UI element
-        Debug.Log("Mouse exited: " + gameObject.name);
+        
+        // Debug.Log("Mouse exited: " + gameObject.name);
     }
 }

@@ -9,13 +9,20 @@ public class PipGenerator : MonoBehaviour
 
     private void Start()
     {
-        // Subscribe to the Uimanager's upgrade ui started event
-        UIManager.upgradesState += UpdatePips;
+        UpdatePips();
         // Subscribe to the UpgradeManager's upgrade Button Clicked event
-        UpgradeManager.upgradeButtonClicked += UpdatePips;
+        UpgradeManager.OnUpgradeButtonClickedEvent += UpdatePips;
+       
     }
     void UpdatePips()
     {
+        Debug.Log("UpdatePips() called.");
+        // Clear the pips
+        foreach (Transform child in pipParent)
+        {
+            Destroy(child.gameObject);
+        }
+
         // Check that the UpgradeManager and pipPrefab are assigned
         if (upgradeManager != null && pipPrefab != null)
         {
@@ -29,14 +36,22 @@ public class PipGenerator : MonoBehaviour
             {
                 // Generate pips based on the upgrade amount and maxUpgrade
                 int amount = upgrade.amount;
-                int maxAmount = upgrade.maxUpgrade;
+                int maxUpgrade = upgrade.maxUpgrade;
+                int pipsToGenerate = amount > maxUpgrade ? maxUpgrade : amount;
 
-                for (int i = 0; i < maxAmount; i++)
+                // Generate the pips that have been upgraded
+                for (int i = 0; i < pipsToGenerate; i++)
                 {
                     GameObject pip = Instantiate(pipPrefab, pipParent);
-                    // Customize the pip appearance or properties as needed
-                    // You may need to arrange pips in a specific layout
+                    pip.GetComponent<Image>().color = Color.green;
                 }
+                // Generate the remaining pips
+                for (int i = 0; i < maxUpgrade - amount; i++)
+                {
+                    GameObject pip = Instantiate(pipPrefab, pipParent);
+                    pip.GetComponent<Image>().color = Color.red;
+                }
+
             }
             else
             {

@@ -36,7 +36,7 @@ public class UpgradeManager : MonoBehaviour
     // event handler
     public delegate void UpgradeButtonClicked();
     // event
-    public static event UpgradeButtonClicked upgradeButtonClicked;
+    public static event UpgradeButtonClicked OnUpgradeButtonClickedEvent;
 
     void Awake()
     {        
@@ -75,8 +75,6 @@ public class UpgradeManager : MonoBehaviour
         if (upgrade.amount < upgrade.maxUpgrade && cash >= upgrade.cost)
         {
             cash -= upgrade.cost;
-            // announce that the upgrade click was successful
-            upgradeButtonClicked();
             upgrade.amount++;
             upgrade.cost *= 2;
             Debug.Log("Upgraded " + upgrade.name + " to " + upgrade.amount);
@@ -85,16 +83,18 @@ public class UpgradeManager : MonoBehaviour
                 upgrade.isUnlocked = true;
                 Debug.Log("Unlocked " + upgrade.name);
             }
+            // announce that the upgrade click was successful
+            OnUpgradeButtonClickedEvent();
         }
     }    
     public Upgrade GetUpgrade(string name)
     {
         foreach (Upgrade upgrade in upgrades)
         {
-            Debug.Log("Checking upgrade " + upgrade.name);
+            // Debug.Log("Checking upgrade " + upgrade.name);
             if (upgrade.name == name)
             {
-                Debug.Log("Found upgrade " + upgrade.name);
+                // Debug.Log("Found upgrade " + upgrade.name);
                 return upgrade;
             }
         }
