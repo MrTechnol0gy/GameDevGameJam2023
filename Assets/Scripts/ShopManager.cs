@@ -44,7 +44,7 @@ public class ShopManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Check if the loaded scene is one where we should collect shop positions
-        if (scene.name == "Gameplay")
+        if (scene.name == "Large Mall" || scene.name == "Medium Mall" || scene.name == "Small Mall")
         {
             // Collect all shop positions
             Debug.Log("Collecting shop positions...");

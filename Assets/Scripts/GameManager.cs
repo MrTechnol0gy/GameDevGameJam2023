@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Starting the game");
         // Loads the gameplay scene
-        SceneManager.LoadScene("Gameplay");
+        SceneManager.LoadScene("Large Mall");
         
         // Save the game
         SaveLoadManager.instance.SaveGame();

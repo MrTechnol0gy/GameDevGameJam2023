@@ -14,12 +14,12 @@ public class AIGrandma : MonoBehaviour
     public GameObject purse;
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain in a shop
     [SerializeField] float shopTime = 12f;      // how long the agent will shop
-    [SerializeField] int shopList = 5;          // how many shops grandma needs to visit before she's done shopping
+    private int shopList = 0;                   // how many shops grandma needs to visit before she's done shopping
     public bool isMugged = false;
     private Vector3 destination;                // placeholder for any destination the grandma needs
     private float timer;                        // placeholder for timer
     private List<Vector3> shops;
-    private int shopsVisited = 0;              // counter for amount of shops grandma has visited
+    private int shopsVisited = 0;               // counter for amount of shops grandma has visited
     private GameObject grandmaGO;
     public Outline outlineScript;
     
@@ -154,13 +154,20 @@ public class AIGrandma : MonoBehaviour
     
     void Awake()
     {
+        
         // Subscribe to the ShopManager.ShopPositionsCollected event
         // This exists to assist with a timing issue where Grandma was trying to get the list of shops before they were ready
         
         ShopManager.instance.ShopPositionsCollected += OnShopPositionsCollected;
+
     }
     void Start()
     {
+        // set the shoplist from the LevelManager
+        Debug.Log("Required visits is " + LevelManager.instance.GetLevel().requiredVisits);
+        shopList = LevelManager.instance.GetLevel().requiredVisits;
+        Debug.Log("Shop list is " + shopList);
+        
         escapePoint = GameObject.FindWithTag("EscapePoint");
         grandmaGO = gameObject;
         Debug.Log("Grandma Spritzer is " + UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").isUnlocked);
