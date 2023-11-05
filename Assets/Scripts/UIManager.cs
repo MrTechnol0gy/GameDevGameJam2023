@@ -41,9 +41,9 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI cultistsClickedText;
     public TMPro.TextMeshProUGUI clownsClickedText;
     public TMPro.TextMeshProUGUI finalResultsText;
-    public TMPro.TextMeshProUGUI villainVictoryText;
-    public TMPro.TextMeshProUGUI grandmaVictoryText;
     public TMPro.TextMeshProUGUI progressTrackerText;
+    public GameObject victory;
+    public GameObject defeat;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -397,6 +397,19 @@ public class UIManager : MonoBehaviour
         // update the total progress tracker
         int totalProgressTracker = ResultsManager.instance.GetTotalShopsVisited();
         progressTrackerText.text = totalProgressTracker.ToString("D3") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D3");
+        // If the player is victorious, display the victory screen
+        if (ResultsManager.instance.GetVillainVictory() == true)
+        {
+            //Debug.Log("Villain victory!");
+            victory.SetActive(false);
+            defeat.SetActive(true);
+        }
+        else 
+        {
+            //Debug.Log("Grandma victory!");
+            victory.SetActive(true);
+            defeat.SetActive(false);
+        }
     }
 
     // This method is called when the player hovers over an upgrade button, and displays the upgrade's description
