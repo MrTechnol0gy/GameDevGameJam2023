@@ -43,6 +43,7 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI finalResultsText;
     public TMPro.TextMeshProUGUI villainVictoryText;
     public TMPro.TextMeshProUGUI grandmaVictoryText;
+    public TMPro.TextMeshProUGUI progressTrackerText;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -390,9 +391,12 @@ public class UIManager : MonoBehaviour
         int muggerValue = UpgradeManager.instance.muggerValue;
         int totalMuggerValue = muggersClicked * muggerValue;
         muggersClickedText.text = "$" + totalMuggerValue.ToString("D3");
-
+        // other villain scores go here
         int finalResultsValue = totalMuggerValue;
         finalResultsText.text = "$" + finalResultsValue.ToString("D3");
+        // update the total progress tracker
+        int totalProgressTracker = ResultsManager.instance.GetTotalShopsVisited();
+        progressTrackerText.text = totalProgressTracker.ToString("D3") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D3");
     }
 
     // This method is called when the player hovers over an upgrade button, and displays the upgrade's description

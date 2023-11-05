@@ -7,7 +7,8 @@ public class ResultsManager : MonoBehaviour
 {
     // Singleton
     public static ResultsManager instance;
-
+    // Variables
+    private int totalShopsVisited = 0;
     private int muggersClicked = 0;
     private bool villainVictory = false;
 
@@ -35,6 +36,8 @@ public class ResultsManager : MonoBehaviour
 
         // Subscribe to the villain victory conditions
         AIMugger.muggerEscaped += VillainVictory;
+
+        AIGrandma.GrandmaFinishedShoppingEvent += IncreaseWinCondition;
     }
 
     private void StartTracking()
@@ -42,6 +45,10 @@ public class ResultsManager : MonoBehaviour
         // resets all tracked stats to base values
         villainVictory = false;
         muggersClicked = 0;
+    }
+    private void IncreaseWinCondition()
+    {
+        totalShopsVisited++;
     }
     private void MuggerClicked()
     {
@@ -56,5 +63,13 @@ public class ResultsManager : MonoBehaviour
     public int GetScores()
     {
         return muggersClicked;
+    }
+    public bool GetVillainVictory()
+    {
+        return villainVictory;
+    }
+    public int GetTotalShopsVisited()
+    {
+        return totalShopsVisited;
     }
 }

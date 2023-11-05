@@ -22,6 +22,9 @@ public class AIGrandma : MonoBehaviour
     private int shopsVisited = 0;               // counter for amount of shops grandma has visited
     private GameObject grandmaGO;
     public Outline outlineScript;
+    // Event for when Grandma finishes at each shop
+    public delegate void GrandmaFinishedShopping();
+    public static event GrandmaFinishedShopping GrandmaFinishedShoppingEvent;
     
     public enum States
     {
@@ -98,6 +101,8 @@ public class AIGrandma : MonoBehaviour
                 else if (TimeElapsedSince(TimeStartedState, shopTime))
                 {
                     shopsVisited++;
+                    // Announce that a shop has been visited
+                    GrandmaFinishedShoppingEvent?.Invoke();
                     // Debug.Log("Shops visited is " + shopsVisited);
                     AudioManager.instance.GrandmaShops();
                     currentState = States.stopped;

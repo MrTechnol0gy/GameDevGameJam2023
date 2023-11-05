@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     public delegate void LevelLoadedEventHandler();
     public static event LevelLoadedEventHandler LevelLoaded;
     
+    // Game Victory Conditions
+    [Header("Game Victory Conditions")]
+    public int totalShopsToVisitForVictory = 100;
     private void Awake()
     {
         // Check if there is an instance of the GameManager
