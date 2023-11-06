@@ -19,8 +19,6 @@ public class UIManager : MonoBehaviour
     public GameObject gameplayUI;
     // reference to the results screen UI
     public GameObject resultsScreenUI;
-    // reference to the level select UI
-    public GameObject levelSelectUI;
     // reference to the upgrades UI
     public GameObject upgradesUI;
     // reference to the glossary UI
@@ -58,7 +56,6 @@ public class UIManager : MonoBehaviour
         results = 4,
         glossary = 5,
         upgrades = 6,
-        levelselect = 7
     }
     private States _currentState = States.mainmenu;       //sets the starting state    
     public States currentState 
@@ -128,10 +125,6 @@ public class UIManager : MonoBehaviour
                 // listen for the hover event
                 HoverHandler.OnHoverEnter += UpgradeHover;
                 break;
-            case States.levelselect:
-                //Debug.Log("I am level select.");   
-                levelSelectUI.SetActive(true);  
-                break;
         }
     }
 
@@ -195,12 +188,6 @@ public class UIManager : MonoBehaviour
                 // Stop listening for the event
                 HoverHandler.OnHoverEnter -= UpgradeHover;         
                 break;
-            case States.levelselect:
-                //Debug.Log("I am level select.");
-                levelSelectUI.SetActive(false); 
-                // Sets the previous state variable to this state
-                previousState = States.levelselect;             
-                break;
         }
     }
 
@@ -239,7 +226,6 @@ public class UIManager : MonoBehaviour
         gameplayUI.SetActive(false);
         resultsScreenUI.SetActive(false);
         upgradesUI.SetActive(false);
-        levelSelectUI.SetActive(false);
         glossaryUI.SetActive(false);
     }
 
@@ -329,7 +315,7 @@ public class UIManager : MonoBehaviour
             {
                 currentState = States.mainmenu;
             }
-            else if (SceneManager.GetActiveScene().name == "Gameplay")
+            else
             {
                 currentState = States.gameplay;
             }
@@ -345,10 +331,6 @@ public class UIManager : MonoBehaviour
         else if (previousState == States.upgrades)
         {
             currentState = States.upgrades;
-        }
-        else if (previousState == States.levelselect)
-        {
-            currentState = States.levelselect;
         }
     }
 

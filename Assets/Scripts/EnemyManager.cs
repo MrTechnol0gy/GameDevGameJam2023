@@ -37,29 +37,36 @@ public class EnemyManager : MonoBehaviour
     {
         // Listen for the GameStarted event
         // This expression is used to make sure the scene is loaded before the event is invoked
-        GameManager.GameStarted += () => StartCoroutine(OnGameStarted());
+        // GameManager.GameStarted += () => StartCoroutine(OnGameStarted());
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
-    private IEnumerator OnGameStarted()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Game Started event received by the enemy manager!");
-
-        // Wait for the next frame to ensure that the scene is loaded
-        yield return null;
-
-        // Find the floor object by tag
-        mallFloor = GameObject.FindGameObjectWithTag("Floor");
-
-        if (mallFloor != null)
+        // If the current scene is not the main menu scene...
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("MainMenu"))
         {
-            Debug.Log("Floor found!");
+            // Find the floor object by tag
+            mallFloor = GameObject.FindGameObjectWithTag("Floor");
+
+            if (mallFloor != null)
+            {
+                Debug.Log("Floor found!");
+            }
+            else
+            {
+                Debug.LogError("Floor not found!");
+            }
+
+            // Start spawning enemies
+            StartSpawning();            
         }
         else
         {
-            Debug.LogError("Floor not found!");
+            // Stop spawning enemies
+            CancelInvoke();
+            // Reset the amount of civvies
+            amountOfCivvies = 30;
         }
-
-        // Start spawning enemies
-        StartSpawning();
     }
     private void StartSpawning()
     {
