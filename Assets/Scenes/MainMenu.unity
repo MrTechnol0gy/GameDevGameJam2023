@@ -7160,34 +7160,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40f4547419b5fe14b97d8be8eb5b7cb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cash: 0
+  cash: 50
   muggerValue: 10
   cultistValue: 20
   clownValue: 30
   upgrades:
   - name: GrandmaSpritzer
-    cost: 0
+    cost: 5
     maxUpgrade: 1
     amount: 0
     isUnlocked: 0
     description: Applies a highlight to Grandma so she can be seen through obstacles
       and other characters.
   - name: SecurityGuard
-    cost: 0
+    cost: 5
     maxUpgrade: 3
     amount: 0
     isUnlocked: 0
     description: Creates Security Guards who will wander the mall and highlight nearby
       Villains for a time.
   - name: RooftopSniper
-    cost: 0
+    cost: 5
     maxUpgrade: 3
     amount: 0
     isUnlocked: 0
     description: Creates a Rooftop Sniper who will periodically remove a random Villain
       from the mall.
   - name: LocalWrestler
-    cost: 0
+    cost: 5
     maxUpgrade: 3
     amount: 0
     isUnlocked: 0
@@ -7200,7 +7200,7 @@ MonoBehaviour:
     isUnlocked: 1
     description: Unlocks larger malls with more enemies and larger rewards.
   - name: RocketPoweredScooter
-    cost: 0
+    cost: 5
     maxUpgrade: 5
     amount: 0
     isUnlocked: 0

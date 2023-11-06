@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5815489659660629360}
   - component: {fileID: 2447213558855177481}
   - component: {fileID: 7867955126257519794}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ShoppingPoint
   m_TagString: ShopStop
   m_Icon: {fileID: 0}
