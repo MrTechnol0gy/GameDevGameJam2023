@@ -16,6 +16,10 @@ public class EnemyManager : MonoBehaviour
     public int amountOfCivvies = 30;    // amount of civvies
     [Header("Other Components")]
     public GameObject mallFloor;        // Reference to the mall floor object
+
+    // A list of all the enemies in the scene
+    public List<GameObject> enemies = new List<GameObject>();
+
     private void Awake()
     {
         // Check if there is an instance of the EnemyManager
@@ -85,6 +89,9 @@ public class EnemyManager : MonoBehaviour
 
         // Instantiate the Mugger prefab at the random position
         Instantiate(muggerPrefab, randomPosition, Quaternion.identity);
+
+        // Add the Mugger to the list of enemies
+        enemies.Add(muggerPrefab);
     }
 
      private void SpawnCivvie()
@@ -116,5 +123,11 @@ public class EnemyManager : MonoBehaviour
         }
 
         return randomPoint;
+    }
+
+    // Return the list of enemies
+    public List<GameObject> GetEnemies()
+    {
+        return enemies;
     }
 }

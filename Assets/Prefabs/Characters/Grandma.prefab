@@ -204,7 +204,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f9bd91dfaece42e4a893843e0ea6be21, type: 2}
+  - {fileID: 2100000, guid: d6380801b0db2374db05f205197db4b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -291,7 +291,6 @@ MonoBehaviour:
   purse: {fileID: 1914754652495905146}
   stoppedTime: 3
   shopTime: 12
-  shopList: 5
   isMugged: 0
   outlineScript: {fileID: 1791118833256527590}
 --- !u!114 &1791118833256527590

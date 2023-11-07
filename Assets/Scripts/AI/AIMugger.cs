@@ -14,6 +14,7 @@ public class AIMugger : MonoBehaviour
     public GameObject muggerGO;
     public GameObject grandma;
     public GameObject escapePoint;
+    public Outline outlineScript; 
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain stopped
     [SerializeField] float searchTime = 12f;    // how long the agent will search
     [SerializeField] float searchRadius = 30f;  // how large an area the agent will search in
@@ -21,12 +22,15 @@ public class AIMugger : MonoBehaviour
     [SerializeField] float launchForce = 10f;   // how fast the agent is launched
     [SerializeField] float spinForce = 100f;    // how fast the agent is spun after being launched
     [SerializeField] float destructDelay = 3f;  // how soon after being launched the mugger is destroyed
+    [SerializeField] float durationOfSpotted = 3f;    // how long the villain is spotted for
     private bool isGrandmaVisible = false;      // can the mugger see grandma
     private bool isLaunched = false;            // has the mugger got gotted
     private bool hasMugged = false;             // has the mugger got the purse
+    private bool isSpotted = false;             // has the mugger been spotted by a guard
     private Vector3 destination;                // placeholder for any destination the mugger needs
     private Rigidbody agentRigidbody;           // placeholder for the mugger's rigidbody
     private float timer;                        // placeholder for timer
+    private float spottedTimer;                 // placeholder for spotted timer
     // event for when the mugger is clicked
     public delegate void MuggerClicked();
     public static event MuggerClicked muggerClicked;
@@ -212,6 +216,22 @@ public class AIMugger : MonoBehaviour
     void Update()
     {
         OnUpdatedState(currentState);
+        IsSpotted();
+    }
+
+    void IsSpotted()
+    {
+        if (isSpotted)
+        {
+            // turn on the outline
+            outlineScript.enabled = true;
+            spottedTimer += Time.deltaTime;
+        }
+        if (isSpotted && spottedTimer >= durationOfSpotted)
+        {
+            isSpotted = false;
+            spottedTimer = 0f;
+        }
     }
 
     private Vector3 SearchDestination()
@@ -240,7 +260,10 @@ public class AIMugger : MonoBehaviour
     {
         if (!isLaunched)
         {
-            Debug.Log("Got me.");
+            // Remove this mugger from the list of enemies in the EnemyManager
+            EnemyManager.instance.enemies.Remove(gameObject);
+
+            // Set the launched flag to true
             isLaunched = true;
             // Disable NavMeshAgent to allow manual control
             mugger.enabled = false;
@@ -292,6 +315,12 @@ public class AIMugger : MonoBehaviour
         Destroy(gameObject, destructDelay);
     }
     
+    public void IAmSpotted()
+    {
+        isSpotted = true;
+        // Set the timer for the spotted timer
+        spottedTimer = 0f;
+    }
     // This method can be used to test if a certain time has elapsed since we registered an event time. 
     public bool TimeElapsedSince(float timeEventHappened, float testingTimeElapsed) => !(timeEventHappened + testingTimeElapsed > Time.time);
     
