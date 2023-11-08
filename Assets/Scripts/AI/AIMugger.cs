@@ -3,34 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIMugger : MonoBehaviour
+public class AIMugger : AIVillainBase
 {
-    private float TimeStartedState;             // timer to know when we started a state
     public LayerMask wallLayer;
     public GameObject purse;
 
     [Header("Agent")]
-    public NavMeshAgent mugger;
-    public GameObject muggerGO;
-    public GameObject grandma;
-    public GameObject escapePoint;
-    public Outline outlineScript; 
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain stopped
     [SerializeField] float searchTime = 12f;    // how long the agent will search
-    [SerializeField] float searchRadius = 30f;  // how large an area the agent will search in
     [SerializeField] float searchTimer = 3f;    // how often the mugger searches for grandma
     [SerializeField] float launchForce = 10f;   // how fast the agent is launched
     [SerializeField] float spinForce = 100f;    // how fast the agent is spun after being launched
-    [SerializeField] float destructDelay = 3f;  // how soon after being launched the mugger is destroyed
-    [SerializeField] float durationOfSpotted = 3f;    // how long the villain is spotted for
     private bool isGrandmaVisible = false;      // can the mugger see grandma
     private bool isLaunched = false;            // has the mugger got gotted
     private bool hasMugged = false;             // has the mugger got the purse
-    private bool isSpotted = false;             // has the mugger been spotted by a guard
     private Vector3 destination;                // placeholder for any destination the mugger needs
-    private Rigidbody agentRigidbody;           // placeholder for the mugger's rigidbody
     private float timer;                        // placeholder for timer
-    private float spottedTimer;                 // placeholder for spotted timer
     // event for when the mugger is clicked
     public delegate void MuggerClicked();
     public static event MuggerClicked muggerClicked;
@@ -73,7 +61,7 @@ public class AIMugger : MonoBehaviour
         {
             case States.stopped:
                 //Debug.Log("I am " + currentState);
-                mugger.isStopped = true;
+                agent.isStopped = true;
                 break;
             case States.searching:
                 //Debug.Log("I am " + currentState);
@@ -128,7 +116,7 @@ public class AIMugger : MonoBehaviour
                 }
                 if (!isGrandmaVisible)
                 {
-                    mugger.SetDestination(destination);
+                    agent.SetDestination(destination);
                 }
                 else if (isGrandmaVisible)
                 {
@@ -142,11 +130,11 @@ public class AIMugger : MonoBehaviour
                 }
                 else if (isGrandmaVisible)
                 {
-                    mugger.SetDestination(grandma.transform.position);
+                    agent.SetDestination(target.transform.position);
                 }
-                if (DistanceCheck(muggerGO, grandma) < 3)
+                if (GetDistanceToTarget(thisGameObject, target) < 3)
                 {
-                    if (!grandma.GetComponent<AIGrandma>().GotMugged())
+                    if (!target.GetComponent<AIGrandma>().GotMugged())
                     {
                         hasMugged = true;
                         Debug.Log("grandma is mugged");
@@ -165,8 +153,8 @@ public class AIMugger : MonoBehaviour
                 }
                 else
                 {
-                    mugger.SetDestination(escapePoint.transform.position);
-                    if (DistanceCheck(muggerGO, escapePoint) < 3)
+                    agent.SetDestination(escapePoint.transform.position);
+                    if (GetDistanceToTarget(thisGameObject, escapePoint) < 3)
                     {
                         muggerEscaped?.Invoke();
                         UIManager.instance.Results();
@@ -189,7 +177,7 @@ public class AIMugger : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
-                mugger.isStopped = false;
+                agent.isStopped = false;
                 break;
             case States.searching:
                 break;
@@ -203,57 +191,18 @@ public class AIMugger : MonoBehaviour
                 break;
         }
     }
-    
-    void Start()
+
+    protected override void Start()
     {
-        grandma = GameObject.FindWithTag("Player");
-        muggerGO = gameObject;
-        escapePoint = GameObject.FindWithTag("EscapePoint");
-        agentRigidbody = GetComponent<Rigidbody>();
-        OnStartedState(currentState);
+        base.Start();
         AudioManager.instance.MuggerSpawn();
+        OnStartedState(currentState);
     }
-    void Update()
+
+    protected override void Update()
     {
+        base.Update();
         OnUpdatedState(currentState);
-        IsSpotted();
-    }
-
-    void IsSpotted()
-    {
-        if (isSpotted)
-        {
-            // turn on the outline
-            outlineScript.enabled = true;
-            spottedTimer += Time.deltaTime;
-        }
-        if (isSpotted && spottedTimer >= durationOfSpotted)
-        {
-            isSpotted = false;
-            spottedTimer = 0f;
-        }
-    }
-
-    private Vector3 SearchDestination()
-    {
-        Vector3 randomPoint = Vector3.zero;
-
-        // Get a random point on the NavMesh
-        Vector3 randomDirection = Random.insideUnitSphere * searchRadius;
-        
-        // Try to find a valid point on the NavMesh using the generated position
-        if (NavMesh.SamplePosition(transform.position + randomDirection, out NavMeshHit hit, searchRadius, NavMesh.AllAreas))
-        {
-            //Debug.Log("Random point found.");
-            randomPoint = hit.position;
-        }
-        else
-        {
-            //Debug.Log("Random point not found.");
-            randomPoint = transform.position;
-        }
-        
-        return randomPoint;
     }
 
     public void Gottem()
@@ -266,19 +215,19 @@ public class AIMugger : MonoBehaviour
             // Set the launched flag to true
             isLaunched = true;
             // Disable NavMeshAgent to allow manual control
-            mugger.enabled = false;
+            agent.enabled = false;
 
             // Disable rigidbody gravity to ensure it launches upwards
-            agentRigidbody.useGravity = false;
+            rb.useGravity = false;
 
             // Disable the kinematics so that force can be applied directly
-            agentRigidbody.isKinematic = false;
+            rb.isKinematic = false;
 
             // Apply a vertical force to launch the agent into the air
-            agentRigidbody.AddForce(Vector3.up * launchForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * launchForce, ForceMode.Impulse);
 
             // Apply a torque to make the agent spin wildly
-            agentRigidbody.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
+            rb.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
 
             // Play sfx
             AudioManager.instance.MuggerCaught();
@@ -288,55 +237,10 @@ public class AIMugger : MonoBehaviour
             if (hasMugged)
             {
                 // Let Grandma know she's got her purse back
-                grandma.GetComponent<AIGrandma>().isMugged = false;
+                target.GetComponent<AIGrandma>().isMugged = false;
                 //Debug.Log("Grandma can have her purse back.");
             }
         }        
     }
-    private bool CheckForGrandma()
-    {
-        float distance = Vector3.Distance(transform.position, grandma.transform.position);
-        if (distance <= searchRadius/2)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    public float DistanceCheck(GameObject checker, GameObject target)
-    {
-        float distance = Vector3.Distance(checker.transform.position, target.transform.position);
-        return distance;
-    }
-    private void DestroyMe()
-    {
-        Destroy(gameObject, destructDelay);
-    }
     
-    public void IAmSpotted()
-    {
-        isSpotted = true;
-        // Set the timer for the spotted timer
-        spottedTimer = 0f;
-    }
-    // This method can be used to test if a certain time has elapsed since we registered an event time. 
-    public bool TimeElapsedSince(float timeEventHappened, float testingTimeElapsed) => !(timeEventHappened + testingTimeElapsed > Time.time);
-    
-    // I use Handles.Label to show a label with the current state above the player. Can use it for more debug info as well.
-    // I wrap it around a #if UNITY_EDITOR to make sure it doesn't make its way into the build, unity doesn't like using UnityEditor methods in builds.
-    #if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        //If we're not playing don't draw gizmos.
-        if (!Application.isPlaying) return;
-        
-        //Setting the position for our debug label and the color.
-        Vector3 debugPos = transform.position;
-        debugPos.y += 2; 
-        GUI.color = Color.black;
-        UnityEditor.Handles.Label(debugPos,$"{currentState}");
-    }
-    #endif
 }
