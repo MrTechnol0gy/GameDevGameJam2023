@@ -3,36 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIMugger : AIVillainBase
+public class AICultist : AIVillainBase
 {
     public LayerMask wallLayer;
-    public GameObject purse;
 
     [Header("Agent")]
     [SerializeField] float searchRadius = 20;   // how far the agent will search
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain stopped
     [SerializeField] float searchTime = 12f;    // how long the agent will search
-    [SerializeField] float searchTimer = 3f;    // how often the mugger searches for grandma
+    [SerializeField] float searchTimer = 3f;    // how often the agent searches for grandma
     [SerializeField] float launchForce = 10f;   // how fast the agent is launched
     [SerializeField] float spinForce = 100f;    // how fast the agent is spun after being launched
-    private bool isGrandmaVisible = false;      // can the mugger see grandma
-    private bool isLaunched = false;            // has the mugger got gotted
-    private bool hasMugged = false;             // has the mugger got the purse
-    private Vector3 destination;                // placeholder for any destination the mugger needs
+    private bool isGrandmaVisible = false;      // can the agent see grandma
+    private bool isLaunched = false;            // has the agent got gotted
+    private bool hasPreached = false;             // has the agent got the purse
+    private Vector3 destination;                // placeholder for any destination the agent needs
     private float timer;                        // placeholder for timer
     // event for when the mugger is clicked
-    public delegate void MuggerClicked();
-    public static event MuggerClicked muggerClicked;
-    public delegate void MuggerEscaped();
-    public static event MuggerEscaped muggerEscaped;
+    public delegate void CultistClicked();
+    public static event CultistClicked cultistClicked;
     public enum States
     {
         stopped,       // stopped = 0
         searching,     // searching = 1
         chasing,       // chasing = 2
-        escaping,      // escaping = 3
-        launched,      // launched = 4
-        mugged         // mugged = 5
+        launched,      // launched = 3
+        preached         // mugged = 4
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
@@ -71,17 +67,12 @@ public class AIMugger : AIVillainBase
             case States.chasing:
                 //Debug.Log("I am " + currentState);
                 break;
-            case States.escaping:
-                //Debug.Log("I am " + currentState);
-                break;
             case States.launched:
-                //Debug.Log("I am " + currentState);                
-                purse.SetActive(false);
+                //Debug.Log("I am " + currentState);
                 DestroyMe();
                 break;
-            case States.mugged:
+            case States.preached:
                 //Debug.Log("I am " + currentState);
-                purse.SetActive(true);
                 break;
         }
     }
@@ -135,38 +126,20 @@ public class AIMugger : AIVillainBase
                 }
                 if (GetDistanceToTarget(thisGameObject, target) < 3)
                 {
-                    if (!target.GetComponent<AIGrandma>().GotMugged())
-                    {
-                        hasMugged = true;
-                        Debug.Log("grandma is mugged");
-                        currentState = States.mugged;
-                    }
-                    else
-                    {
-                        currentState = States.searching;
-                    }
+                    // if (!target.GetComponent<AIGrandma>().GotMugged())
+                    // {
+                    //     hasPreached = true;
+                    //     Debug.Log("grandma is mugged");
+                    //     currentState = States.preached;
+                    // }
+                    // else
+                    // {
+                    //     currentState = States.searching;
+                    // }
                 }
                 break; 
-            case States.escaping:
-                if (isLaunched)
-                {
-                    currentState = States.launched;
-                }
-                else
-                {
-                    agent.SetDestination(escapePoint.transform.position);
-                    if (GetDistanceToTarget(thisGameObject, escapePoint) < 3)
-                    {
-                        muggerEscaped?.Invoke();
-                        UIManager.instance.Results();
-                    }
-                }
-                break;
-            case States.mugged:
-                if (hasMugged)
-                {
-                    currentState = States.escaping;
-                }
+            case States.preached:
+                
                 break;
             case States.launched:
                 break;
@@ -184,11 +157,9 @@ public class AIMugger : AIVillainBase
                 break;
             case States.chasing:
                 break;
-            case States.escaping:
-                break;
             case States.launched:
                 break;
-            case States.mugged:
+            case States.preached:
                 break;
         }
     }
@@ -196,7 +167,7 @@ public class AIMugger : AIVillainBase
     protected override void Start()
     {
         base.Start();
-        AudioManager.instance.MuggerSpawn();
+        AudioManager.instance.CultistSpawn();
         OnStartedState(currentState);
     }
 
@@ -231,16 +202,10 @@ public class AIMugger : AIVillainBase
             rb.AddTorque(Random.insideUnitSphere * spinForce, ForceMode.Impulse);
 
             // Play sfx
-            AudioManager.instance.MuggerCaught();
+            AudioManager.instance.CultistCaught();
 
             // Let the UpgradeManager know the Mugger has been clicked
-            muggerClicked?.Invoke();            
-            if (hasMugged)
-            {
-                // Let Grandma know she's got her purse back
-                target.GetComponent<AIGrandma>().isMugged = false;
-                //Debug.Log("Grandma can have her purse back.");
-            }
+            cultistClicked?.Invoke();
         }        
     }    
 }

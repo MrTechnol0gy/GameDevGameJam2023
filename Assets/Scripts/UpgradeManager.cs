@@ -58,15 +58,31 @@ public class UpgradeManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         // subscribe to the MuggerClicked event
-        AIMugger.muggerClicked += OnMuggerClicked;        
+        AIMugger.muggerClicked += OnMuggerClicked;
+        AICultist.cultistClicked += OnCultistClicked;
+        AIBalloonClown.clownClicked += OnClownClicked;
     }
 
     // listener for the MuggerClicked event
     private void OnMuggerClicked()
     {
         Debug.Log("Mugger Clicked");
-        // add 10 to the cash
+        // add to the cash
         cash += muggerValue;
+    }
+
+    private void OnCultistClicked()
+    {
+        Debug.Log("Cultist Clicked");
+        // add to the cash
+        cash += cultistValue;
+    }
+
+    private void OnClownClicked()
+    {
+        Debug.Log("Clown Clicked");
+        // add to the cash
+        cash += clownValue;
     }
     // listener for the upgrade button
     // buttonName is the name of the button that was clicked

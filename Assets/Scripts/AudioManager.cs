@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Audio Tracks")]
     [SerializeField] AudioClip[] muggerSpawn;
+    [SerializeField] AudioClip[] cultistSpawn;
     [SerializeField] AudioClip[] muggerRegretClips;
     [SerializeField] AudioClip grandmaMugged;
     [SerializeField] AudioClip[] grandmaShops;
@@ -60,6 +61,16 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void CultistSpawn()
+    {
+        // TODO
+    }
+
+    public void BalloonClownSpawed()
+    {
+        // TODO
+    }
+
     public void MuggerCaught()
     {
         if (isGrandmaMuggedPlaying())
@@ -79,6 +90,16 @@ public class AudioManager : MonoBehaviour
             mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
             mainAudioSource.Play();
         }
+    }
+
+    public void CultistCaught()
+    {
+        // TODO
+    }
+    
+    public void ClownCaught()
+    {
+        // TODO
     }
 
     public void GrandmaMugged()

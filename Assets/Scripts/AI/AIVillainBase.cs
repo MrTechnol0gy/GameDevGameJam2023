@@ -14,7 +14,6 @@ public class AIVillainBase : MonoBehaviour
     protected bool isSpotted;
     protected float spottedTimer;
     protected float durationOfSpotted = 3f;
-    protected float searchRadius = 10f;
     protected float destructDelay = 3f;
     protected Rigidbody rb;
 
@@ -48,7 +47,7 @@ public class AIVillainBase : MonoBehaviour
         }
     }
 
-    protected virtual Vector3 SearchDestination()
+    protected virtual Vector3 SearchDestination(float searchRadius)
     {
         Vector3 randomPoint = Vector3.zero;
 
@@ -69,7 +68,7 @@ public class AIVillainBase : MonoBehaviour
         
         return randomPoint;
     }
-    protected virtual bool CheckForGrandma()
+    protected virtual bool CheckForGrandma(float searchRadius)
     {
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= searchRadius/2)
