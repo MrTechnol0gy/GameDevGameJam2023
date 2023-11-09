@@ -79,6 +79,8 @@ public class EnemyManager : MonoBehaviour
         {
             // Stop spawning enemies
             CancelInvoke();
+            // Clear the list of enemies between rounds
+            enemies.Clear();
             // Reset the amount of civvies
             amountOfCivvies = 30;
             // Reset the amount of guards
@@ -115,10 +117,11 @@ public class EnemyManager : MonoBehaviour
         Vector3 randomPosition = GetRandomNavMeshPosition();
 
         // Instantiate the Mugger prefab at the random position
-        Instantiate(muggerPrefab, randomPosition, Quaternion.identity);
+        // Remember to create a new variable to store the instantiated object
+        GameObject newMugger = Instantiate(muggerPrefab, randomPosition, Quaternion.identity);
 
-        // Add the Mugger to the list of enemies
-        enemies.Add(muggerPrefab);
+        // Add the new Mugger to the list of enemies
+        enemies.Add(newMugger);
     }
 
      private void SpawnCivvie()
