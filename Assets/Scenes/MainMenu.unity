@@ -2197,10 +2197,19 @@ MonoBehaviour:
     type: 3}
   spawnIntervalFloor: 6
   spawnIntervalCeiling: 12
+  cultistPrefab: {fileID: 0}
+  cultistSpawnIntervalFloor: 6
+  cultistSpawnIntervalCeiling: 12
+  clownPrefab: {fileID: 0}
+  clownSpawnIntervalFloor: 6
+  clownSpawnIntervalCeiling: 12
+  guardPrefab: {fileID: 8015455481516880283, guid: d3f8a86f8b169c043ad5ff8c80126290,
+    type: 3}
   civilianPrefab: {fileID: 3292484367672847996, guid: 50be1bb61b793f942a4ed629a32ece09,
     type: 3}
   amountOfCivvies: 30
   mallFloor: {fileID: 0}
+  enemies: []
 --- !u!1 &403952704
 GameObject:
   m_ObjectHideFlags: 0
@@ -13750,6 +13759,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 10fda211f5b3c994295e74412ae98bf0, type: 3}
   - {fileID: 8300000, guid: 0208e9d89d46088459a84798eb07362e, type: 3}
   - {fileID: 8300000, guid: 20f07d8046d20e346858012b5dcc8924, type: 3}
+  cultistSpawn: []
   muggerRegretClips:
   - {fileID: 8300000, guid: d6a85d5e42e1c4848bda51fa8b40c354, type: 3}
   - {fileID: 8300000, guid: 517b1524f84cbd145bc51dafa798ade1, type: 3}

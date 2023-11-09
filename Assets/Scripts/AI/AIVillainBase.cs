@@ -36,14 +36,17 @@ public class AIVillainBase : MonoBehaviour
     {
         if (isSpotted)
         {
-            // turn on the outline
-            outlineScript.enabled = true;
+            if (outlineScript == !outlineScript.enabled)
+            {
+                outlineScript.enabled = true;
+            }
             spottedTimer += Time.deltaTime;
         }
         if (isSpotted && spottedTimer >= durationOfSpotted)
         {
             isSpotted = false;
             spottedTimer = 0f;
+            outlineScript.enabled = false;
         }
     }
 
@@ -92,7 +95,7 @@ public class AIVillainBase : MonoBehaviour
         Destroy(thisGameObject, destructDelay);
     }
 
-    protected virtual void IAmSpotted()
+    public void IAmSpotted()
     {
         isSpotted = true;
         spottedTimer = 0f;

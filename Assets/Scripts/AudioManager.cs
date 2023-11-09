@@ -66,7 +66,7 @@ public class AudioManager : MonoBehaviour
         // TODO
     }
 
-    public void BalloonClownSpawed()
+    public void BalloonClownSpawned()
     {
         // TODO
     }
@@ -109,6 +109,7 @@ public class AudioManager : MonoBehaviour
         mainAudioSource.Play();
     }
 
+
     public void GrandmaShops()
     { 
         if (isGrandmaMuggedPlaying())
@@ -128,6 +129,12 @@ public class AudioManager : MonoBehaviour
             mainAudioSource.pitch = 1f;
             mainAudioSource.Play();
         }
+    }
+
+    public void VillainSpotted()
+    {
+        // TODO
+        Debug.Log("VillainSpotted");
     }
 
     public void CivilianClips()

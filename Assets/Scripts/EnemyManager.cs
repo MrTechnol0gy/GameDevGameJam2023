@@ -7,10 +7,19 @@ using UnityEngine.SceneManagement;
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance;
-    [Header("Mugger Stats")]
+    [Header("Villain Stats")]
     public GameObject muggerPrefab; // Prefab to instantiate
     public float spawnIntervalFloor = 6f; // Interval between spawns
     public float spawnIntervalCeiling = 12f;
+    public GameObject cultistPrefab;    // Prefab to instantiate
+    public float cultistSpawnIntervalFloor = 6f; // Interval between spawns
+    public float cultistSpawnIntervalCeiling = 12f;
+    public GameObject clownPrefab;      // Prefab to instantiate
+    public float clownSpawnIntervalFloor = 6f; // Interval between spawns
+    public float clownSpawnIntervalCeiling = 12f;
+    [Header("Upgrade Stats")]
+    public GameObject guardPrefab;      // Prefab to instantiate
+    private int amountOfGuards;          // amount of guards
     [Header("Civilian Stats")]
     public GameObject civilianPrefab;   // Prefab to instantiate
     public int amountOfCivvies = 30;    // amount of civvies
@@ -60,7 +69,9 @@ public class EnemyManager : MonoBehaviour
             {
                 Debug.LogError("Floor not found!");
             }
-
+            // Set the amount of guards
+            amountOfGuards = UpgradeManager.instance.GetUpgrade("SecurityGuard").amount;
+            
             // Start spawning enemies
             StartSpawning();            
         }
@@ -70,6 +81,8 @@ public class EnemyManager : MonoBehaviour
             CancelInvoke();
             // Reset the amount of civvies
             amountOfCivvies = 30;
+            // Reset the amount of guards
+            amountOfGuards = UpgradeManager.instance.GetUpgrade("SecurityGuard").amount;
         }
     }
     private void StartSpawning()
@@ -80,6 +93,20 @@ public class EnemyManager : MonoBehaviour
             SpawnCivvie();
             amountOfCivvies--;
         }
+        while (amountOfGuards != 0)
+        {
+            SpawnGuard();
+            amountOfGuards--;
+        }
+    }
+
+    private void SpawnGuard()
+    {
+        // Get a random point on the NavMesh
+        Vector3 randomPosition = GetRandomNavMeshPosition();
+
+        // Instantiate the Mugger prefab at the random position
+        Instantiate(guardPrefab, randomPosition, Quaternion.identity);
     }
 
     private void SpawnMugger()

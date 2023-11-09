@@ -166,7 +166,7 @@ public class AIBalloonClown : AIVillainBase
     protected override void Start()
     {
         base.Start();
-        AudioManager.instance.BalloonClownSpawed();
+        AudioManager.instance.BalloonClownSpawned();
         OnStartedState(currentState);
     }
 

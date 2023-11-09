@@ -17,7 +17,6 @@ public class AIGuard : MonoBehaviour
     [SerializeField] float searchTimer = 3f;    // how often the guard searches
     private GameObject spottedEnemy;            // the spotted villain
     private Vector3 destination;                // placeholder for any destination the agent needs to go to
-    private Rigidbody agentRigidbody;           // placeholder for the agent's rigidbody
     private float timer;                        // placeholder for timer
     public enum States
     {
@@ -61,6 +60,10 @@ public class AIGuard : MonoBehaviour
                 break;
             case States.spotted:
                 //Debug.Log("I am " + currentState);
+                // Call the I Am Spotted method on the spotted villain
+                spottedEnemy.GetComponent<AIVillainBase>().IAmSpotted();
+                // Audio cue
+                AudioManager.instance.VillainSpotted();
                 break;
         }
     }
@@ -84,14 +87,22 @@ public class AIGuard : MonoBehaviour
                 if (timer <= 0f)
                 {
                     timer = searchTimer;
+                    Debug.Log("Checking for enemies.");
                     spottedEnemy = CheckForEnemies();
                     if (spottedEnemy != null)
                     {
+                        Debug.Log("Spotted enemy." + spottedEnemy.name);
                         currentState = States.spotted;
                     }
-                }                
+                } 
+                guard.SetDestination(destination);                   // sets the agent's destination to the destination             
                 break;
             case States.spotted:
+                // wait 3 seconds and then go to Stopped
+                if (TimeElapsedSince(TimeStartedState, stoppedTime))
+                {
+                    currentState = States.stopped;
+                }
                 break;
         }
     }
@@ -113,7 +124,7 @@ public class AIGuard : MonoBehaviour
     void Start()
     {
         guardGO = gameObject;
-        agentRigidbody = GetComponent<Rigidbody>();
+        guard = GetComponent<NavMeshAgent>();
         OnStartedState(currentState);
     }
     void Update()
@@ -147,12 +158,17 @@ public class AIGuard : MonoBehaviour
     {
         // Get the list of enemies from the EnemyManager script
         List<GameObject> enemies = EnemyManager.instance.enemies;
+        Debug.Log("Enemy list length: " + enemies.Count);
         // Loop through the list of enemies
         foreach (GameObject enemy in enemies)
         {
+            // Debug distance
+            Debug.Log("Distance to enemy: " + DistanceCheck(guardGO, enemy));
             // Check if the enemy is within the search radius
             if (DistanceCheck(guardGO, enemy) <= searchRadius)
             {
+                
+                Debug.Log("Enemy spotted!");
                 return enemy;
             }
         }

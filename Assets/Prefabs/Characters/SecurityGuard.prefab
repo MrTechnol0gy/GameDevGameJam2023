@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 390613434267350870}
   - component: {fileID: 9199930866297809861}
   - component: {fileID: 156345966290906694}
+  - component: {fileID: 4094011451146153936}
   m_Layer: 0
   m_Name: SecurityGuard
   m_TagString: Civilian
@@ -535,3 +536,24 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &4094011451146153936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015455481516880283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2ef68d63b001d439b329ebe4f06541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  guard: {fileID: 0}
+  guardGO: {fileID: 0}
+  stoppedTime: 3
+  searchTime: 12
+  searchRadius: 30
+  searchTimer: 3
