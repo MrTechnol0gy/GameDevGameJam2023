@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
-public class EnemyManager : MonoBehaviour
+public class AIManager : MonoBehaviour
 {
-    public static EnemyManager instance;
+    public static AIManager instance;
     [Header("Villain Stats")]
     public GameObject muggerPrefab; // Prefab to instantiate
     public float spawnIntervalFloor = 6f; // Interval between spawns
@@ -17,6 +17,10 @@ public class EnemyManager : MonoBehaviour
     public GameObject clownPrefab;      // Prefab to instantiate
     public float clownSpawnIntervalFloor = 6f; // Interval between spawns
     public float clownSpawnIntervalCeiling = 12f;
+    [Header("Grandma Stats")]
+    public GameObject grandmaPrefab;    // Prefab to instantiate
+    public GameObject rocketPoweredGrandmaPrefab;    // Prefab to instantiate
+    private GameObject grandma;         // Reference to the grandma object
     [Header("Upgrade Stats")]
     public GameObject guardPrefab;      // Prefab to instantiate
     private int amountOfGuards;          // amount of guards
@@ -25,13 +29,15 @@ public class EnemyManager : MonoBehaviour
     public int amountOfCivvies = 30;    // amount of civvies
     [Header("Other Components")]
     public GameObject mallFloor;        // Reference to the mall floor object
+    private GameObject mallEntrance;    // Reference to the mall entrance object
+    private Vector3 entrancePosition;   // Position of the mall entrance
 
     // A list of all the enemies in the scene
     public List<GameObject> enemies = new List<GameObject>();
 
     private void Awake()
     {
-        // Check if there is an instance of the EnemyManager
+        // Check if there is an instance of the AIManager
         if (instance == null)
         {
             // If not, set the instance to this
@@ -69,10 +75,17 @@ public class EnemyManager : MonoBehaviour
             {
                 Debug.LogError("Floor not found!");
             }
+
+            // Find the mall entrance by tag
+            mallEntrance = GameObject.FindGameObjectWithTag("EscapePoint");
+
             // Set the amount of guards
             amountOfGuards = UpgradeManager.instance.GetUpgrade("SecurityGuard").amount;
             
-            // Start spawning enemies
+            // Get the entrance position
+            GetEntranceForSpawning();
+
+            // Start spawning AIs
             StartSpawning();            
         }
         else
@@ -87,9 +100,12 @@ public class EnemyManager : MonoBehaviour
             amountOfGuards = UpgradeManager.instance.GetUpgrade("SecurityGuard").amount;
         }
     }
+
+    // Start spawning all scene AIs
     private void StartSpawning()
     {
         InvokeRepeating(nameof(SpawnMugger), 0f, Random.Range(spawnIntervalFloor, spawnIntervalCeiling));
+        SpawnGrandma();
         while (amountOfCivvies != 0)
         {
             SpawnCivvie();
@@ -102,6 +118,20 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    private void SpawnGrandma()
+    {
+        // Check the Upgrade Manager to see if the Rocketpowered Scooter has been purchased
+        if (UpgradeManager.instance.GetUpgrade("RocketPoweredScooter").isUnlocked)
+        {
+            // If it has, spawn the rocketPoweredGrandma at the entrance
+            grandma = Instantiate(rocketPoweredGrandmaPrefab, entrancePosition, Quaternion.identity);
+        }
+        else
+        {
+            // If it hasn't, spawn the basic grandma at the entrance
+            grandma = Instantiate(grandmaPrefab, entrancePosition, Quaternion.identity);
+        }
+    }
     private void SpawnGuard()
     {
         // Get a random point on the NavMesh
@@ -153,6 +183,16 @@ public class EnemyManager : MonoBehaviour
         }
 
         return randomPoint;
+    }
+
+    private void GetEntranceForSpawning()
+    {
+        // Get a location on the navmesh near the entrance
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(mallEntrance.transform.position, out hit, 10f, NavMesh.AllAreas))
+        {
+            entrancePosition = hit.position;
+        }
     }
 
     // Return the list of enemies

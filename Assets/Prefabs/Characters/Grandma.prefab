@@ -285,7 +285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   escapePoint: {fileID: 0}
   grandma: {fileID: 3554470757939090951}
   purse: {fileID: 1914754652495905146}

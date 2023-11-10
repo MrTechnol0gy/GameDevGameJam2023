@@ -180,8 +180,8 @@ public class AIBalloonClown : AIVillainBase
     {
         if (!isLaunched)
         {
-            // Remove this mugger from the list of enemies in the EnemyManager
-            EnemyManager.instance.enemies.Remove(gameObject);
+            // Remove this mugger from the list of enemies in the AIManager
+            AIManager.instance.enemies.Remove(gameObject);
 
             // Set the launched flag to true
             isLaunched = true;

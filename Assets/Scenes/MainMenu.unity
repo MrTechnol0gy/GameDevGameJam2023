@@ -2160,7 +2160,7 @@ GameObject:
   - component: {fileID: 389894576}
   - component: {fileID: 389894577}
   m_Layer: 0
-  m_Name: EnemyManager
+  m_Name: AIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2203,6 +2203,10 @@ MonoBehaviour:
   clownPrefab: {fileID: 0}
   clownSpawnIntervalFloor: 6
   clownSpawnIntervalCeiling: 12
+  grandmaPrefab: {fileID: 3292484367672847996, guid: 588391179bea86b4fb0c6e93a8b0f45a,
+    type: 3}
+  rocketPoweredGrandmaPrefab: {fileID: 1809529883826240658, guid: f013b39f5ed52ca4283ac4b332622430,
+    type: 3}
   guardPrefab: {fileID: 8015455481516880283, guid: d3f8a86f8b169c043ad5ff8c80126290,
     type: 3}
   civilianPrefab: {fileID: 3292484367672847996, guid: 50be1bb61b793f942a4ed629a32ece09,

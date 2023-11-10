@@ -157,49 +157,42 @@ public class AIGrandma : MonoBehaviour
         }
     }
     
-    void Awake()
-    {
-        
-        // Subscribe to the ShopManager.ShopPositionsCollected event
-        // This exists to assist with a timing issue where Grandma was trying to get the list of shops before they were ready
-        
-        ShopManager.instance.ShopPositionsCollected += OnShopPositionsCollected;
-
-    }
     void Start()
     {
-        // set the shoplist from the LevelManager
-        Debug.Log("Required visits is " + LevelManager.instance.GetLevel().requiredVisits);
         shopList = LevelManager.instance.GetLevel().requiredVisits;
-        Debug.Log("Shop list is " + shopList);
         
         escapePoint = GameObject.FindWithTag("EscapePoint");
         grandmaGO = gameObject;
-        Debug.Log("Grandma Spritzer is " + UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").isUnlocked);
         if (UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").isUnlocked)
         {
             outlineScript.enabled = true;
+        }
+        if (UpgradeManager.instance.GetUpgrade("RocketPoweredScooter").isUnlocked)
+        {
+            AdjustSpeedBasedOnUpgrades();
         }
         OnStartedState(currentState);
     }
 
     void Update()
     {
+        if (shops == null)
+        {
+            GetShopsListFromShopManager();
+        }
         OnUpdatedState(currentState);
     }
 
-    void OnDisable()
+    private void AdjustSpeedBasedOnUpgrades()
     {
-        // Unsubscribe from the ShopManager.ShopPositionsCollected event
-        ShopManager.instance.ShopPositionsCollected -= OnShopPositionsCollected;
+        float speedIncrease = Mathf.Clamp01(UpgradeManager.instance.GetUpgrade("RocketPoweredScooter").amount * 0.1f);
+        float adjustedSpeed = grandma.speed * (1.0f + speedIncrease);
+        grandma.speed = adjustedSpeed;
     }
 
-    public void OnShopPositionsCollected()
+    private void GetShopsListFromShopManager()
     {
-        // Get the list of shop positions from the ShopManager script
         shops = ShopManager.instance.GetShopPositions();
-
-        Debug.Log("Shop positions for grandma collected: " + shops.Count);
     }
     private Vector3 ShopDestination()
     {
@@ -207,7 +200,7 @@ public class AIGrandma : MonoBehaviour
         {
             if (shops == null)
             {
-                Debug.Log("Shops is null");
+                Debug.Log("Shops is null.");
             }
             else if (shops.Count == 0)
             {

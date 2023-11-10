@@ -71,7 +71,7 @@ public class AISniper : MonoBehaviour
                     if (target >= 0)
                     {
                         // Find the target and let them know they've been shot
-                        spottedEnemy = EnemyManager.instance.GetEnemies()[target];
+                        spottedEnemy = AIManager.instance.GetEnemies()[target];
                         // Tells the enemy they've been shot by a sniper
                         spottedEnemy.GetComponent<AIVillainBase>().ShotBySniper();
                         currentState = States.stopped;
@@ -110,8 +110,8 @@ public class AISniper : MonoBehaviour
 
     private int FindTarget()
     {
-        // Get the list of enemies from the EnemyManager script
-        List<GameObject> enemies = EnemyManager.instance.GetEnemies();
+        // Get the list of enemies from the AIManager script
+        List<GameObject> enemies = AIManager.instance.GetEnemies();
         if (enemies == null)
         {
             Debug.Log("Enemies is null.");
