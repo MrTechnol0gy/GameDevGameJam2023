@@ -23,8 +23,10 @@ public class AIMugger : AIVillainBase
     // event for when the mugger is clicked
     public delegate void MuggerClicked();
     public static event MuggerClicked muggerClicked;
+    // event for when the mugger escapes
     public delegate void MuggerEscaped();
     public static event MuggerEscaped muggerEscaped;
+
     public enum States
     {
         stopped,       // stopped = 0
@@ -34,6 +36,7 @@ public class AIMugger : AIVillainBase
         launched,      // launched = 4
         mugged         // mugged = 5
     }
+
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
     {
@@ -55,6 +58,7 @@ public class AIMugger : AIVillainBase
             }
         }
     }
+
     // OnStartedState is for things that should happen when a state first begins
     public void OnStartedState(States state)
     {
@@ -85,6 +89,7 @@ public class AIMugger : AIVillainBase
                 break;
         }
     }
+
     // OnUpdatedState is for things that occur during the state (main actions)
     public void OnUpdatedState(States state) 
     {
@@ -95,6 +100,11 @@ public class AIMugger : AIVillainBase
                 {
                     currentState = States.searching;
                 }
+                else if (shotBySniper)
+                {
+                    Defeated();
+                    currentState = States.launched;
+                }
                 else if (isLaunched)
                 {
                     currentState = States.launched;
@@ -104,6 +114,11 @@ public class AIMugger : AIVillainBase
                 if (TimeElapsedSince(TimeStartedState, searchTime))
                 {
                     currentState = States.stopped;
+                }
+                else if (shotBySniper)
+                {
+                    Defeated();
+                    currentState = States.launched;
                 }
                 else if (isLaunched)
                 {
@@ -129,6 +144,11 @@ public class AIMugger : AIVillainBase
                 {
                     currentState = States.launched;
                 }
+                else if (shotBySniper)
+                {
+                    Defeated();
+                    currentState = States.launched;
+                }
                 else if (isGrandmaVisible)
                 {
                     agent.SetDestination(target.transform.position);
@@ -152,6 +172,11 @@ public class AIMugger : AIVillainBase
                 {
                     currentState = States.launched;
                 }
+                else if (shotBySniper)
+                {
+                    Defeated();
+                    currentState = States.launched;
+                }
                 else
                 {
                     agent.SetDestination(escapePoint.transform.position);
@@ -172,6 +197,7 @@ public class AIMugger : AIVillainBase
                 break;
         }
     }
+
     // OnEndedState is for things that should end or change when a state ends; for cleanup
     public void OnEndedState(States state)
     {
@@ -206,15 +232,18 @@ public class AIMugger : AIVillainBase
         OnUpdatedState(currentState);
     }
 
-    public void Gottem()
+    public void Defeated()
     {
         if (!isLaunched)
         {
-            // Remove this mugger from the list of enemies in the EnemyManager
-            EnemyManager.instance.enemies.Remove(gameObject);
+            // Get the index of this mugger in the EnemyManager enemies list
+            int muggerIndex = EnemyManager.instance.GetEnemies().IndexOf(gameObject);
+            // Remove this mugger from the list of enemies in the EnemyManager using the index
+            EnemyManager.instance.enemies.RemoveAt(muggerIndex);
 
             // Set the launched flag to true
             isLaunched = true;
+
             // Disable NavMeshAgent to allow manual control
             agent.enabled = false;
 
@@ -239,7 +268,6 @@ public class AIMugger : AIVillainBase
             {
                 // Let Grandma know she's got her purse back
                 target.GetComponent<AIGrandma>().isMugged = false;
-                //Debug.Log("Grandma can have her purse back.");
             }
         }        
     }    

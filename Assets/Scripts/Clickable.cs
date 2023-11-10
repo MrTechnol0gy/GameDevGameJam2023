@@ -32,7 +32,7 @@ public class Clickable : MonoBehaviour
                         AIMugger aIMugger = hitObject.GetComponent<AIMugger>();
                         if (aIMugger != null)
                         {
-                            aIMugger.Gottem();
+                            aIMugger.Defeated();
                         }
                     }
                 }

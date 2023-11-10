@@ -15,6 +15,7 @@ public class AIVillainBase : MonoBehaviour
     protected float spottedTimer;
     protected float durationOfSpotted = 3f;
     protected float destructDelay = 3f;
+    protected bool shotBySniper = false;
     protected Rigidbody rb;
 
     protected virtual void Start()
@@ -99,6 +100,11 @@ public class AIVillainBase : MonoBehaviour
     {
         isSpotted = true;
         spottedTimer = 0f;
+    }
+
+    public void ShotBySniper()
+    {
+        shotBySniper = true; 
     }
 
     protected virtual bool TimeElapsedSince(float timeEventHappened, float testingTimeElapsed) => !(timeEventHappened + testingTimeElapsed > Time.time);

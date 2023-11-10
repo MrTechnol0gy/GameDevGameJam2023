@@ -47,7 +47,7 @@ public class ShopManager : MonoBehaviour
         if (scene.name == "Large Mall" || scene.name == "Medium Mall" || scene.name == "Small Mall")
         {
             // Collect all shop positions
-            Debug.Log("Collecting shop positions...");
+            // Debug.Log("Collecting shop positions...");
             CollectshopPositions();
         }
     }
@@ -64,7 +64,7 @@ public class ShopManager : MonoBehaviour
 
         // Raise the ShopPositionsCollected event
         ShopPositionsCollected?.Invoke();
-        Debug.Log("Shop positions collected by the manager. Event invoked.");
+        // Debug.Log("Shop positions collected by the manager. Event invoked.");
 
         //Debug.Log("Shop positions collected: " + shopPositions.Count);
     }
@@ -81,7 +81,7 @@ public class ShopManager : MonoBehaviour
     // returns the list of shop positions
     public List<Vector3> GetShopPositions()
     {
-        Debug.Log("Returning shop positions...");
+        // Debug.Log("Returning shop positions...");
         return shopPositions;
     }
 }

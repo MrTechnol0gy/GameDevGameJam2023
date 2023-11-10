@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -64,14 +65,24 @@ public class AISniper : MonoBehaviour
                 }
                 break;
             case States.firing:
-                // TODO
-                // 1. Find a target
-                FindTarget();
-                // 2. Tell the target they've been shot
-                // EnemyManager.instance.enemies[0].GetComponent<AIVillainBase>().IAmShot();
-                // 3. Go to stopped state
-                currentState = States.stopped;
-                break;
+                {
+                int target;
+                target = FindTarget();
+                    if (target >= 0)
+                    {
+                        // Find the target and let them know they've been shot
+                        spottedEnemy = EnemyManager.instance.GetEnemies()[target];
+                        // Tells the enemy they've been shot by a sniper
+                        spottedEnemy.GetComponent<AIVillainBase>().ShotBySniper();
+                        currentState = States.stopped;
+                    }
+                    // If there are no enemies on the map to be shot, reset the clock
+                    else
+                    {
+                        currentState = States.stopped;
+                    }
+                }
+            break;
         }
     }
     // OnEndedState is for things that should end or change when a state ends; for cleanup
@@ -81,7 +92,7 @@ public class AISniper : MonoBehaviour
         {
             case States.stopped:
                 break;
-            case States.firing:
+            case States.firing:                
                 break;
         }
     }
@@ -90,24 +101,41 @@ public class AISniper : MonoBehaviour
     {
         sniperGO = gameObject;
         OnStartedState(currentState);
+        AdjustShotDelay();
     }
     void Update()
     {
         OnUpdatedState(currentState);
     }
 
-    private GameObject FindTarget()
+    private int FindTarget()
     {
         // Get the list of enemies from the EnemyManager script
-        List<GameObject> enemies = EnemyManager.instance.enemies;
-        // Debug.Log("Enemy list length: " + enemies.Count);
+        List<GameObject> enemies = EnemyManager.instance.GetEnemies();
+        if (enemies == null)
+        {
+            Debug.Log("Enemies is null.");
+            return - 1;
+        }
+        Debug.Log("Enemy list length: " + enemies.Count);
         if (enemies.Count > 0)
         {
             // Pick a random enemy from the list
             int randomEnemy = Random.Range(0, enemies.Count);
-            return enemies[randomEnemy];
+            // Debug.Log("Enemy is " + randomEnemy);
+            return randomEnemy;
         }
-        return null;
+        return -1;
+    }
+
+    private void AdjustShotDelay()
+    {
+        // Get the reduction based on the amount of the purchased upgrade
+        float reduction = Mathf.Clamp01(UpgradeManager.instance.GetUpgrade("RooftopSniper").amount * 0.1f);
+        // Calculate the adjusted shot delay
+        float adjustedShotDelay = shotDelay * (1.0f - reduction);
+        shotDelay = adjustedShotDelay;
+        Debug.Log("Adjusted shot delay: " + shotDelay);
     }
     public float DistanceCheck(GameObject checker, GameObject target)
     {

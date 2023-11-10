@@ -938,6 +938,7 @@ GameObject:
   - component: {fileID: 160722672072472009}
   - component: {fileID: 6756142481440002086}
   - component: {fileID: 297164260935307084}
+  - component: {fileID: 7502213683947239991}
   m_Layer: 0
   m_Name: Mugger
   m_TagString: Mugger
@@ -1124,6 +1125,18 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &7502213683947239991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7154359449824147763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617a5bf009bffc74b8d9b538d100ebb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9142859718224644195
 GameObject:
   m_ObjectHideFlags: 0

@@ -57,7 +57,7 @@ public class LevelManager : MonoBehaviour
     public Level GetLevel()
     {
         string name = currentLevelName;
-        Debug.Log("Current level name: " + name);
+        // Debug.Log("Current level name: " + name);
         // Loop through the upgrades array
         foreach (Level level in levels)
         {
