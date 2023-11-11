@@ -157,7 +157,7 @@ public class AIGuard : MonoBehaviour
     private GameObject CheckForEnemies()
     {
         // Get the list of enemies from the AIManager script
-        List<GameObject> enemies = AIManager.instance.enemies;
+        List<GameObject> enemies = AIManager.instance.GetEnemies();
         Debug.Log("Enemy list length: " + enemies.Count);
         // Loop through the list of enemies
         foreach (GameObject enemy in enemies)

@@ -2209,6 +2209,10 @@ MonoBehaviour:
     type: 3}
   guardPrefab: {fileID: 8015455481516880283, guid: d3f8a86f8b169c043ad5ff8c80126290,
     type: 3}
+  wrestlerPrefab: {fileID: 4220712666459452761, guid: 3f6dfd4d3d0338d4f94cdaeb5d2d64c0,
+    type: 3}
+  numOfVillainsBeforeWrestlerSpawn: 5
+  timeBetweenWrestlerSpawnChecks: 10
   civilianPrefab: {fileID: 3292484367672847996, guid: 50be1bb61b793f942a4ed629a32ece09,
     type: 3}
   amountOfCivvies: 30

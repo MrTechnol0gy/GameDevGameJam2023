@@ -23,7 +23,12 @@ public class AIManager : MonoBehaviour
     private GameObject grandma;         // Reference to the grandma object
     [Header("Upgrade Stats")]
     public GameObject guardPrefab;      // Prefab to instantiate
-    private int amountOfGuards;          // amount of guards
+    private int amountOfGuards;         // amount of guards
+    private List<GameObject> guards = new List<GameObject>(); // List of guards
+    public GameObject wrestlerPrefab;   // Prefab to instantiate
+    public int numOfVillainsBeforeWrestlerSpawn = 5; // Number of villains before wrestler spawns
+    private List<GameObject> wrestlers = new List<GameObject>(); // List of wrestlers
+    public int timeBetweenWrestlerSpawnChecks = 3; // Time between wrestler spawn checks
     [Header("Civilian Stats")]
     public GameObject civilianPrefab;   // Prefab to instantiate
     public int amountOfCivvies = 30;    // amount of civvies
@@ -33,7 +38,7 @@ public class AIManager : MonoBehaviour
     private Vector3 entrancePosition;   // Position of the mall entrance
 
     // A list of all the enemies in the scene
-    public List<GameObject> enemies = new List<GameObject>();
+    private List<GameObject> enemies = new List<GameObject>();
 
     private void Awake()
     {
@@ -58,6 +63,16 @@ public class AIManager : MonoBehaviour
         // This expression is used to make sure the scene is loaded before the event is invoked
         // GameManager.GameStarted += () => StartCoroutine(OnGameStarted());
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Update()
+    {
+        // if the list of wrestlers is empty...
+        if (wrestlers.Count == 0)
+        {
+            // Check the number of villains in the scene
+            Invoke(nameof(GetVillainCount), timeBetweenWrestlerSpawnChecks);            
+        }
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -90,14 +105,22 @@ public class AIManager : MonoBehaviour
         }
         else
         {
-            // Stop spawning enemies
+            // Cancel all invokes when the main menu scene is loaded
             CancelInvoke();
             // Clear the list of enemies between rounds
             enemies.Clear();
+            // Clear the list of guards between rounds
+            guards.Clear();
+            // Clear the list of wrestlers between rounds
+            wrestlers.Clear();
             // Reset the amount of civvies
             amountOfCivvies = 30;
             // Reset the amount of guards
             amountOfGuards = UpgradeManager.instance.GetUpgrade("SecurityGuard").amount;
+            // Clear all references
+            grandma = null;
+            mallFloor = null;
+            mallEntrance = null;
         }
     }
 
@@ -137,8 +160,11 @@ public class AIManager : MonoBehaviour
         // Get a random point on the NavMesh
         Vector3 randomPosition = GetRandomNavMeshPosition();
 
-        // Instantiate the Mugger prefab at the random position
-        Instantiate(guardPrefab, randomPosition, Quaternion.identity);
+        // Instantiate the Guard prefab at the random position
+        GameObject newGuard = Instantiate(guardPrefab, randomPosition, Quaternion.identity);
+
+        // Add the new Guard to the list of guards
+        guards.Add(newGuard);
     }
 
     private void SpawnMugger()
@@ -159,8 +185,38 @@ public class AIManager : MonoBehaviour
         // Get a random point on the NavMesh
         Vector3 randomPosition = GetRandomNavMeshPosition();
 
-        // Instantiate the Mugger prefab at the random position
+        // Instantiate the Civilian prefab at the random position
         Instantiate(civilianPrefab, randomPosition, Quaternion.identity);
+    }
+
+    private void SpawnWrestler()
+    {
+        // Get the amount of Wrestlers to spawn from the UpgradeManager
+        int amountOfWrestlers = UpgradeManager.instance.GetUpgrade("Wrestler").amount;
+
+        while (amountOfWrestlers != 0)
+        {
+            // Instantiate the Wrestler prefab at the random position
+            GameObject newWrestler = Instantiate(wrestlerPrefab, entrancePosition, Quaternion.identity);
+
+            // Add the new Wrestler to the list of wrestlers
+            wrestlers.Add(newWrestler);            
+
+            amountOfWrestlers--;
+        }
+    }
+
+    private void GetVillainCount()
+    {
+        // Get the number of villains in the scene
+        int villainCount = enemies.Count;
+
+        // If the number of villains is greater than the number of villains before the wrestler spawns...
+        if (villainCount > numOfVillainsBeforeWrestlerSpawn)
+        {
+            // Spawn the wrestler
+            SpawnWrestler();
+        }
     }
     private Vector3 GetRandomNavMeshPosition()
     {
@@ -199,5 +255,11 @@ public class AIManager : MonoBehaviour
     public List<GameObject> GetEnemies()
     {
         return enemies;
+    }
+
+    // Remove an enemy from the list of enemies by index
+    public void RemoveEnemy(int index)
+    {
+        enemies.RemoveAt(index);
     }
 }

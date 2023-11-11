@@ -239,7 +239,7 @@ public class AIMugger : AIVillainBase
             // Get the index of this mugger in the AIManager enemies list
             int muggerIndex = AIManager.instance.GetEnemies().IndexOf(gameObject);
             // Remove this mugger from the list of enemies in the AIManager using the index
-            AIManager.instance.enemies.RemoveAt(muggerIndex);
+            AIManager.instance.RemoveEnemy(muggerIndex);
 
             // Set the launched flag to true
             isLaunched = true;

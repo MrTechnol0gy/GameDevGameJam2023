@@ -16,7 +16,7 @@ public class AICultist : AIVillainBase
     [SerializeField] float spinForce = 100f;    // how fast the agent is spun after being launched
     private bool isGrandmaVisible = false;      // can the agent see grandma
     private bool isLaunched = false;            // has the agent got gotted
-    private bool hasPreached = false;             // has the agent got the purse
+    private bool hasPreached = false;           // has the agent got the purse
     private Vector3 destination;                // placeholder for any destination the agent needs
     private float timer;                        // placeholder for timer
     // event for when the mugger is clicked
@@ -28,7 +28,7 @@ public class AICultist : AIVillainBase
         searching,     // searching = 1
         chasing,       // chasing = 2
         launched,      // launched = 3
-        preached         // mugged = 4
+        preached       // preached = 4
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
@@ -181,8 +181,10 @@ public class AICultist : AIVillainBase
     {
         if (!isLaunched)
         {
+            // Get the index of this enemy in the list of enemies
+            int index = AIManager.instance.GetEnemies().IndexOf(thisGameObject);
             // Remove this mugger from the list of enemies in the AIManager
-            AIManager.instance.enemies.Remove(gameObject);
+            AIManager.instance.RemoveEnemy(index);
 
             // Set the launched flag to true
             isLaunched = true;

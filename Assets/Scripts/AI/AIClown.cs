@@ -180,8 +180,11 @@ public class AIBalloonClown : AIVillainBase
     {
         if (!isLaunched)
         {
+            // Get the index of this Clown in the list of enemies
+            int index = AIManager.instance.GetEnemies().IndexOf(thisGameObject);
+            
             // Remove this mugger from the list of enemies in the AIManager
-            AIManager.instance.enemies.Remove(gameObject);
+            AIManager.instance.RemoveEnemy(index);
 
             // Set the launched flag to true
             isLaunched = true;
