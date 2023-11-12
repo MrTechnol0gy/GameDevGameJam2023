@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -36,6 +37,7 @@ public class AIManager : MonoBehaviour
     public GameObject mallFloor;        // Reference to the mall floor object
     private GameObject mallEntrance;    // Reference to the mall entrance object
     private Vector3 entrancePosition;   // Position of the mall entrance
+    private float timer = 0f;           // Timer for checks
 
     // A list of all the enemies in the scene
     private List<GameObject> enemies = new List<GameObject>();
@@ -63,16 +65,27 @@ public class AIManager : MonoBehaviour
         // This expression is used to make sure the scene is loaded before the event is invoked
         // GameManager.GameStarted += () => StartCoroutine(OnGameStarted());
         SceneManager.sceneLoaded += OnSceneLoaded;
+        // Start the timer
+        timer = Time.time;
     }
 
     private void Update()
     {
-        // if the list of wrestlers is empty...
-        if (wrestlers.Count == 0)
+        // Update the timer
+        timer += Time.deltaTime;
+        if (timer >= timeBetweenWrestlerSpawnChecks)
         {
-            // Check the number of villains in the scene
-            Invoke(nameof(GetVillainCount), timeBetweenWrestlerSpawnChecks);            
-        }
+            //Debug.Log("Checking for wrestlers...");
+            // Check the number of wrestlers in the scene
+            if (wrestlers.Count == 0)
+            {
+                // Check the number of villains in the scene
+                // Spawn a wrestler if necessary
+                GetVillainCount();
+            }
+            // Reset the timer
+            timer = 0f;
+        }        
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -192,7 +205,7 @@ public class AIManager : MonoBehaviour
     private void SpawnWrestler()
     {
         // Get the amount of Wrestlers to spawn from the UpgradeManager
-        int amountOfWrestlers = UpgradeManager.instance.GetUpgrade("Wrestler").amount;
+        int amountOfWrestlers = UpgradeManager.instance.GetUpgrade("LocalWrestler").amount;
 
         while (amountOfWrestlers != 0)
         {
@@ -214,6 +227,7 @@ public class AIManager : MonoBehaviour
         // If the number of villains is greater than the number of villains before the wrestler spawns...
         if (villainCount > numOfVillainsBeforeWrestlerSpawn)
         {
+            //Debug.Log("Enough villains to spawn a wrestler!");
             // Spawn the wrestler
             SpawnWrestler();
         }
@@ -257,9 +271,23 @@ public class AIManager : MonoBehaviour
         return enemies;
     }
 
+    // return the list of wrestlers
+    public List<GameObject> GetWrestlers()
+    {
+        return wrestlers;
+    }
+
     // Remove an enemy from the list of enemies by index
+    // Removing by index updates the list dynamically
+    // This is important because the list is accessed frequently
     public void RemoveEnemy(int index)
     {
         enemies.RemoveAt(index);
+    }
+
+    // Remove a wrestler from the list of wrestlers by index
+    public void RemoveWrestler(int index)
+    {
+        wrestlers.RemoveAt(index);
     }
 }

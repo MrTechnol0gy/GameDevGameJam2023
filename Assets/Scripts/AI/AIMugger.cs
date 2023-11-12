@@ -100,7 +100,7 @@ public class AIMugger : AIVillainBase
                 {
                     currentState = States.searching;
                 }
-                else if (shotBySniper)
+                else if (shotBySniper || suplexedByWrestler)
                 {
                     Defeated();
                     currentState = States.launched;
@@ -115,7 +115,7 @@ public class AIMugger : AIVillainBase
                 {
                     currentState = States.stopped;
                 }
-                else if (shotBySniper)
+                else if (shotBySniper || suplexedByWrestler)
                 {
                     Defeated();
                     currentState = States.launched;
@@ -144,7 +144,7 @@ public class AIMugger : AIVillainBase
                 {
                     currentState = States.launched;
                 }
-                else if (shotBySniper)
+                else if (shotBySniper || suplexedByWrestler)
                 {
                     Defeated();
                     currentState = States.launched;
@@ -172,7 +172,7 @@ public class AIMugger : AIVillainBase
                 {
                     currentState = States.launched;
                 }
-                else if (shotBySniper)
+                else if (shotBySniper || suplexedByWrestler)
                 {
                     Defeated();
                     currentState = States.launched;
