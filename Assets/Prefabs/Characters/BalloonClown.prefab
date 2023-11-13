@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberOfSpheres: 30
   sphereRadius: 0.5
-  sphereScale: 5
+  sphereScale: 1
 --- !u!1 &7916973343131261541
 GameObject:
   m_ObjectHideFlags: 0
