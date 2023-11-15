@@ -17,10 +17,10 @@ public class LevelManager : MonoBehaviour
     {
         public string name;
         public LevelSize size;
-        public int shopsAmount;
-        public bool isUnlocked = false;
-        public List<string> villainTypes;
-        public int requiredVisits;
+        public int shopsAmount;     // What is this for?
+        public bool isUnlocked = false; // Whether the level has been unlocked.
+        public List<string> villainTypes;   // The kind of villains that can appear in this level.
+        public int requiredVisits;  // How many shops need to be visited before the level is complete.
 
         public Level(string name, LevelSize size, int shopsAmount, bool isUnlocked, List<string> villainType, int requiredVisits)
         {

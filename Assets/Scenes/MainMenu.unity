@@ -11272,9 +11272,7 @@ MonoBehaviour:
     isUnlocked: 1
     villainTypes:
     - Mugger
-    - Cultists
-    - Balloon Clown
-    requiredVisits: 8
+    requiredVisits: 4
 --- !u!4 &1733443527
 Transform:
   m_ObjectHideFlags: 0
