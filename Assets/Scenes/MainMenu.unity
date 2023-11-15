@@ -11258,13 +11258,22 @@ MonoBehaviour:
     villainTypes:
     - Mugger
     requiredVisits: 3
-  - name: medium mall
+  - name: Medium mall
     size: 1
     shopsAmount: 10
     isUnlocked: 1
     villainTypes:
     - Mugger
     - Cultists
+    requiredVisits: 8
+  - name: Convenience Store
+    size: 0
+    shopsAmount: 10
+    isUnlocked: 1
+    villainTypes:
+    - Mugger
+    - Cultists
+    - Balloon Clown
     requiredVisits: 8
 --- !u!4 &1733443527
 Transform:

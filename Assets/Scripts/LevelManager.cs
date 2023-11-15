@@ -73,6 +73,22 @@ public class LevelManager : MonoBehaviour
         return null;
     }
 
+    public int DetermineCameraAmount()
+    {
+        Level level = GetLevel();
+        switch (level.size)
+        {
+            case LevelSize.Small:
+                return 1;
+            case LevelSize.Medium:
+                return 4;
+            case LevelSize.Large:
+                return 6;
+            default:
+                return 1;
+        }
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Get the current scenes name

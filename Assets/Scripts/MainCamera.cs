@@ -14,6 +14,30 @@ public class MainCamera : MonoBehaviour
     }
     void Start()
     {
+        GetCamerasInScene();
+        SetCameraViewports();        
+    }
+
+    private void GetCamerasInScene()
+    {
+        // Get the size of the level from the LevelManager
+        int amountOfCameras = LevelManager.instance.DetermineCameraAmount();
+
+        // Create an array of cameras
+        cameras = new Camera[amountOfCameras];
+
+        // Find all cameras in the scene by tag "SecurityCamera"
+        GameObject[] cameraObjects = GameObject.FindGameObjectsWithTag("SecurityCamera");
+
+        // Loop through the cameras and add them to the array
+        for (int i = 0; i < amountOfCameras; i++)
+        {
+            cameras[i] = cameraObjects[i].GetComponentInChildren<Camera>();
+        }
+    }
+
+    private void SetCameraViewports()
+    {
         // Set the viewport rect for each camera view
         int numCameras = cameras.Length;
         int numRows = Mathf.CeilToInt(Mathf.Sqrt(numCameras));
@@ -47,10 +71,10 @@ public class MainCamera : MonoBehaviour
     }
 
     void SetViewportRect(int cameraIndex, float x, float y, float width, float height)
-{
-    Rect viewportRect = new Rect(x, y, width, height);
-    cameras[cameraIndex].rect = viewportRect;
-}
+    {
+        Rect viewportRect = new Rect(x, y, width, height);
+        cameras[cameraIndex].rect = viewportRect;
+    }
 
     public Camera[] cameraList()
     {
