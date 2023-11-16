@@ -11257,7 +11257,7 @@ MonoBehaviour:
     isUnlocked: 1
     villainTypes:
     - Mugger
-    requiredVisits: 3
+    requiredVisits: 25
   - name: Medium mall
     size: 1
     shopsAmount: 10

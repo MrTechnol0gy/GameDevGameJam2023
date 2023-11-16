@@ -9,11 +9,15 @@ public class Clickable : MonoBehaviour
 
     void Start()
     {
-        cameras = MainCamera.get.cameraList();
-        //Debug.Log("Camera list is this long " + cameras.Length);
+        
     }
     void Update()
     {
+        if (cameras == null)
+        {
+            Debug.Log("Getting cameras");
+            cameras = MainCamera.get.cameraList();
+        }
         if (Input.GetMouseButtonDown(0))
         {
             foreach (Camera camera in cameras)
