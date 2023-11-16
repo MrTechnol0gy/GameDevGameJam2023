@@ -21,8 +21,8 @@ public class LevelManager : MonoBehaviour
         public bool isUnlocked = false; // Whether the level has been unlocked.
         public List<string> villainTypes;   // The kind of villains that can appear in this level.
         public int requiredVisits;  // How many shops need to be visited before the level is complete.
-
-        public Level(string name, LevelSize size, int shopsAmount, bool isUnlocked, List<string> villainType, int requiredVisits)
+        public int numOfCivvies;    // How many civilians are in the level.
+        public Level(string name, LevelSize size, int shopsAmount, bool isUnlocked, List<string> villainType, int requiredVisits, int numOfCivvies)
         {
             this.name = name;
             this.size = size;
@@ -30,6 +30,8 @@ public class LevelManager : MonoBehaviour
             this.isUnlocked = isUnlocked;
             this.villainTypes = villainType;
             this.requiredVisits = requiredVisits;
+            this.numOfCivvies = numOfCivvies;
+
         }
     }
     // Array of levels

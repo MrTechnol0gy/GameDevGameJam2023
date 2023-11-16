@@ -1983,6 +1983,7 @@ GameObject:
   - component: {fileID: 607520746}
   - component: {fileID: 607520745}
   - component: {fileID: 607520748}
+  - component: {fileID: 607520749}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2108,6 +2109,19 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &607520749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607520744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d81fb4aeb83945418b91c14c250308b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameras: []
 --- !u!1001 &696552098
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6273,7 +6287,7 @@ PrefabInstance:
     - target: {fileID: 1974289473025475723, guid: 46f55c6e3f7f17944ac199b34b073450,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.92387956
       objectReference: {fileID: 0}
     - target: {fileID: 1974289473025475723, guid: 46f55c6e3f7f17944ac199b34b073450,
         type: 3}
@@ -6283,7 +6297,7 @@ PrefabInstance:
     - target: {fileID: 1974289473025475723, guid: 46f55c6e3f7f17944ac199b34b073450,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.38268343
       objectReference: {fileID: 0}
     - target: {fileID: 1974289473025475723, guid: 46f55c6e3f7f17944ac199b34b073450,
         type: 3}
@@ -6298,12 +6312,22 @@ PrefabInstance:
     - target: {fileID: 1974289473025475723, guid: 46f55c6e3f7f17944ac199b34b073450,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -45
       objectReference: {fileID: 0}
     - target: {fileID: 1974289473025475723, guid: 46f55c6e3f7f17944ac199b34b073450,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2423603078838602990, guid: 46f55c6e3f7f17944ac199b34b073450,
+        type: 3}
+      propertyPath: maxRotationAngle
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2423603078838602990, guid: 46f55c6e3f7f17944ac199b34b073450,
+        type: 3}
+      propertyPath: minRotationAngle
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 4459479678287062755, guid: 46f55c6e3f7f17944ac199b34b073450,
         type: 3}
@@ -6719,7 +6743,7 @@ GameObject:
   - component: {fileID: 1599360398}
   m_Layer: 0
   m_Name: ConvenienceStoreFloor
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

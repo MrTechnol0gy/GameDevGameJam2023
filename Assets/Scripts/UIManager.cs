@@ -207,7 +207,7 @@ public class UIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         // Sets all UI to false
         SetAllUIToFalse();
-        GameManager.GameStarted += GameplayUI;
+        LevelLoadManager.GameStarted += GameplayUI;
         UpgradeManager.OnUpgradeButtonClickedEvent += UpdateUpgradeScreenUI;
         AIMugger.muggerClicked += UpdateGameplayUI;
     }
@@ -344,7 +344,6 @@ public class UIManager : MonoBehaviour
 
     public void ContinueFromUpgrades()
     {
-        GameManager.instance.StartGame();
         currentState = States.gameplay;
     }
 

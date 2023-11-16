@@ -32,7 +32,7 @@ public class AIManager : MonoBehaviour
     public int timeBetweenWrestlerSpawnChecks = 3; // Time between wrestler spawn checks
     [Header("Civilian Stats")]
     public GameObject civilianPrefab;   // Prefab to instantiate
-    public int amountOfCivvies = 30;    // amount of civvies
+    private int numOfCivvies;        // amount of civvies
     [Header("Other Components")]
     public GameObject mallFloor;        // Reference to the mall floor object
     private GameObject mallEntrance;    // Reference to the mall entrance object
@@ -109,6 +109,9 @@ public class AIManager : MonoBehaviour
 
             // Set the amount of guards
             amountOfGuards = UpgradeManager.instance.GetUpgrade("SecurityGuard").amount;
+
+            // Set the amount of civvies
+            numOfCivvies = LevelManager.instance.GetLevel().numOfCivvies;
             
             // Get the entrance position
             GetEntranceForSpawning();
@@ -126,8 +129,8 @@ public class AIManager : MonoBehaviour
             guards.Clear();
             // Clear the list of wrestlers between rounds
             wrestlers.Clear();
-            // Reset the amount of civvies
-            amountOfCivvies = 30;
+            // Clear the amount of Civvies
+            numOfCivvies = 0;
             // Reset the amount of guards
             amountOfGuards = UpgradeManager.instance.GetUpgrade("SecurityGuard").amount;
             // Clear all references
@@ -140,12 +143,13 @@ public class AIManager : MonoBehaviour
     // Start spawning all scene AIs
     private void StartSpawning()
     {
-        InvokeRepeating(nameof(SpawnMugger), 0f, Random.Range(spawnIntervalFloor, spawnIntervalCeiling));
+        // Wait for the Mugger spawn interval floor number of seconds before beginning to spawn
+        InvokeRepeating(nameof(SpawnMugger), spawnIntervalFloor, Random.Range(spawnIntervalFloor, spawnIntervalCeiling));
         SpawnGrandma();
-        while (amountOfCivvies != 0)
+        while (numOfCivvies != 0)
         {
             SpawnCivvie();
-            amountOfCivvies--;
+            numOfCivvies--;
         }
         while (amountOfGuards != 0)
         {

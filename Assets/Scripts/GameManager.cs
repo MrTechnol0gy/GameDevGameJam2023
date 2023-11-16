@@ -7,10 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    // Declare the delegate type for the event
-    public delegate void GameStartedEventHandler();
-    // Declare the event using the delegate type
-    public static event GameStartedEventHandler GameStarted;
+    // Declare the delegate type for the event    
     public delegate void LevelLoadedEventHandler();
     public static event LevelLoadedEventHandler LevelLoaded;
     
@@ -39,22 +36,6 @@ public class GameManager : MonoBehaviour
         // Load the game data
         SaveLoadManager.instance.LoadGame();
         Debug.Log("Game loaded");
-    }
-    public void StartGame()
-    {
-        Debug.Log("Starting the game");
-        // Loads the gameplay scene
-        SceneManager.LoadScene("Large Mall");
-        
-        // Save the game
-        SaveLoadManager.instance.SaveGame();
-        Debug.Log("Game saved");
-        
-        // Invoke the event
-        if (GameStarted != null)
-        {
-            GameStarted();
-        }
     }
 
     public void MainMenu()
