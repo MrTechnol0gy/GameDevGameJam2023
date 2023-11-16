@@ -2217,7 +2217,6 @@ MonoBehaviour:
   timeBetweenWrestlerSpawnChecks: 10
   civilianPrefab: {fileID: 3292484367672847996, guid: 50be1bb61b793f942a4ed629a32ece09,
     type: 3}
-  amountOfCivvies: 30
   mallFloor: {fileID: 0}
 --- !u!1 &403952704
 GameObject:
@@ -11036,15 +11035,15 @@ MonoBehaviour:
     villainTypes:
     - Mugger
     requiredVisits: 25
-    numOfCivvies: 30
-  - name: Medium mall
+    numOfCivvies: 50
+  - name: Medium Mall
     size: 1
     shopsAmount: 10
     isUnlocked: 1
     villainTypes:
     - Mugger
-    requiredVisits: 8
-    numOfCivvies: 20
+    requiredVisits: 6
+    numOfCivvies: 12
   - name: Convenience Store
     size: 0
     shopsAmount: 10

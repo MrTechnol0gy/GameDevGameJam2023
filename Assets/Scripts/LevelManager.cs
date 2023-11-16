@@ -83,7 +83,7 @@ public class LevelManager : MonoBehaviour
             case LevelSize.Small:
                 return 1;
             case LevelSize.Medium:
-                return 4;
+                return 2;
             case LevelSize.Large:
                 return 6;
             default:
