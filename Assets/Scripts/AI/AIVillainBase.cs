@@ -86,6 +86,24 @@ public class AIVillainBase : MonoBehaviour
         }
     }
 
+    protected virtual GameObject GetClosestCivilian(List<GameObject> civilians)
+    {
+        GameObject closestCivilian = null;
+        float closestDistance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject civilian in civilians)
+        {
+            Vector3 direction = civilian.transform.position - position;
+            float distance = direction.sqrMagnitude;
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestCivilian = civilian;
+            }
+        }
+        return closestCivilian;
+    }
+
     protected virtual float GetDistanceToTarget(GameObject thisGameObject, GameObject target)
     {
         float distance = Vector3.Distance(thisGameObject.transform.position, target.transform.position);

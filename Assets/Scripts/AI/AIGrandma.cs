@@ -21,6 +21,7 @@ public class AIGrandma : MonoBehaviour
     private List<Vector3> shops;
     private int shopsVisited = 0;               // counter for amount of shops grandma has visited
     private GameObject grandmaGO;
+    private int preachedToCount = 0;            // counter for amount of times grandma has been preached to
     public Outline outlineScript;
     // Event for when Grandma finishes at each shop
     public delegate void GrandmaFinishedShopping();
@@ -228,6 +229,13 @@ public class AIGrandma : MonoBehaviour
         }
         return false;
     }
+
+    public void PreachToMe()
+    {
+        Debug.Log("Grandma preached to");
+        preachedToCount++;
+    }
+
     public float DistanceCheck(GameObject checker, GameObject target)
     {
         float distance = Vector3.Distance(checker.transform.position, target.transform.position);

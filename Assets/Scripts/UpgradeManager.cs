@@ -57,7 +57,7 @@ public class UpgradeManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
 
-        // subscribe to the MuggerClicked event
+        // subscribe to the VillainClicked events
         AIMugger.muggerClicked += OnMuggerClicked;
         AICultist.cultistClicked += OnCultistClicked;
         AIBalloonClown.clownClicked += OnClownClicked;

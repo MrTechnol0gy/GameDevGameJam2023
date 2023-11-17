@@ -2195,8 +2195,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muggerPrefab: {fileID: 7154359449824147763, guid: 55931377813fed842844870a07e81023,
     type: 3}
-  spawnIntervalFloor: 6
-  spawnIntervalCeiling: 12
+  muggerSpawnIntervalFloor: 6
+  muggerSpawnIntervalCeiling: 12
   cultistPrefab: {fileID: 8100301292170525781, guid: 9383c0b750bf22e41ba98d4260000587,
     type: 3}
   cultistSpawnIntervalFloor: 6
@@ -11034,6 +11034,7 @@ MonoBehaviour:
     isUnlocked: 1
     villainTypes:
     - Mugger
+    - Cultist
     requiredVisits: 25
     numOfCivvies: 50
   - name: Medium Mall

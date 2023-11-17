@@ -10,8 +10,8 @@ public class AIManager : MonoBehaviour
     public static AIManager instance;
     [Header("Villain Stats")]
     public GameObject muggerPrefab; // Prefab to instantiate
-    public float spawnIntervalFloor = 6f; // Interval between spawns
-    public float spawnIntervalCeiling = 12f;
+    public float muggerSpawnIntervalFloor = 6f; // Interval between spawns
+    public float muggerSpawnIntervalCeiling = 12f;
     public GameObject cultistPrefab;    // Prefab to instantiate
     public float cultistSpawnIntervalFloor = 6f; // Interval between spawns
     public float cultistSpawnIntervalCeiling = 12f;
@@ -41,6 +41,9 @@ public class AIManager : MonoBehaviour
 
     // A list of all the enemies in the scene
     private List<GameObject> enemies = new List<GameObject>();
+
+    // A list of all civilians in the scene
+    private List<GameObject> civilians = new List<GameObject>();
 
     private void Awake()
     {
@@ -129,6 +132,8 @@ public class AIManager : MonoBehaviour
             guards.Clear();
             // Clear the list of wrestlers between rounds
             wrestlers.Clear();
+            // Clear the list of civilians between rounds
+            civilians.Clear();
             // Clear the amount of Civvies
             numOfCivvies = 0;
             // Reset the amount of guards
@@ -144,7 +149,7 @@ public class AIManager : MonoBehaviour
     private void StartSpawning()
     {
         // Wait for the Mugger spawn interval floor number of seconds before beginning to spawn
-        InvokeRepeating(nameof(SpawnMugger), spawnIntervalFloor, Random.Range(spawnIntervalFloor, spawnIntervalCeiling));
+        InvokeRepeating(nameof(SpawnMugger), muggerSpawnIntervalFloor, Random.Range(muggerSpawnIntervalFloor, muggerSpawnIntervalCeiling));
         SpawnGrandma();
         while (numOfCivvies != 0)
         {
@@ -156,6 +161,8 @@ public class AIManager : MonoBehaviour
             SpawnGuard();
             amountOfGuards--;
         }
+        // Wait for the Cultist spawn interval floor number of seconds before beginning to spawn
+        InvokeRepeating(nameof(SpawnCultistWithRandomCivilian), cultistSpawnIntervalFloor, Random.Range(cultistSpawnIntervalFloor, cultistSpawnIntervalCeiling));
     }
 
     private void SpawnGrandma()
@@ -203,7 +210,10 @@ public class AIManager : MonoBehaviour
         Vector3 randomPosition = GetRandomNavMeshPosition();
 
         // Instantiate the Civilian prefab at the random position
-        Instantiate(civilianPrefab, randomPosition, Quaternion.identity);
+        GameObject newCivilian = Instantiate(civilianPrefab, randomPosition, Quaternion.identity);
+
+        // Add the new Civilian to the list of civilians
+        civilians.Add(newCivilian);
     }
 
     private void SpawnWrestler()
@@ -223,6 +233,42 @@ public class AIManager : MonoBehaviour
         }
     }
 
+    private void SpawnCultistWithRandomCivilian()
+    {        
+        // Replaces a civilian with a cultist
+        // Get a random civilian
+        GameObject randomCivilian = civilians[Random.Range(0, civilians.Count)];
+        // Get the position of the civilian
+        Vector3 civilianPosition = randomCivilian.transform.position;
+        // Remove the civilian from the list of civilians
+        civilians.Remove(randomCivilian);
+        // Destroy the civilian
+        Destroy(randomCivilian);
+        // Instantiate a cultist at the civilian's position, with an x rotation of -90
+        GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.Euler(-90, 0, 0));
+        // Add the new Cultist to the list of enemies
+        enemies.Add(newCultist);
+        // Spawn a new civilian in the scene
+        SpawnCivvie();
+    }
+
+    public void ReplaceSpecificCivilianWithCultist(GameObject civilian)
+    {
+        // Replaces a civilian with a cultist
+        // Get the position of the civilian
+        Vector3 civilianPosition = civilian.transform.position;
+        // Remove the civilian from the list of civilians
+        civilians.Remove(civilian);
+        // Destroy the civilian
+        Destroy(civilian);
+        // Instantiate a cultist at the civilian's position with an x rotation of -90
+        GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.Euler(-90, 0, 0));
+        // Add the new Cultist to the list of enemies
+        enemies.Add(newCultist);
+        // Spawn a new civilian in the scene
+        SpawnCivvie();
+    }
+
     private void GetVillainCount()
     {
         // Get the number of villains in the scene
@@ -236,6 +282,7 @@ public class AIManager : MonoBehaviour
             SpawnWrestler();
         }
     }
+
     private Vector3 GetRandomNavMeshPosition()
     {
         Vector3 randomPoint = Vector3.zero;
@@ -273,6 +320,12 @@ public class AIManager : MonoBehaviour
     public List<GameObject> GetEnemies()
     {
         return enemies;
+    }
+
+    // Return the list of civilians
+    public List<GameObject> GetCivilians()
+    {
+        return civilians;
     }
 
     // return the list of wrestlers

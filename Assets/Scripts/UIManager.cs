@@ -210,6 +210,7 @@ public class UIManager : MonoBehaviour
         LevelLoadManager.GameStarted += GameplayUI;
         UpgradeManager.OnUpgradeButtonClickedEvent += UpdateUpgradeScreenUI;
         AIMugger.muggerClicked += UpdateGameplayUI;
+        AICultist.cultistClicked += UpdateGameplayUI;
     }
     void Start()
     {

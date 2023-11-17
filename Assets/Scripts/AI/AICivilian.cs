@@ -14,13 +14,14 @@ public class AICivilian : MonoBehaviour
     [SerializeField] float shopTime = 12f;      // how long the agent will shop
     private Vector3 destination;                // placeholder for any destination the Civilian needs
     private float timer;                        // placeholder for timer
+    private bool preached;                      // has the agent been preached to
     private List<Vector3> shops;
     
     public enum States
     {
         stopped,        // stopped = 0
         shopping,       // shopping = 1
-        chasing,        // chasing = 2
+        preached,       // preached = 2
         goinghome,      // goinghome = 3
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
@@ -57,8 +58,9 @@ public class AICivilian : MonoBehaviour
                 //Debug.Log("I am " + currentState);
                 destination = ShopDestination();                    // gets a destination to go shopping
                 break;
-            case States.chasing:
+            case States.preached:
                 //Debug.Log("I am " + currentState);
+                AIManager.instance.ReplaceSpecificCivilianWithCultist(gameObject);
                 break;
             case States.goinghome:
                 //Debug.Log("I am " + currentState);
@@ -75,18 +77,26 @@ public class AICivilian : MonoBehaviour
                 {
                     currentState = States.shopping;
                 }
+                else if (preached)
+                {
+                    currentState = States.preached;
+                }
                 break;
             case States.shopping:
                 if (TimeElapsedSince(TimeStartedState, Random.Range(shopTime - 10, shopTime + 10)))
                 {
                     currentState = States.stopped;
                 }
+                else if (preached)
+                {
+                    currentState = States.preached;
+                }
                 else
                 {
                     Civilian.SetDestination(destination);
                 }
                 break;
-            case States.chasing:
+            case States.preached:
                 break; 
             case States.goinghome:
                 break;
@@ -103,17 +113,13 @@ public class AICivilian : MonoBehaviour
                 break;
             case States.shopping:
                 break;
-            case States.chasing:
+            case States.preached:
                 break;
             case States.goinghome:
                 break;
         }
-    }
+    }    
     
-    void Awake()
-    {
-       
-    }
     void Start()
     {        
         OnStartedState(currentState);
@@ -122,6 +128,11 @@ public class AICivilian : MonoBehaviour
     void Update()
     {
         OnUpdatedState(currentState);
+    }
+
+    public void PreachToMe()
+    {
+        preached = true;
     }
     
     private Vector3 ShopDestination()

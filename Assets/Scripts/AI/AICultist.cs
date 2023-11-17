@@ -16,7 +16,8 @@ public class AICultist : AIVillainBase
     [SerializeField] float spinForce = 100f;    // how fast the agent is spun after being launched
     private bool isGrandmaVisible = false;      // can the agent see grandma
     private bool isLaunched = false;            // has the agent got gotted
-    private bool hasPreached = false;           // has the agent got the purse
+    private bool hasPreached = false;           // has the agent preached to grandma
+    private GameObject closestCivilian;         // placeholder for the closest civilian 
     private Vector3 destination;                // placeholder for any destination the agent needs
     private float timer;                        // placeholder for timer
     // event for when the mugger is clicked
@@ -86,6 +87,11 @@ public class AICultist : AIVillainBase
                 {
                     currentState = States.searching;
                 }
+                else if (shotBySniper || suplexedByWrestler)
+                {
+                    Defeated();
+                    currentState = States.launched;
+                }
                 else if (isLaunched)
                 {
                     currentState = States.launched;
@@ -95,6 +101,11 @@ public class AICultist : AIVillainBase
                 if (TimeElapsedSince(TimeStartedState, searchTime))
                 {
                     currentState = States.stopped;
+                }
+                else if (shotBySniper || suplexedByWrestler)
+                {
+                    Defeated();
+                    currentState = States.launched;
                 }
                 else if (isLaunched)
                 {
@@ -108,7 +119,9 @@ public class AICultist : AIVillainBase
                 }
                 if (!isGrandmaVisible)
                 {
-                    agent.SetDestination(destination);
+                    // Get the closest civilian
+                    closestCivilian = GetClosestCivilian(AIManager.instance.GetCivilians());
+                    agent.SetDestination(closestCivilian.transform.position);
                 }
                 else if (isGrandmaVisible)
                 {
@@ -120,26 +133,46 @@ public class AICultist : AIVillainBase
                 {
                     currentState = States.launched;
                 }
+                else if (shotBySniper || suplexedByWrestler)
+                {
+                    Defeated();
+                    currentState = States.launched;
+                }
                 else if (isGrandmaVisible)
                 {
                     agent.SetDestination(target.transform.position);
                 }
+                else if (!isGrandmaVisible)
+                {
+                    agent.SetDestination(closestCivilian.transform.position);
+                }
                 if (GetDistanceToTarget(thisGameObject, target) < 3)
                 {
-                    // if (!target.GetComponent<AIGrandma>().GotMugged())
-                    // {
-                    //     hasPreached = true;
-                    //     Debug.Log("grandma is mugged");
-                    //     currentState = States.preached;
-                    // }
-                    // else
-                    // {
-                    //     currentState = States.searching;
-                    // }
+                    // let the target know they've been preached to
+                    target.GetComponent<AIGrandma>().PreachToMe();
+                    currentState = States.preached;
+                }
+                else if (GetDistanceToTarget(thisGameObject, closestCivilian) < 3)
+                {
+                    // let the civilian know they've been preached to
+                    closestCivilian.GetComponent<AICivilian>().PreachToMe();
+                    currentState = States.preached;
                 }
                 break; 
             case States.preached:
-                
+                if (TimeElapsedSince(TimeStartedState, stoppedTime))
+                {
+                    currentState = States.stopped;
+                }
+                else if (shotBySniper || suplexedByWrestler)
+                {
+                    Defeated();
+                    currentState = States.launched;
+                }
+                else if (isLaunched)
+                {
+                    currentState = States.launched;
+                }
                 break;
             case States.launched:
                 break;
@@ -177,17 +210,19 @@ public class AICultist : AIVillainBase
         OnUpdatedState(currentState);
     }
 
-    public void Gottem()
+    public void Defeated()
     {
         if (!isLaunched)
         {
             // Get the index of this enemy in the list of enemies
             int index = AIManager.instance.GetEnemies().IndexOf(thisGameObject);
+
             // Remove this mugger from the list of enemies in the AIManager
             AIManager.instance.RemoveEnemy(index);
 
             // Set the launched flag to true
             isLaunched = true;
+
             // Disable NavMeshAgent to allow manual control
             agent.enabled = false;
 

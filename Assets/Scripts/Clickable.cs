@@ -39,6 +39,15 @@ public class Clickable : MonoBehaviour
                             aIMugger.Defeated();
                         }
                     }
+                    else if (hitObject.CompareTag("Cultist"))
+                    {
+                        // Invoke the method on the clicked object
+                        AICultist aICultist = hitObject.GetComponent<AICultist>();
+                        if (aICultist != null)
+                        {
+                            aICultist.Defeated();
+                        } 
+                    }                   
                 }
             }
         }
