@@ -20,33 +20,24 @@ public class SphereSpawner : MonoBehaviour
         for (int i = 0; i < numberOfSpheres; i++)
         {
             Vector3 randomOffset = Random.onUnitSphere * sphereRadius;
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.transform.position = transform.position + randomOffset;
+            sphere.transform.localScale = Vector3.one * sphereRadius * sphereScale; // Set the scale to match the diameter
 
-            // Ensure spheres don't overlap
-            Collider[] colliders = Physics.OverlapSphere(transform.position + randomOffset, sphereRadius);
-            if (colliders.Length == 0)
+            // Set a random color
+            Renderer renderer = sphere.GetComponent<Renderer>();
+            if (renderer != null)
             {
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.position = transform.position + randomOffset;
-                sphere.transform.localScale = Vector3.one * sphereRadius * sphereScale; // Set the scale to match the diameter
-
-                // Set a random color
-                Renderer renderer = sphere.GetComponent<Renderer>();
-                if (renderer != null)
-                {
-                    renderer.material.color = Random.ColorHSV();
-                }
-
-                // Make the sphere a child of the spawner
-                sphere.transform.parent = transform;
-
-                // Add the sphere to the list
-                spheres.Add(sphere);
+                renderer.material.color = Random.ColorHSV();
             }
-            else
-            {
-                // If there's an overlap, try again
-                i--;
-            }
+
+            // Make the sphere a child of the spawner
+            sphere.transform.parent = transform;
+
+            // Add the sphere to the list
+            spheres.Add(sphere);
+        
+        
         }
     }
 

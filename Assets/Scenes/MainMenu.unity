@@ -2214,10 +2214,10 @@ MonoBehaviour:
   wrestlerPrefab: {fileID: 2751387739163163146, guid: 3f6dfd4d3d0338d4f94cdaeb5d2d64c0,
     type: 3}
   numOfVillainsBeforeWrestlerSpawn: 2
-  timeBetweenWrestlerSpawnChecks: 10
   civilianPrefab: {fileID: 3292484367672847996, guid: 50be1bb61b793f942a4ed629a32ece09,
     type: 3}
   mallFloor: {fileID: 0}
+  timeBetweenConditionalSpawnChecks: 6
 --- !u!1 &403952704
 GameObject:
   m_ObjectHideFlags: 0
@@ -11035,7 +11035,8 @@ MonoBehaviour:
     villainTypes:
     - Mugger
     - Cultist
-    requiredVisits: 25
+    - BalloonClown
+    requiredVisits: 12
     numOfCivvies: 50
   - name: Medium Mall
     size: 1
@@ -11043,7 +11044,8 @@ MonoBehaviour:
     isUnlocked: 1
     villainTypes:
     - Mugger
-    requiredVisits: 6
+    - Cultist
+    requiredVisits: 8
     numOfCivvies: 12
   - name: Convenience Store
     size: 0

@@ -29,7 +29,6 @@ public class AIManager : MonoBehaviour
     public GameObject wrestlerPrefab;   // Prefab to instantiate
     public int numOfVillainsBeforeWrestlerSpawn = 5; // Number of villains before wrestler spawns
     private List<GameObject> wrestlers = new List<GameObject>(); // List of wrestlers
-    public int timeBetweenWrestlerSpawnChecks = 3; // Time between wrestler spawn checks
     [Header("Civilian Stats")]
     public GameObject civilianPrefab;   // Prefab to instantiate
     private int numOfCivvies;        // amount of civvies
@@ -37,6 +36,7 @@ public class AIManager : MonoBehaviour
     public GameObject mallFloor;        // Reference to the mall floor object
     private GameObject mallEntrance;    // Reference to the mall entrance object
     private Vector3 entrancePosition;   // Position of the mall entrance
+    public int timeBetweenConditionalSpawnChecks = 6; // Time between conditional spawn checks
     private float timer = 0f;           // Timer for checks
 
     // A list of all the enemies in the scene
@@ -64,32 +64,10 @@ public class AIManager : MonoBehaviour
     }
     private void Start()
     {
-        // Listen for the GameStarted event
-        // This expression is used to make sure the scene is loaded before the event is invoked
-        // GameManager.GameStarted += () => StartCoroutine(OnGameStarted());
+        // Subscribe to the sceneLoaded event
         SceneManager.sceneLoaded += OnSceneLoaded;
-        // Start the timer
-        timer = Time.time;
     }
-
-    private void Update()
-    {
-        // Update the timer
-        timer += Time.deltaTime;
-        if (timer >= timeBetweenWrestlerSpawnChecks)
-        {
-            //Debug.Log("Checking for wrestlers...");
-            // Check the number of wrestlers in the scene
-            if (wrestlers.Count == 0)
-            {
-                // Check the number of villains in the scene
-                // Spawn a wrestler if necessary
-                GetVillainCount();
-            }
-            // Reset the timer
-            timer = 0f;
-        }        
-    }
+    
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // If the current scene is not the main menu scene...
@@ -116,11 +94,17 @@ public class AIManager : MonoBehaviour
             // Set the amount of civvies
             numOfCivvies = LevelManager.instance.GetLevel().numOfCivvies;
             
+            // Start the timer
+            timer = Time.time;
+
             // Get the entrance position
             GetEntranceForSpawning();
 
             // Start spawning AIs
-            StartSpawning();            
+            StartSpawning();        
+
+            // Start spawning AIs based on conditions
+            InvokeRepeating(nameof(SpawnBasedOnConditions), timeBetweenConditionalSpawnChecks, timeBetweenConditionalSpawnChecks);    
         }
         else
         {
@@ -138,6 +122,8 @@ public class AIManager : MonoBehaviour
             numOfCivvies = 0;
             // Reset the amount of guards
             amountOfGuards = UpgradeManager.instance.GetUpgrade("SecurityGuard").amount;
+            // Reset the timer
+            timer = 0f;
             // Clear all references
             grandma = null;
             mallFloor = null;
@@ -262,24 +248,56 @@ public class AIManager : MonoBehaviour
         // Destroy the civilian
         Destroy(civilian);
         // Instantiate a cultist at the civilian's position with an x rotation of -90
-        GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.Euler(-90, 0, 0));
+        GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.identity);
+        // Rotate it's x axis by 90 degrees (to correct an asset import issue)
+        newCultist.transform.Rotate(-90, 0, 0);
         // Add the new Cultist to the list of enemies
         enemies.Add(newCultist);
         // Spawn a new civilian in the scene
         SpawnCivvie();
     }
 
-    private void GetVillainCount()
+    private void SpawnBalloonClown()
+    {
+        Debug.Log("Spawning a balloon clown!");
+        // Instantiate the Clown prefab at the entrance
+        GameObject newClown = Instantiate(clownPrefab, entrancePosition, Quaternion.identity);
+        Debug.Log("Clown spawned at " + entrancePosition);
+        Debug.Log("Rotating that clown!");
+        // Rotate it's x axis by 90 degrees (to correct an asset import issue)
+        newClown.transform.Rotate(-90, 0, 0);
+        Debug.Log("Clown rotated!");
+        Debug.Log("Adding that clown to the list of enemies!");
+        // Add the new Clown to the list of enemies
+        enemies.Add(newClown);
+    }
+
+    // Spawns AIs that require certain conditions to be met
+    // Condition 1: The number of villains in the scene is greater than the "number of villains before the wrestler spawns" variable
+    // Condition 2: There are no balloon clowns in the scene
+    private void SpawnBasedOnConditions()
     {
         // Get the number of villains in the scene
         int villainCount = enemies.Count;
 
-        // If the number of villains is greater than the number of villains before the wrestler spawns...
-        if (villainCount > numOfVillainsBeforeWrestlerSpawn)
+        // Condition 1...
+        // If there are enough villains to spawn a wrestler and there are no wrestlers in the scene
+        if (villainCount >= numOfVillainsBeforeWrestlerSpawn && wrestlers.Count == 0)
         {
             //Debug.Log("Enough villains to spawn a wrestler!");
             // Spawn the wrestler
             SpawnWrestler();
+            // Reset the timer
+            timer = 0f;
+        }
+
+        // Condition 2...
+        // Spawn balloon clowns if there are no balloon clowns in the scene
+        if (GetBalloonClownCount() == 0)
+        {
+            Debug.Log("No balloon clowns in the scene!");
+            // Spawn a balloon clown
+            SpawnBalloonClown();
         }
     }
 
@@ -332,6 +350,22 @@ public class AIManager : MonoBehaviour
     public List<GameObject> GetWrestlers()
     {
         return wrestlers;
+    }
+
+    // Check the list of enemies for the number of Balloon Clowns
+    public int GetBalloonClownCount()
+    {
+        int balloonClownCount = 0;
+
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy.GetComponent<AIBalloonClown>() != null)
+            {
+                balloonClownCount++;
+            }
+        }
+
+        return balloonClownCount;
     }
 
     // Remove an enemy from the list of enemies by index

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9131607746236743328}
-  - component: {fileID: 8498934799371600062}
+  - component: {fileID: 875762052116661749}
   m_Layer: 0
   m_Name: BalloonSpawnPoint
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3135396933531530334}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8498934799371600062
+--- !u!114 &875762052116661749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,9 +60,10 @@ GameObject:
   - component: {fileID: 5114135078094679471}
   - component: {fileID: 6121950971081976220}
   - component: {fileID: 1377527054101908884}
+  - component: {fileID: 4727888412604878638}
   m_Layer: 0
   m_Name: BalloonClown
-  m_TagString: Untagged
+  m_TagString: BalloonClown
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -182,3 +183,21 @@ MonoBehaviour:
   searchTimer: 3
   launchForce: 10
   spinForce: 100
+--- !u!114 &4727888412604878638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7916973343131261541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0.5135948, b: 0, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

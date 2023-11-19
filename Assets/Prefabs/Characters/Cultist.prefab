@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 409298963574549762}
   - component: {fileID: 4801391380721143777}
   - component: {fileID: 4399471798277831698}
+  - component: {fileID: 4596696276253076369}
   m_Layer: 0
   m_Name: Cultist
   m_TagString: Cultist
@@ -182,3 +183,21 @@ CapsuleCollider:
   m_Height: 0.029499164
   m_Direction: 1
   m_Center: {x: 0.00030762656, y: 0.001440815, z: 0.027286788}
+--- !u!114 &4596696276253076369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8100301292170525781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.9433962, g: 0.56926256, b: 0, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
