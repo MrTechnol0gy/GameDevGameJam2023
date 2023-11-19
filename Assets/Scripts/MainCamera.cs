@@ -5,8 +5,10 @@ using UnityEngine;
 public class MainCamera : MonoBehaviour
 {
     public static MainCamera get;
-    [Header("Cameras")]
-    [SerializeField] Camera[] cameras;
+    // Array of cameras in the scene
+    private Camera[] cameras;
+    // List of cameras in the scene
+    private List<GameObject> cameraList = new List<GameObject>();
 
     void Awake()
     {
@@ -76,7 +78,14 @@ public class MainCamera : MonoBehaviour
         cameras[cameraIndex].rect = viewportRect;
     }
 
-    public Camera[] cameraList()
+    // return the list of cameras
+    public List<GameObject> GetCamerasList()
+    {
+        return cameraList;
+    }
+
+    // return the array of cameras
+    public Camera[] GetCamerasArray()
     {
         return cameras;
     }

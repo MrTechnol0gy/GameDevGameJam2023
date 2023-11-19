@@ -16,7 +16,7 @@ public class Clickable : MonoBehaviour
         if (cameras == null)
         {
             Debug.Log("Getting cameras");
-            cameras = MainCamera.get.cameraList();
+            cameras = MainCamera.get.GetCamerasArray();
         }
         if (Input.GetMouseButtonDown(0))
         {

@@ -8,27 +8,22 @@ public class AIBalloonClown : AIVillainBase
     public LayerMask wallLayer;
 
     [Header("Agent")]
-    [SerializeField] float searchRadius = 20;   // how far the agent will search
     [SerializeField] float stoppedTime = 3f;    // how long the agent will remain stopped
-    [SerializeField] float searchTime = 12f;    // how long the agent will search
-    [SerializeField] float searchTimer = 3f;    // how often the agent searches for grandma
     [SerializeField] float launchForce = 10f;   // how fast the agent is launched
     [SerializeField] float spinForce = 100f;    // how fast the agent is spun after being launched
-    private bool isGrandmaVisible = false;      // can the agent see grandma
     private bool isLaunched = false;            // has the agent got gotted
-    private bool attachedBalloon = false;             // has the agent got the purse
     private Vector3 destination;                // placeholder for any destination the agent needs
     private float timer;                        // placeholder for timer
-    // event for when the mugger is clicked
+    // Placeholder for the list of cameras in the scene
+    private List<GameObject> cameras = new List<GameObject>();
+    // event for when the agent is clicked
     public delegate void ClownClicked();
     public static event ClownClicked clownClicked;
     public enum States
     {
         stopped,       // stopped = 0
-        searching,     // searching = 1
-        chasing,       // chasing = 2
-        launched,      // launched = 3
-        ballooned      // ballooned = 4
+        goingToCamera, // going to a camera = 1
+        launched,      // launched = 2
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
@@ -60,19 +55,14 @@ public class AIBalloonClown : AIVillainBase
                 //Debug.Log("I am " + currentState);
                 agent.isStopped = true;
                 break;
-            case States.searching:
+            case States.goingToCamera:
                 //Debug.Log("I am " + currentState);
-                destination = SearchDestination(searchRadius);                    // gets a destination to search towards
-                break;
-            case States.chasing:
-                //Debug.Log("I am " + currentState);
+                // Get a random camera from the list of cameras and set it as the destination
+                GetRandomCamera();
                 break;
             case States.launched:
                 //Debug.Log("I am " + currentState);
                 DestroyMe();
-                break;
-            case States.ballooned:
-                //Debug.Log("I am " + currentState);
                 break;
         }
     }
@@ -84,61 +74,33 @@ public class AIBalloonClown : AIVillainBase
             case States.stopped:
                 if (TimeElapsedSince(TimeStartedState, stoppedTime))
                 {
-                    currentState = States.searching;
+                    currentState = States.goingToCamera;
+                }
+                else if (shotBySniper || suplexedByWrestler)
+                {
+                    Defeated();
+                    currentState = States.launched;
                 }
                 else if (isLaunched)
                 {
                     currentState = States.launched;
                 }
                 break;
-            case States.searching:
-                if (TimeElapsedSince(TimeStartedState, searchTime))
+            case States.goingToCamera:
+                if (shotBySniper || suplexedByWrestler)
                 {
-                    currentState = States.stopped;
+                    Defeated();
+                    currentState = States.launched;
                 }
                 else if (isLaunched)
                 {
                     currentState = States.launched;
-                }
-                timer -= Time.deltaTime;
-                if (timer <= 0f)
+                }  
+                else
                 {
-                    timer = searchTimer;
-                    isGrandmaVisible = CheckForGrandma(searchRadius);
-                }
-                if (!isGrandmaVisible)
-                {
+                    // head towards the camera
                     agent.SetDestination(destination);
-                }
-                else if (isGrandmaVisible)
-                {
-                    currentState = States.chasing;
-                }
-                break;
-            case States.chasing:
-                if (isLaunched)
-                {
-                    currentState = States.launched;
-                }
-                else if (isGrandmaVisible)
-                {
-                    agent.SetDestination(target.transform.position);
-                }
-                if (GetDistanceToTarget(thisGameObject, target) < 3)
-                {
-                    // if (!target.GetComponent<AIGrandma>().GotMugged())
-                    // {
-                    //     attachedBalloon = true;
-                    //     currentState = States.ballooned;
-                    // }
-                    // else
-                    // {
-                    //     currentState = States.searching;
-                    // }
-                }
-                break; 
-            case States.ballooned:
-                
+                }              
                 break;
             case States.launched:
                 break;
@@ -152,13 +114,9 @@ public class AIBalloonClown : AIVillainBase
             case States.stopped:
                 agent.isStopped = false;
                 break;
-            case States.searching:
-                break;
-            case States.chasing:
+            case States.goingToCamera:
                 break;
             case States.launched:
-                break;
-            case States.ballooned:
                 break;
         }
     }
@@ -168,6 +126,8 @@ public class AIBalloonClown : AIVillainBase
         base.Start();
         AudioManager.instance.BalloonClownSpawned();
         OnStartedState(currentState);
+        // Get the cameras in the scene from the MainCamera
+        cameras = MainCamera.get.GetCamerasList();
     }
 
     protected override void Update()
@@ -176,7 +136,15 @@ public class AIBalloonClown : AIVillainBase
         OnUpdatedState(currentState);
     }
 
-    public void Gottem()
+    private void GetRandomCamera()
+    {
+        // Get a random camera from the list of cameras
+        int randomCamera = Random.Range(0, cameras.Count);
+        // Set the destination to the random camera
+        destination = cameras[randomCamera].transform.position;
+    }
+
+    public void Defeated()
     {
         if (!isLaunched)
         {
