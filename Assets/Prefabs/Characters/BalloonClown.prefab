@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 6086744159760275901}
   - component: {fileID: 8695359837073836653}
   - component: {fileID: 8901939992569906118}
+  - component: {fileID: 8963967086957188971}
   m_Layer: 0
   m_Name: BalloonClown
   m_TagString: BalloonClown
@@ -275,6 +276,18 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &8963967086957188971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2311623920022094256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617a5bf009bffc74b8d9b538d100ebb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3238110055726941586
 GameObject:
   m_ObjectHideFlags: 0

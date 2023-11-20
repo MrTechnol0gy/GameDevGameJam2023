@@ -226,10 +226,10 @@ public class AIManager : MonoBehaviour
         GameObject randomCivilian = civilians[Random.Range(0, civilians.Count)];
         // Get the position of the civilian
         Vector3 civilianPosition = randomCivilian.transform.position;
-        // Remove the civilian from the list of civilians
-        civilians.Remove(randomCivilian);
         // Destroy the civilian
         Destroy(randomCivilian);
+        // Remove the civilian from the list of civilians
+        civilians.Remove(randomCivilian);
         // Instantiate a cultist at the civilian's position
         GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.identity);
         // Add the new Cultist to the list of enemies
@@ -243,10 +243,10 @@ public class AIManager : MonoBehaviour
         // Replaces a civilian with a cultist
         // Get the position of the civilian
         Vector3 civilianPosition = civilian.transform.position;
-        // Remove the civilian from the list of civilians
-        civilians.Remove(civilian);
         // Destroy the civilian
         Destroy(civilian);
+        // Remove the civilian from the list of civilians
+        civilians.Remove(civilian);
         // Instantiate a cultist at the civilian's position
         GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.identity);
         // Add the new Cultist to the list of enemies
