@@ -13,6 +13,7 @@ TagManager:
   - SecurityCamera
   - Cultist
   - BalloonClown
+  - ClownStop
   layers:
   - Default
   - TransparentFX

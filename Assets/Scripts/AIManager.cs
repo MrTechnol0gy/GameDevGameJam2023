@@ -230,8 +230,8 @@ public class AIManager : MonoBehaviour
         civilians.Remove(randomCivilian);
         // Destroy the civilian
         Destroy(randomCivilian);
-        // Instantiate a cultist at the civilian's position, with an x rotation of -90
-        GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.Euler(-90, 0, 0));
+        // Instantiate a cultist at the civilian's position
+        GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.identity);
         // Add the new Cultist to the list of enemies
         enemies.Add(newCultist);
         // Spawn a new civilian in the scene
@@ -247,10 +247,8 @@ public class AIManager : MonoBehaviour
         civilians.Remove(civilian);
         // Destroy the civilian
         Destroy(civilian);
-        // Instantiate a cultist at the civilian's position with an x rotation of -90
+        // Instantiate a cultist at the civilian's position
         GameObject newCultist = Instantiate(cultistPrefab, civilianPosition, Quaternion.identity);
-        // Rotate it's x axis by 90 degrees (to correct an asset import issue)
-        newCultist.transform.Rotate(-90, 0, 0);
         // Add the new Cultist to the list of enemies
         enemies.Add(newCultist);
         // Spawn a new civilian in the scene
@@ -259,15 +257,8 @@ public class AIManager : MonoBehaviour
 
     private void SpawnBalloonClown()
     {
-        Debug.Log("Spawning a balloon clown!");
         // Instantiate the Clown prefab at the entrance
         GameObject newClown = Instantiate(clownPrefab, entrancePosition, Quaternion.identity);
-        Debug.Log("Clown spawned at " + entrancePosition);
-        Debug.Log("Rotating that clown!");
-        // Rotate it's x axis by 90 degrees (to correct an asset import issue)
-        newClown.transform.Rotate(-90, 0, 0);
-        Debug.Log("Clown rotated!");
-        Debug.Log("Adding that clown to the list of enemies!");
         // Add the new Clown to the list of enemies
         enemies.Add(newClown);
     }
@@ -295,7 +286,6 @@ public class AIManager : MonoBehaviour
         // Spawn balloon clowns if there are no balloon clowns in the scene
         if (GetBalloonClownCount() == 0)
         {
-            Debug.Log("No balloon clowns in the scene!");
             // Spawn a balloon clown
             SpawnBalloonClown();
         }

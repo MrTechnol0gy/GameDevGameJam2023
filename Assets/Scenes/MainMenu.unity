@@ -2197,11 +2197,11 @@ MonoBehaviour:
     type: 3}
   muggerSpawnIntervalFloor: 6
   muggerSpawnIntervalCeiling: 12
-  cultistPrefab: {fileID: 8100301292170525781, guid: 9383c0b750bf22e41ba98d4260000587,
+  cultistPrefab: {fileID: 7034959676482038231, guid: 9383c0b750bf22e41ba98d4260000587,
     type: 3}
   cultistSpawnIntervalFloor: 6
   cultistSpawnIntervalCeiling: 12
-  clownPrefab: {fileID: 7916973343131261541, guid: c6f9aaf7fcd24da48bb0be983fc3663f,
+  clownPrefab: {fileID: 2311623920022094256, guid: c6f9aaf7fcd24da48bb0be983fc3663f,
     type: 3}
   clownSpawnIntervalFloor: 6
   clownSpawnIntervalCeiling: 12

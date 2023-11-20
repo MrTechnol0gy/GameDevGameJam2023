@@ -14,8 +14,8 @@ public class AIBalloonClown : AIVillainBase
     private bool isLaunched = false;            // has the agent got gotted
     private Vector3 destination;                // placeholder for any destination the agent needs
     private float timer;                        // placeholder for timer
-    // Placeholder for the list of cameras in the scene
-    private List<GameObject> cameras = new List<GameObject>();
+    // Placeholder for the list of clown stops in the scene
+    private List<GameObject> clownStops = new List<GameObject>();
     // event for when the agent is clicked
     public delegate void ClownClicked();
     public static event ClownClicked clownClicked;
@@ -58,7 +58,7 @@ public class AIBalloonClown : AIVillainBase
             case States.goingToCamera:
                 //Debug.Log("I am " + currentState);
                 // Get a random camera from the list of cameras and set it as the destination
-                GetRandomCamera();
+                GetRandomStopPoint();
                 break;
             case States.launched:
                 //Debug.Log("I am " + currentState);
@@ -126,8 +126,8 @@ public class AIBalloonClown : AIVillainBase
         base.Start();
         AudioManager.instance.BalloonClownSpawned();
         OnStartedState(currentState);
-        // Get the cameras in the scene from the MainCamera
-        cameras = MainCamera.get.GetCamerasList();
+        // Get all the clown stops in the scene
+        clownStops.AddRange(GameObject.FindGameObjectsWithTag("ClownStop"));
     }
 
     protected override void Update()
@@ -136,12 +136,12 @@ public class AIBalloonClown : AIVillainBase
         OnUpdatedState(currentState);
     }
 
-    private void GetRandomCamera()
+    private void GetRandomStopPoint()
     {
-        // Get a random camera from the list of cameras
-        int randomCamera = Random.Range(0, cameras.Count);
-        // Set the destination to the random camera
-        destination = cameras[randomCamera].transform.position;
+        // Get a random clown stop from the list of clown stops
+        int randomStop = Random.Range(0, clownStops.Count);
+        // Set the destination to the random clown stop
+        destination = clownStops[randomStop].transform.position;
     }
 
     public void Defeated()
@@ -151,11 +151,12 @@ public class AIBalloonClown : AIVillainBase
             // Get the index of this Clown in the list of enemies
             int index = AIManager.instance.GetEnemies().IndexOf(thisGameObject);
             
-            // Remove this mugger from the list of enemies in the AIManager
+            // Remove this agent from the list of enemies in the AIManager
             AIManager.instance.RemoveEnemy(index);
 
             // Set the launched flag to true
             isLaunched = true;
+            
             // Disable NavMeshAgent to allow manual control
             agent.enabled = false;
 
