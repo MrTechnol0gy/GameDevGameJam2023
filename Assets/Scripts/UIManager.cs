@@ -21,8 +21,6 @@ public class UIManager : MonoBehaviour
     public GameObject resultsScreenUI;
     // reference to the upgrades UI
     public GameObject upgradesUI;
-    // reference to the glossary UI
-    public GameObject glossaryUI;
     // Header
     [Header("Upgrade Screen UI Elements")]
     public TMPro.TextMeshProUGUI cashText;
@@ -54,8 +52,7 @@ public class UIManager : MonoBehaviour
         options = 2,
         gameplay = 3,
         results = 4,
-        glossary = 5,
-        upgrades = 6,
+        upgrades = 5,
     }
     private States _currentState = States.mainmenu;       //sets the starting state    
     public States currentState 
@@ -112,10 +109,6 @@ public class UIManager : MonoBehaviour
                 UpdateResultsScreenUI();
                 // Listen for the event
                 GameManager.LevelLoaded += MainMenuFromResults;
-                break;
-            case States.glossary:
-                //Debug.Log("I am glossary.");   
-                glossaryUI.SetActive(true);  
                 break;
             case States.upgrades:
                 //Debug.Log("I am upgrades.");   
@@ -174,12 +167,6 @@ public class UIManager : MonoBehaviour
                 SaveLoadManager.instance.SaveGame();
                 Debug.Log("Game saved.");      
                 break;
-            case States.glossary:
-                //Debug.Log("I am losescreen.");
-                glossaryUI.SetActive(false); 
-                // Sets the previous state variable to this state
-                previousState = States.glossary;             
-                break;
             case States.upgrades:
                 //Debug.Log("I am upgrades.");
                 upgradesUI.SetActive(false); 
@@ -227,7 +214,6 @@ public class UIManager : MonoBehaviour
         gameplayUI.SetActive(false);
         resultsScreenUI.SetActive(false);
         upgradesUI.SetActive(false);
-        glossaryUI.SetActive(false);
     }
 
     void Update()
@@ -282,12 +268,6 @@ public class UIManager : MonoBehaviour
         currentState = States.results;
     }
 
-    // This method activates the glossary screen UI
-    public void Glossary()
-    {
-        currentState = States.glossary;
-    }
-
     // This method activates the upgrades UI
     public void Upgrades()
     {
@@ -324,10 +304,6 @@ public class UIManager : MonoBehaviour
         else if (previousState == States.results)
         {
             currentState = States.results;
-        }
-        else if (previousState == States.glossary)
-        {
-            currentState = States.glossary;
         }
         else if (previousState == States.upgrades)
         {
