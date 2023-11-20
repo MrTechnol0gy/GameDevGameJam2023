@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class AIManager : MonoBehaviour
 {
@@ -36,8 +38,10 @@ public class AIManager : MonoBehaviour
     public GameObject mallFloor;        // Reference to the mall floor object
     private GameObject mallEntrance;    // Reference to the mall entrance object
     private Vector3 entrancePosition;   // Position of the mall entrance
+    private String sceneName;           // Name of the current scene
     public int timeBetweenConditionalSpawnChecks = 6; // Time between conditional spawn checks
     private float timer = 0f;           // Timer for checks
+    private float timeSinceClownSpawned = 0f; // Time since clown spawned
 
     // A list of all the enemies in the scene
     private List<GameObject> enemies = new List<GameObject>();
@@ -66,6 +70,22 @@ public class AIManager : MonoBehaviour
     {
         // Subscribe to the sceneLoaded event
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Update()
+    {
+        // If the current scene is not the Main Menu...
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("MainMenu"))
+        {  
+            // Increment the timer
+            timer += Time.deltaTime;
+            // If the current scene is the large mall scene...
+            if (sceneName == "Large Mall")
+            {
+                // Increment the clown spawn timer
+                timeSinceClownSpawned += Time.deltaTime;
+            }
+        }
     }
     
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -97,14 +117,17 @@ public class AIManager : MonoBehaviour
             // Start the timer
             timer = Time.time;
 
+            // Get the scene name
+            sceneName = SceneManager.GetActiveScene().name;
+
             // Get the entrance position
             GetEntranceForSpawning();
 
             // Start spawning AIs
-            StartSpawning();        
+            StartSpawning(); 
 
             // Start spawning AIs based on conditions
-            InvokeRepeating(nameof(SpawnBasedOnConditions), timeBetweenConditionalSpawnChecks, timeBetweenConditionalSpawnChecks);    
+            InvokeRepeating(nameof(SpawnBasedOnConditions), timeBetweenConditionalSpawnChecks, timeBetweenConditionalSpawnChecks);
         }
         else
         {
@@ -147,8 +170,12 @@ public class AIManager : MonoBehaviour
             SpawnGuard();
             amountOfGuards--;
         }
-        // Wait for the Cultist spawn interval floor number of seconds before beginning to spawn
-        InvokeRepeating(nameof(SpawnCultistWithRandomCivilian), cultistSpawnIntervalFloor, Random.Range(cultistSpawnIntervalFloor, cultistSpawnIntervalCeiling));
+        // If the current scene isn't the Convenience Store...
+        if (sceneName != "Convenience Store")
+        {
+            // Wait for the Cultist spawn interval floor number of seconds before beginning to spawn
+            InvokeRepeating(nameof(SpawnCultistWithRandomCivilian), cultistSpawnIntervalFloor, Random.Range(cultistSpawnIntervalFloor, cultistSpawnIntervalCeiling));
+        }
     }
 
     private void SpawnGrandma()
@@ -265,29 +292,39 @@ public class AIManager : MonoBehaviour
 
     // Spawns AIs that require certain conditions to be met
     // Condition 1: The number of villains in the scene is greater than the "number of villains before the wrestler spawns" variable
-    // Condition 2: There are no balloon clowns in the scene
+    // Condition 2: There are no balloon clowns in the scene and it's the large mall scene
     private void SpawnBasedOnConditions()
     {
         // Get the number of villains in the scene
         int villainCount = enemies.Count;
-
-        // Condition 1...
-        // If there are enough villains to spawn a wrestler and there are no wrestlers in the scene
-        if (villainCount >= numOfVillainsBeforeWrestlerSpawn && wrestlers.Count == 0)
+        
+        // If wrestlers upgrade is unlocked...
+        if (UpgradeManager.instance.GetUpgrade("LocalWrestler").isUnlocked)
         {
-            //Debug.Log("Enough villains to spawn a wrestler!");
-            // Spawn the wrestler
-            SpawnWrestler();
-            // Reset the timer
-            timer = 0f;
+            // Condition 1...
+            // If there are enough villains to spawn a wrestler and there are no wrestlers in the scene
+            if (villainCount >= numOfVillainsBeforeWrestlerSpawn && wrestlers.Count == 0)
+            {
+                //Debug.Log("Enough villains to spawn a wrestler!");
+                // Spawn the wrestler
+                SpawnWrestler();
+                // Reset the timer
+                timer = 0f;
+            }
         }
 
-        // Condition 2...
-        // Spawn balloon clowns if there are no balloon clowns in the scene
-        if (GetBalloonClownCount() == 0)
+        // If the current scene is the large mall scene...
+        if (sceneName == "Large Mall")
         {
-            // Spawn a balloon clown
-            SpawnBalloonClown();
+            // Condition 2...
+            // Spawn balloon clowns if there are no balloon clowns in the scene
+            if (GetBalloonClownCount() == 0 && timeSinceClownSpawned > clownSpawnIntervalFloor)
+            {
+                // Spawn a balloon clown
+                SpawnBalloonClown();
+                // Reset the timer
+                timeSinceClownSpawned = 0f;
+            }            
         }
     }
 

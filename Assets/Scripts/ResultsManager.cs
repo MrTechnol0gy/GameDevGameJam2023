@@ -31,7 +31,7 @@ public class ResultsManager : MonoBehaviour
     void Start()
     {
         // Subscribe to the scene change event
-        GameManager.LevelLoaded += StartTracking;
+        LevelLoadManager.GameStarted += StartTracking;
         // Subscribe to villain clicked events
         AIMugger.muggerClicked += MuggerClicked;
         AICultist.cultistClicked += CultistClicked;

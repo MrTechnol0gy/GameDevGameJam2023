@@ -98,7 +98,9 @@ public class UIManager : MonoBehaviour
                 break;
             case States.gameplay:
                 //Debug.Log("I am gameplay.");
-                gameplayUI.SetActive(true);       
+                gameplayUI.SetActive(true);
+                // Update gameplay UI elements
+                UpdateGameplayUI();
                 break;
             case States.results:
                 //Debug.Log("I am results."); 
@@ -107,8 +109,6 @@ public class UIManager : MonoBehaviour
                 Time.timeScale = 0f;
                 // update the UI elements
                 UpdateResultsScreenUI();
-                // Listen for the event
-                GameManager.LevelLoaded += MainMenuFromResults;
                 break;
             case States.upgrades:
                 //Debug.Log("I am upgrades.");   
@@ -127,7 +127,6 @@ public class UIManager : MonoBehaviour
         switch (state) 
         {
             case States.mainmenu:
-                Debug.Log("I am leaving the main menu.");
                 mainMenuUI.SetActive(false);
                 // Sets the previous state variable to this state
                 previousState = States.mainmenu;
@@ -160,12 +159,9 @@ public class UIManager : MonoBehaviour
                 // Sets the previous state variable to this state
                 previousState = States.results; 
                 // resume time
-                Time.timeScale = 1f;    
-                // Stop listening for the event
-                GameManager.LevelLoaded -= MainMenuFromResults;    
+                Time.timeScale = 1f;
                 // Save the game
                 SaveLoadManager.instance.SaveGame();
-                Debug.Log("Game saved.");      
                 break;
             case States.upgrades:
                 //Debug.Log("I am upgrades.");
@@ -195,6 +191,7 @@ public class UIManager : MonoBehaviour
         // Sets all UI to false
         SetAllUIToFalse();
         LevelLoadManager.GameStarted += GameplayUI;
+        LevelLoadManager.GameEnded += MainMenu;
         UpgradeManager.OnUpgradeButtonClickedEvent += UpdateUpgradeScreenUI;
         AIMugger.muggerClicked += UpdateGameplayUI;
         AICultist.cultistClicked += UpdateGameplayUI;
@@ -313,11 +310,9 @@ public class UIManager : MonoBehaviour
     }
 
     // Activates the Main Menu UI when leaving the results screen
-    public void MainMenuFromResults()
+    public void ContinueFromResults()
     {
         currentState = States.mainmenu;
-        // load the main menu scene
-        GameManager.instance.MainMenu();
     }
 
     public void ContinueFromUpgrades()

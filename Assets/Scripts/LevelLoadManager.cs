@@ -12,6 +12,10 @@ public class LevelLoadManager : MonoBehaviour
     // Declare the event using the delegate type
     public static event GameStartedEventHandler GameStarted;
 
+    public delegate void GameEndedEventHandler();
+    // Declare the event using the delegate type
+    public static event GameEndedEventHandler GameEnded;
+
     void Awake()
     {
         // Check if there is an instance of the LevelLoadManager
@@ -30,6 +34,18 @@ public class LevelLoadManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void LoadMainMenu()
+    {
+        // Tell the UI Manager to change UIs
+        UIManager.instance.ContinueFromResults();
+
+        // Loads the main menu scene
+        SceneManager.LoadScene("MainMenu");
+
+        // Invoke the event
+        GameEnded?.Invoke();
+    }
+
     public void StartLargeMall()
     {
         // Tells the UI Manager to change UIs
@@ -40,13 +56,9 @@ public class LevelLoadManager : MonoBehaviour
         
         // Save the game
         SaveLoadManager.instance.SaveGame();
-        Debug.Log("Game saved");
-        
+
         // Invoke the event
-        if (GameStarted != null)
-        {
-            GameStarted();
-        }
+        GameStarted?.Invoke();
     }
 
     public void StartMediumMall()
@@ -59,13 +71,9 @@ public class LevelLoadManager : MonoBehaviour
         
         // Save the game
         SaveLoadManager.instance.SaveGame();
-        Debug.Log("Game saved");
-        
+
         // Invoke the event
-        if (GameStarted != null)
-        {
-            GameStarted();
-        }
+        GameStarted?.Invoke();
     }
 
     public void StartConvenienceStore()
@@ -78,12 +86,8 @@ public class LevelLoadManager : MonoBehaviour
         
         // Save the game
         SaveLoadManager.instance.SaveGame();
-        Debug.Log("Game saved");
-        
+
         // Invoke the event
-        if (GameStarted != null)
-        {
-            GameStarted();
-        }
+        GameStarted?.Invoke();
     }
 }
