@@ -141,22 +141,26 @@ public class AICultist : AIVillainBase
                 else if (isGrandmaVisible)
                 {
                     agent.SetDestination(target.transform.position);
+                    if (GetDistanceToTarget(thisGameObject, target) < 3)
+                    {
+                        // let the target know they've been preached to
+                        target.GetComponent<AIGrandma>().PreachToMe();
+                        currentState = States.preached;
+                    }
                 }
                 else if (!isGrandmaVisible)
                 {
                     agent.SetDestination(closestCivilian.transform.position);
+                    if (closestCivilian != null && (GetDistanceToTarget(thisGameObject, closestCivilian) < 3))
+                    {
+                        // let the civilian know they've been preached to
+                        closestCivilian.GetComponent<AICivilian>().PreachToMe();
+                        currentState = States.preached;
+                    }
                 }
-                if (GetDistanceToTarget(thisGameObject, target) < 3)
+                else
                 {
-                    // let the target know they've been preached to
-                    target.GetComponent<AIGrandma>().PreachToMe();
-                    currentState = States.preached;
-                }
-                else if (GetDistanceToTarget(thisGameObject, closestCivilian) < 3)
-                {
-                    // let the civilian know they've been preached to
-                    closestCivilian.GetComponent<AICivilian>().PreachToMe();
-                    currentState = States.preached;
+                    currentState = States.searching;
                 }
                 break; 
             case States.preached:

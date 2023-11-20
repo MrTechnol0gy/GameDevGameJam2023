@@ -47,7 +47,16 @@ public class Clickable : MonoBehaviour
                         {
                             aICultist.Defeated();
                         } 
-                    }                   
+                    }  
+                    else if (hitObject.CompareTag("BalloonClown"))
+                    {
+                        // Invoke the method on the clicked object
+                        AIBalloonClown aIBalloonClown = hitObject.GetComponent<AIBalloonClown>();
+                        if (aIBalloonClown != null)
+                        {
+                            aIBalloonClown.Defeated();
+                        }
+                    }                 
                 }
             }
         }

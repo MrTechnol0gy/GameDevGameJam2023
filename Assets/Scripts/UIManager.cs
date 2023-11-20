@@ -198,6 +198,7 @@ public class UIManager : MonoBehaviour
         UpgradeManager.OnUpgradeButtonClickedEvent += UpdateUpgradeScreenUI;
         AIMugger.muggerClicked += UpdateGameplayUI;
         AICultist.cultistClicked += UpdateGameplayUI;
+        AIBalloonClown.clownClicked += UpdateGameplayUI;
     }
     void Start()
     {
@@ -345,12 +346,20 @@ public class UIManager : MonoBehaviour
 
     public void UpdateResultsScreenUI()
     {
-        int muggersClicked = ResultsManager.instance.GetScores();
+        int muggersClicked = ResultsManager.instance.GetMuggerAmountClicked();
         int muggerValue = UpgradeManager.instance.muggerValue;
         int totalMuggerValue = muggersClicked * muggerValue;
         muggersClickedText.text = "$" + totalMuggerValue.ToString("D3");
+        int cultistsClicked = ResultsManager.instance.GetCultistAmountClicked();
+        int cultistValue = UpgradeManager.instance.cultistValue;
+        int totalCultistValue = cultistsClicked * cultistValue;
+        cultistsClickedText.text = "$" + totalCultistValue.ToString("D3");
+        int clownsClicked = ResultsManager.instance.GetClownAmountClicked();
+        int clownValue = UpgradeManager.instance.clownValue;
+        int totalClownValue = clownsClicked * clownValue;
+        clownsClickedText.text = "$" + totalClownValue.ToString("D3");
         // other villain scores go here
-        int finalResultsValue = totalMuggerValue;
+        int finalResultsValue = totalMuggerValue + totalCultistValue + totalClownValue;
         finalResultsText.text = "$" + finalResultsValue.ToString("D3");
         // update the total progress tracker
         int totalProgressTracker = ResultsManager.instance.GetTotalShopsVisited();

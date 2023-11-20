@@ -10,6 +10,8 @@ public class ResultsManager : MonoBehaviour
     // Variables
     private int totalShopsVisited = 0;
     private int muggersClicked = 0;
+    private int cultistsClicked = 0;
+    private int clownsClicked = 0;
     private bool villainVictory = false;
 
     void Awake()
@@ -32,7 +34,8 @@ public class ResultsManager : MonoBehaviour
         GameManager.LevelLoaded += StartTracking;
         // Subscribe to villain clicked events
         AIMugger.muggerClicked += MuggerClicked;
-        // Other villain clicked events go here
+        AICultist.cultistClicked += CultistClicked;
+        AIBalloonClown.clownClicked += ClownClicked;
 
         // Subscribe to the villain victory conditions
         AIMugger.muggerEscaped += VillainVictory;
@@ -45,6 +48,8 @@ public class ResultsManager : MonoBehaviour
         // resets all tracked stats to base values
         villainVictory = false;
         muggersClicked = 0;
+        cultistsClicked = 0;
+        clownsClicked = 0;
     }
     private void IncreaseWinCondition()
     {
@@ -55,15 +60,39 @@ public class ResultsManager : MonoBehaviour
         // Debug.Log("Mugger clicked!");
         muggersClicked++;
     }
+
+    private void CultistClicked()
+    {
+        // Debug.Log("Cultist clicked!");
+        cultistsClicked++;
+    }
+
+    private void ClownClicked()
+    {
+        // Debug.Log("Clown clicked!");
+        clownsClicked++;
+    }
+
     private void VillainVictory()
     {
         // Debug.Log("Villain victory!");
         villainVictory = true;
     }
-    public int GetScores()
+    public int GetMuggerAmountClicked()
     {
         return muggersClicked;
     }
+
+    public int GetCultistAmountClicked()
+    {
+        return cultistsClicked;
+    }
+
+    public int GetClownAmountClicked()
+    {
+        return clownsClicked;
+    }
+
     public bool GetVillainVictory()
     {
         return villainVictory;
