@@ -53,6 +53,7 @@ public class UIManager : MonoBehaviour
         gameplay = 3,
         results = 4,
         upgrades = 5,
+        victorious = 6,
     }
     private States _currentState = States.mainmenu;       //sets the starting state    
     public States currentState 
@@ -118,6 +119,9 @@ public class UIManager : MonoBehaviour
                 // listen for the hover event
                 HoverHandler.OnHoverEnter += UpgradeHover;
                 break;
+            case States.victorious:
+                //Debug.Log("I am victorious.");
+                break;
         }
     }
 
@@ -170,6 +174,9 @@ public class UIManager : MonoBehaviour
                 previousState = States.upgrades;    
                 // Stop listening for the event
                 HoverHandler.OnHoverEnter -= UpgradeHover;         
+                break;
+            case States.victorious:
+                //Debug.Log("I am victorious.");
                 break;
         }
     }
@@ -312,7 +319,15 @@ public class UIManager : MonoBehaviour
     // Activates the Main Menu UI when leaving the results screen
     public void ContinueFromResults()
     {
-        currentState = States.mainmenu;
+        if (ResultsManager.instance.GetPlayerVictory() == true)
+        {
+            // Load the victory level
+            LevelLoadManager.instance.LoadVictoryLevel();
+        }
+        else 
+        {
+            currentState = States.mainmenu;
+        }
     }
 
     public void ContinueFromUpgrades()

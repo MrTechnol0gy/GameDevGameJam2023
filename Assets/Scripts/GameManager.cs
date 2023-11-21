@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     // Game Victory Conditions
     [Header("Game Victory Conditions")]
     public int totalShopsToVisitForVictory = 100;
+    
     private void Awake()
     {
         // Check if there is an instance of the GameManager
@@ -34,7 +35,6 @@ public class GameManager : MonoBehaviour
         SaveLoadManager.instance.LoadGame();
         Debug.Log("Game loaded");
     }
-
     
     // Quits the application
     public void QuitGame()

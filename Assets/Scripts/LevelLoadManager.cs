@@ -90,4 +90,16 @@ public class LevelLoadManager : MonoBehaviour
         // Invoke the event
         GameStarted?.Invoke();
     }
+
+    public void LoadVictoryLevel()
+    {
+        // Tells the UI Manager to change UIs
+        UIManager.instance.ContinueFromResults();
+
+        // Loads the victory scene
+        SceneManager.LoadScene("Victory");
+
+        // Invoke the event
+        GameEnded?.Invoke();
+    }
 }

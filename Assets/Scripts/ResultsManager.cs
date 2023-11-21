@@ -13,6 +13,7 @@ public class ResultsManager : MonoBehaviour
     private int cultistsClicked = 0;
     private int clownsClicked = 0;
     private bool villainVictory = false;
+    private bool playerVictory = false;
 
     void Awake()
     {
@@ -32,6 +33,7 @@ public class ResultsManager : MonoBehaviour
     {
         // Subscribe to the scene change event
         LevelLoadManager.GameStarted += StartTracking;
+        LevelLoadManager.GameEnded += VictoryCheck;
         // Subscribe to villain clicked events
         AIMugger.muggerClicked += MuggerClicked;
         AICultist.cultistClicked += CultistClicked;
@@ -43,6 +45,9 @@ public class ResultsManager : MonoBehaviour
         AIGrandma.GrandmaFinishedShoppingEvent += IncreaseWinCondition;
     }
 
+    // On scene change...
+
+
     private void StartTracking()
     {
         // resets all tracked stats to base values
@@ -51,10 +56,20 @@ public class ResultsManager : MonoBehaviour
         cultistsClicked = 0;
         clownsClicked = 0;
     }
+
+    private void VictoryCheck()
+    {
+        if (totalShopsVisited >= GameManager.instance.totalShopsToVisitForVictory)
+        {
+            playerVictory = true;
+        }        
+    }
+
     private void IncreaseWinCondition()
     {
         totalShopsVisited++;
     }
+
     private void MuggerClicked()
     {
         // Debug.Log("Mugger clicked!");
@@ -78,6 +93,7 @@ public class ResultsManager : MonoBehaviour
         // Debug.Log("Villain victory!");
         villainVictory = true;
     }
+
     public int GetMuggerAmountClicked()
     {
         return muggersClicked;
@@ -97,8 +113,14 @@ public class ResultsManager : MonoBehaviour
     {
         return villainVictory;
     }
+
     public int GetTotalShopsVisited()
     {
         return totalShopsVisited;
+    }
+
+    public bool GetPlayerVictory()
+    {
+        return playerVictory;
     }
 }
