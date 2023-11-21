@@ -244,6 +244,9 @@ public class AIManager : MonoBehaviour
 
             amountOfWrestlers--;
         }
+
+        // Play the wrestler spawn sound
+        AudioManager.instance.WrestlerSpawn();
     }
 
     private void SpawnCultistWithRandomCivilian()

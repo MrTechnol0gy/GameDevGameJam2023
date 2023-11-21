@@ -12423,11 +12423,48 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 10fda211f5b3c994295e74412ae98bf0, type: 3}
   - {fileID: 8300000, guid: 0208e9d89d46088459a84798eb07362e, type: 3}
   - {fileID: 8300000, guid: 20f07d8046d20e346858012b5dcc8924, type: 3}
-  cultistSpawn: []
+  - {fileID: 8300000, guid: 050f6f7180373f240bbd0b3d8aaf976c, type: 3}
+  - {fileID: 8300000, guid: 2a6bdc99898e3a44d8228d4f7445d48f, type: 3}
+  - {fileID: 8300000, guid: 1693c7a0b8fe52340b9727d0d7192be6, type: 3}
   muggerRegretClips:
   - {fileID: 8300000, guid: d6a85d5e42e1c4848bda51fa8b40c354, type: 3}
   - {fileID: 8300000, guid: 517b1524f84cbd145bc51dafa798ade1, type: 3}
   - {fileID: 8300000, guid: 4033e5b98960a984382e1f99f1186881, type: 3}
+  - {fileID: 8300000, guid: b1ab7ccf614d2f14b9c7ab4e408e9bb8, type: 3}
+  - {fileID: 8300000, guid: d90ae1fa922329d40a0b11273f768c9a, type: 3}
+  - {fileID: 8300000, guid: 4d75540a2ba37224ca371c64e7cd3c17, type: 3}
+  cultistSpawn:
+  - {fileID: 8300000, guid: f3b25a6273d182a40b2be4a6ad63a059, type: 3}
+  - {fileID: 8300000, guid: b225188280259994c9b249cc7c521f07, type: 3}
+  - {fileID: 8300000, guid: f095f0e3fff82424bbd5caea13f9dd25, type: 3}
+  - {fileID: 8300000, guid: 8f215430499eded42b7f1f92e676009a, type: 3}
+  - {fileID: 8300000, guid: a0050aad7d32bfd40a820e8a8d3b8482, type: 3}
+  - {fileID: 8300000, guid: 93716ae8ccb0e56449c7572834da45fd, type: 3}
+  - {fileID: 8300000, guid: 126893498e0a7c14a8cd2eed0737f169, type: 3}
+  - {fileID: 8300000, guid: 116bd2f5341f2d549863fb764ebc0ecf, type: 3}
+  cultistDefeatClips:
+  - {fileID: 8300000, guid: d1acf52996b3c154389ecacea5b3fcd8, type: 3}
+  - {fileID: 8300000, guid: 1ee5f372cb1a1284186b43f0f37abdd3, type: 3}
+  - {fileID: 8300000, guid: 3b40d65b209597345bf2a75cf43523dc, type: 3}
+  - {fileID: 8300000, guid: a42297a906c5a2b499ffa5a86443a6e7, type: 3}
+  - {fileID: 8300000, guid: c3c491ade97c73846adfbe51def86eb3, type: 3}
+  - {fileID: 8300000, guid: 3465f7bd9f7894f4085d7452d9110c40, type: 3}
+  - {fileID: 8300000, guid: 173775df0272d1e418a32a42a2d423cf, type: 3}
+  - {fileID: 8300000, guid: 2072242e18bf4da43bf8b1b263e8c1dc, type: 3}
+  balloonClownSpawn:
+  - {fileID: 8300000, guid: 0ca355383eb6ccc4e96b03b5a61a3638, type: 3}
+  - {fileID: 8300000, guid: 3baf3a1cb40c6cd468bc5a8f7a1d80ed, type: 3}
+  - {fileID: 8300000, guid: 0a68182da735fe441bf5a4adfb0b4494, type: 3}
+  - {fileID: 8300000, guid: 003a873b0417c8d4fba48e2eda2de1c8, type: 3}
+  - {fileID: 8300000, guid: 7328b9cfd9b414a4b8e9b9e8041f2ca0, type: 3}
+  - {fileID: 8300000, guid: c5fc61299dfe3814a8e147cf33828ebb, type: 3}
+  clownDefeatClips:
+  - {fileID: 8300000, guid: 630b0b8563f13e14b9736d5439af1906, type: 3}
+  - {fileID: 8300000, guid: 20f7a2aa38322ae4b94837b0dcea2e97, type: 3}
+  - {fileID: 8300000, guid: c98ddfe8498022d49bcc739a42caaa5b, type: 3}
+  - {fileID: 8300000, guid: f5432ea1f168f3147bec0187a4657507, type: 3}
+  - {fileID: 8300000, guid: f3ab8b26b7abdaf4b9d1a5eb9bf4f861, type: 3}
+  - {fileID: 8300000, guid: 18ad2cbe7496ce34083291f50c02b02f, type: 3}
   grandmaMugged: {fileID: 8300000, guid: 206dd9f49a3fae540af5f2c4363971fe, type: 3}
   grandmaShops:
   - {fileID: 8300000, guid: d97742610c706394b99f87389f2fa997, type: 3}
@@ -12439,6 +12476,16 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c7c1e9bb754d53d43abe3390795f6bbe, type: 3}
   - {fileID: 8300000, guid: 36da851304986b94890f402f2c3eec1a, type: 3}
   - {fileID: 8300000, guid: 113631c6eec97bc46bcf22ca6585117b, type: 3}
+  villainSpottedClips: {fileID: 8300000, guid: ffe82b9e5c8eb7249a7b14f79a34aafe, type: 3}
+  wrestlerSpawn:
+  - {fileID: 8300000, guid: 2e29f54e811812e40bff2efecac35be6, type: 3}
+  - {fileID: 8300000, guid: 73ccdf3bb7c5e1a488c85db1b89e3f61, type: 3}
+  - {fileID: 8300000, guid: b67dd0b159a4eeb458544f90ca99b189, type: 3}
+  - {fileID: 8300000, guid: ba086caf31fc72a448cfbd234cb6c473, type: 3}
+  - {fileID: 8300000, guid: b04765b6dbaf83b49ac5241a57ae1289, type: 3}
+  - {fileID: 8300000, guid: f2942001955fb644082d90f01c1f7411, type: 3}
+  sniperShotClip: {fileID: 8300000, guid: 23bb28c6d512c2342ba4f978f7385f53, type: 3}
+  balloonPop: {fileID: 8300000, guid: a09bf6a78cae3b94cb0e79bdc6017088, type: 3}
   masterVolumeSlider: {fileID: 152410575}
 --- !u!82 &2032455159
 AudioSource:

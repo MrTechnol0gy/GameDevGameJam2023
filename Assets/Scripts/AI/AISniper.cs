@@ -74,6 +74,9 @@ public class AISniper : MonoBehaviour
                         spottedEnemy = AIManager.instance.GetEnemies()[target];
                         // Tells the enemy they've been shot by a sniper
                         spottedEnemy.GetComponent<AIVillainBase>().ShotBySniper();
+                        // Play the sniper shot sound
+                        AudioManager.instance.SniperShot();
+                        // Change the state to stopped
                         currentState = States.stopped;
                     }
                     // If there are no enemies on the map to be shot, reset the clock

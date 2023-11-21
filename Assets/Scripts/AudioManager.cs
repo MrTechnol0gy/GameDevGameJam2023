@@ -9,11 +9,18 @@ public class AudioManager : MonoBehaviour
 
     [Header("Audio Tracks")]
     [SerializeField] AudioClip[] muggerSpawn;
-    [SerializeField] AudioClip[] cultistSpawn;
     [SerializeField] AudioClip[] muggerRegretClips;
+    [SerializeField] AudioClip[] cultistSpawn;
+    [SerializeField] AudioClip[] cultistDefeatClips;
+    [SerializeField] AudioClip[] balloonClownSpawn;
+    [SerializeField] AudioClip[] clownDefeatClips;
     [SerializeField] AudioClip grandmaMugged;
     [SerializeField] AudioClip[] grandmaShops;
     [SerializeField] AudioClip[] civilians;
+    [SerializeField] AudioClip villainSpottedClips;
+    [SerializeField] AudioClip[] wrestlerSpawn;
+    [SerializeField] AudioClip sniperShotClip;
+    [SerializeField] AudioClip balloonPop;
     private AudioSource mainAudioSource;
     [Header("Audio Sliders")]
     [SerializeField] Slider masterVolumeSlider;
@@ -42,131 +49,152 @@ public class AudioManager : MonoBehaviour
     
     public void MuggerSpawn()
     {
-        if (isGrandmaMuggedPlaying())
-        {
-            return;
-        }
-        else if (!isGrandmaMuggedPlaying())
-        {
-            // Select a random index within the array length
-            int randomIndex = Random.Range(0, muggerSpawn.Length);
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, muggerSpawn.Length);
 
-            // Get the randomly selected AudioClip
-            AudioClip randomClip = muggerSpawn[randomIndex];
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = muggerSpawn[randomIndex];
 
-            // Play the selected clip
-            mainAudioSource.clip = randomClip;
-            mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
-            mainAudioSource.Play();
-        }
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        mainAudioSource.PlayOneShot(randomClip);       
     }
 
     public void CultistSpawn()
     {
-        // TODO
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, cultistSpawn.Length);
+
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = cultistSpawn[randomIndex];
+
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        mainAudioSource.PlayOneShot(randomClip);
     }
 
     public void BalloonClownSpawned()
     {
-        // TODO
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, balloonClownSpawn.Length);
+
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = balloonClownSpawn[randomIndex];
+
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        mainAudioSource.PlayOneShot(randomClip);
     }
 
     public void MuggerCaught()
     {
-        if (isGrandmaMuggedPlaying())
-        {
-            return;
-        }
-        else if (!isGrandmaMuggedPlaying())
-        {
-            // Select a random index within the array length
-            int randomIndex = Random.Range(0, muggerRegretClips.Length);
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, muggerRegretClips.Length);
 
-            // Get the randomly selected AudioClip
-            AudioClip randomClip = muggerRegretClips[randomIndex];
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = muggerRegretClips[randomIndex];
 
-            // Play the selected clip
-            mainAudioSource.clip = randomClip;
-            mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
-            mainAudioSource.Play();
-        }
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        mainAudioSource.PlayOneShot(randomClip);
     }
 
     public void CultistCaught()
     {
-        // TODO
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, cultistDefeatClips.Length);
+
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = cultistDefeatClips[randomIndex];
+
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        mainAudioSource.PlayOneShot(randomClip);
     }
     
     public void ClownCaught()
     {
-        // TODO
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, clownDefeatClips.Length);
+
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = clownDefeatClips[randomIndex];
+
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        mainAudioSource.PlayOneShot(randomClip);
     }
 
     public void GrandmaMugged()
     {
-        mainAudioSource.clip = grandmaMugged;
         mainAudioSource.pitch = 1f;
-        mainAudioSource.Play();
+        mainAudioSource.PlayOneShot(grandmaMugged);
     }
-
 
     public void GrandmaShops()
     { 
-        if (isGrandmaMuggedPlaying())
-        {
-            return;
-        }
-        else if (!isGrandmaMuggedPlaying())
-        {
-            // Select a random index within the array length
-            int randomIndex = Random.Range(0, grandmaShops.Length);
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, grandmaShops.Length);
 
-            // Get the randomly selected AudioClip
-            AudioClip randomClip = grandmaShops[randomIndex];
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = grandmaShops[randomIndex];
 
-            // Play the selected clip
-            mainAudioSource.clip = randomClip;
-            mainAudioSource.pitch = 1f;
-            mainAudioSource.Play();
-        }
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = 1f;
+        mainAudioSource.PlayOneShot(randomClip);
     }
 
     public void VillainSpotted()
     {
-        // TODO
-        Debug.Log("VillainSpotted");
+        mainAudioSource.pitch = 1f;
+        mainAudioSource.PlayOneShot(villainSpottedClips);
     }
 
     public void CivilianClips()
     {
-        Debug.Log("CivilianClip");
-        if (isGrandmaMuggedPlaying())
-        {
-            return;
-        }
-        else if (!isGrandmaMuggedPlaying())
-        {
-            // Select a random index within the array length
-            int randomIndex = Random.Range(0, grandmaShops.Length);
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, grandmaShops.Length);
 
-            // Get the randomly selected AudioClip
-            AudioClip randomClip = civilians[randomIndex];
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = civilians[randomIndex];
 
-            // Play the selected clip
-            mainAudioSource.clip = randomClip;
-            mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
-            mainAudioSource.Play();
-        }
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        mainAudioSource.PlayOneShot(randomClip);
     }
 
-    private bool isGrandmaMuggedPlaying()
+    public void WrestlerSpawn()
     {
-        if (mainAudioSource.clip == grandmaMugged && mainAudioSource.isPlaying)
-        {
-            return true;
-        }
-        else
-        return false;
+        // Select a random index within the array length
+        int randomIndex = Random.Range(0, wrestlerSpawn.Length);
+
+        // Get the randomly selected AudioClip
+        AudioClip randomClip = wrestlerSpawn[randomIndex];
+
+        // Play the selected clip
+        mainAudioSource.clip = randomClip;
+        mainAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        mainAudioSource.PlayOneShot(randomClip);
+    }
+
+    public void SniperShot()
+    {
+        mainAudioSource.pitch = 1f;
+        mainAudioSource.PlayOneShot(sniperShotClip);
+    }
+
+    public void BalloonPop()
+    {
+        mainAudioSource.pitch = 1f;
+        mainAudioSource.PlayOneShot(balloonPop);
     }
 
     public void ChangeVolumes()
