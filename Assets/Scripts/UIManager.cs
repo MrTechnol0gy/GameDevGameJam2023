@@ -21,9 +21,11 @@ public class UIManager : MonoBehaviour
     public GameObject resultsScreenUI;
     // reference to the upgrades UI
     public GameObject upgradesUI;
+    public GameObject victoryUI;
     // Header
     [Header("Upgrade Screen UI Elements")]
     public TMPro.TextMeshProUGUI cashText;
+    public TMPro.TextMeshProUGUI progressText;
     public TMPro.TextMeshProUGUI informationText;
     public TMPro.TextMeshProUGUI grandmaSpritzerText;
     public TMPro.TextMeshProUGUI securityGuardText;
@@ -54,8 +56,9 @@ public class UIManager : MonoBehaviour
         results = 4,
         upgrades = 5,
         victorious = 6,
+        intro = 7
     }
-    private States _currentState = States.mainmenu;       //sets the starting state    
+    private States _currentState = States.intro;       //sets the starting state    
     public States currentState 
     {
         get => _currentState;
@@ -84,6 +87,8 @@ public class UIManager : MonoBehaviour
             case States.mainmenu:
                 //Debug.Log("I am the main menu."); 
                 mainMenuUI.SetActive(true);   
+                // Tell the audio manager to start playing the BGM
+                AudioManager.instance.PlayBackgroundMusic();
                 break;
             case States.pausemenu:
                 //Debug.Log("I am paused.");   
@@ -98,6 +103,8 @@ public class UIManager : MonoBehaviour
                 Time.timeScale = 0f;  
                 break;
             case States.gameplay:
+                // Stop the BGM
+                AudioManager.instance.StopBackgroundMusic();
                 //Debug.Log("I am gameplay.");
                 gameplayUI.SetActive(true);
                 // Update gameplay UI elements
@@ -122,7 +129,11 @@ public class UIManager : MonoBehaviour
                 HoverHandler.OnHoverEnter += UpgradeHover;
                 break;
             case States.victorious:
+                victoryUI.SetActive(true);
                 //Debug.Log("I am victorious.");
+                break;
+            case States.intro:
+                //Debug.Log("I am the intro.");
                 break;
         }
     }
@@ -179,7 +190,11 @@ public class UIManager : MonoBehaviour
                 HoverHandler.OnHoverEnter -= UpgradeHover;         
                 break;
             case States.victorious:
+                victoryUI.SetActive(false);
                 //Debug.Log("I am victorious.");
+                break;
+            case States.intro:
+                //Debug.Log("I am the intro.");
                 break;
         }
     }
@@ -221,6 +236,7 @@ public class UIManager : MonoBehaviour
         gameplayUI.SetActive(false);
         resultsScreenUI.SetActive(false);
         upgradesUI.SetActive(false);
+        victoryUI.SetActive(false);
     }
 
     void Update()
@@ -331,6 +347,9 @@ public class UIManager : MonoBehaviour
         else 
         {
             currentState = States.mainmenu;
+
+            // Load the main menu level
+            SceneManager.LoadScene("MainMenu");
         }
     }
 
@@ -345,6 +364,8 @@ public class UIManager : MonoBehaviour
         Debug.Log("Updating upgrade screen UI");
         // update the cash text
         cashText.text = "Cash: $" + UpgradeManager.instance.GetCash().ToString("D3");
+        // update the progress text
+        progressText.text = "Presents To Party: " + ResultsManager.instance.GetProgress().ToString("D1") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D1");
         // update the upgrade text
         grandmaSpritzerText.text = "$" + UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").cost.ToString("D3");
         securityGuardText.text = "$" + UpgradeManager.instance.GetUpgrade("SecurityGuard").cost.ToString("D3");
@@ -377,7 +398,7 @@ public class UIManager : MonoBehaviour
         int finalResultsValue = totalMuggerValue + totalCultistValue + totalClownValue;
         finalResultsText.text = "$" + finalResultsValue.ToString("D3");
         // update the total progress tracker
-        int totalProgressTracker = ResultsManager.instance.GetTotalShopsVisited();
+        int totalProgressTracker = ResultsManager.instance.GetProgress();
         progressTrackerText.text = totalProgressTracker.ToString("D3") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D3");
         // If the player is victorious, display the victory screen
         if (ResultsManager.instance.GetVillainVictory() == true)

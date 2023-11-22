@@ -8,7 +8,7 @@ public class ResultsManager : MonoBehaviour
     // Singleton
     public static ResultsManager instance;
     // Variables
-    private int totalShopsVisited = 0;
+    private int progress = 0;
     private int muggersClicked = 0;
     private int cultistsClicked = 0;
     private int clownsClicked = 0;
@@ -44,9 +44,6 @@ public class ResultsManager : MonoBehaviour
         AIGrandma.GrandmaFinishedShoppingEvent += IncreaseWinCondition;
     }
 
-    // On scene change...
-
-
     private void StartTracking()
     {
         // resets all tracked stats to base values
@@ -58,7 +55,7 @@ public class ResultsManager : MonoBehaviour
 
     public void VictoryCheck()
     {
-        if (totalShopsVisited >= GameManager.instance.totalShopsToVisitForVictory)
+        if (progress >= GameManager.instance.totalShopsToVisitForVictory)
         {
             playerVictory = true;
         }        
@@ -66,7 +63,7 @@ public class ResultsManager : MonoBehaviour
 
     private void IncreaseWinCondition()
     {
-        totalShopsVisited++;
+        progress++;
     }
 
     private void MuggerClicked()
@@ -113,9 +110,15 @@ public class ResultsManager : MonoBehaviour
         return villainVictory;
     }
 
-    public int GetTotalShopsVisited()
+    public int GetProgress()
     {
-        return totalShopsVisited;
+        return progress;
+    }
+
+    // Set the progress to a specific value
+    public void SetProgress(int value)
+    {
+        progress = value;
     }
 
     public bool GetPlayerVictory()

@@ -46,6 +46,13 @@ public class LevelLoadManager : MonoBehaviour
         GameEnded?.Invoke();
     }
 
+    public void LoadMainMenuFromIntro()
+    {
+        UIManager.instance.MainMenu();
+        // Loads the main menu scene
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void StartLargeMall()
     {
         // Tells the UI Manager to change UIs

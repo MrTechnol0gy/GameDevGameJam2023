@@ -35,6 +35,6 @@ public class PlayIntro : MonoBehaviour
         }
 
         // Load the main menu scene
-        SceneManager.LoadScene("MainMenu");
+        LevelLoadManager.instance.LoadMainMenuFromIntro();
     }
 }

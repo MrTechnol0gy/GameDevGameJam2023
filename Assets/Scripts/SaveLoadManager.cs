@@ -16,6 +16,7 @@ public class SaveLoadManager : MonoBehaviour
     public class SaveData
     {
         public int cash;
+        public int progress;
         public List<UpgradeManager.Upgrade> upgrades;
     }
 
@@ -50,6 +51,7 @@ public class SaveLoadManager : MonoBehaviour
         SaveData data = new SaveData
         {
             cash = UpgradeManager.instance.GetCash(),
+            progress = ResultsManager.instance.GetProgress(),
             upgrades = new List<UpgradeManager.Upgrade>(UpgradeManager.instance.upgrades)
         };
 
@@ -65,6 +67,7 @@ public class SaveLoadManager : MonoBehaviour
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             UpgradeManager.instance.cash = data.cash;
+            ResultsManager.instance.SetProgress(data.progress);
             UpgradeManager.instance.upgrades = data.upgrades.ToArray();
         }
         else
@@ -98,6 +101,7 @@ public class SaveLoadManager : MonoBehaviour
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             UpgradeManager.instance.cash = data.cash;
+            ResultsManager.instance.SetProgress(data.progress);
             UpgradeManager.instance.upgrades = data.upgrades.ToArray();
         }
         else

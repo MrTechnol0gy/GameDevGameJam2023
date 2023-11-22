@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
 
     [Header("Audio Tracks")]
+    [SerializeField] AudioClip backgroundMusic;
     [SerializeField] AudioClip[] muggerSpawn;
     [SerializeField] AudioClip[] muggerRegretClips;
     [SerializeField] AudioClip[] cultistSpawn;
@@ -24,6 +25,7 @@ public class AudioManager : MonoBehaviour
     private AudioSource mainAudioSource;
     [Header("Audio Sliders")]
     [SerializeField] Slider masterVolumeSlider;
+    private bool isBGMPlaying = false;
 
     private void Awake()
     {
@@ -45,6 +47,24 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         mainAudioSource = GetComponent<AudioSource>();
+    }
+
+    public void PlayBackgroundMusic()
+    {
+        if (isBGMPlaying)
+        {
+            return;
+        }
+        isBGMPlaying = true;
+        mainAudioSource.clip = backgroundMusic;
+        mainAudioSource.loop = true;
+        mainAudioSource.Play();
+    }
+
+    public void StopBackgroundMusic()
+    {
+        isBGMPlaying = false;
+        mainAudioSource.Stop();
     }
     
     public void MuggerSpawn()
