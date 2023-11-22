@@ -342,6 +342,7 @@ public class UIManager : MonoBehaviour
     // Updates the various UI elements on the upgrade screen
     public void UpdateUpgradeScreenUI()
     {
+        Debug.Log("Updating upgrade screen UI");
         // update the cash text
         cashText.text = "Cash: $" + UpgradeManager.instance.GetCash().ToString("D3");
         // update the upgrade text

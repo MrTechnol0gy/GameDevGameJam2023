@@ -20,6 +20,7 @@ public class SaveLoadManager : MonoBehaviour
     }
 
     private string savePath;
+    private string defaultSavePath = Application.dataPath + "/DefaultSaveData/defaultSave.json";
 
     private void Awake()
     {
@@ -38,8 +39,8 @@ public class SaveLoadManager : MonoBehaviour
     }
     private void Start()
     {
-        savePath = Application.persistentDataPath + "/save.json";
-        // Debug.Log("Application.persistentDataPath: " + Application.persistentDataPath);
+        savePath = Application.persistentDataPath + "/save.json";        
+        Debug.Log(savePath);
         // Load the game
         LoadGame();
     }
@@ -48,8 +49,8 @@ public class SaveLoadManager : MonoBehaviour
     {
         SaveData data = new SaveData
         {
-            cash = upgradeManager.GetCash(),
-            upgrades = new List<UpgradeManager.Upgrade>(upgradeManager.upgrades)
+            cash = UpgradeManager.instance.GetCash(),
+            upgrades = new List<UpgradeManager.Upgrade>(UpgradeManager.instance.upgrades)
         };
 
         string json = JsonUtility.ToJson(data);
@@ -63,8 +64,8 @@ public class SaveLoadManager : MonoBehaviour
             string json = File.ReadAllText(savePath);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
-            upgradeManager.cash = data.cash;
-            upgradeManager.upgrades = data.upgrades.ToArray();
+            UpgradeManager.instance.cash = data.cash;
+            UpgradeManager.instance.upgrades = data.upgrades.ToArray();
         }
         else
         {
@@ -83,13 +84,25 @@ public class SaveLoadManager : MonoBehaviour
         }
         else
         {
+            PlayerPrefs.DeleteAll();
+            RestoreDefaults();
             Debug.Log("No save file found to delete.");
         }
     }
 
     private void RestoreDefaults()
     {
-        // Restores the default values of the game
-        Debug.Log("Restoring defaults...NOT IMPLEMENTED YET");
+        if (File.Exists(defaultSavePath))
+        {
+            string json = File.ReadAllText(defaultSavePath);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            UpgradeManager.instance.cash = data.cash;
+            UpgradeManager.instance.upgrades = data.upgrades.ToArray();
+        }
+        else
+        {
+            Debug.LogWarning("No default save data found.");
+        }
     }
 }
