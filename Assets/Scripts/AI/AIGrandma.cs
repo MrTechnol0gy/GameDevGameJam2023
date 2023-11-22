@@ -22,6 +22,9 @@ public class AIGrandma : MonoBehaviour
     private int shopsVisited = 0;               // counter for amount of shops grandma has visited
     private GameObject grandmaGO;
     private int preachedToCount = 0;            // counter for amount of times grandma has been preached to
+    public int maxPreachedTo = 3;               // max amount of times grandma can be preached to
+    public int timeBetweenPreach = 5;           // how long between each time grandma can be preached to
+    private bool canBePreachedTo = true;        // bool to check if grandma can be preached to
     public Outline outlineScript;
     // Event for when Grandma finishes at each shop
     public delegate void GrandmaFinishedShopping();
@@ -32,7 +35,8 @@ public class AIGrandma : MonoBehaviour
         stopped,        // stopped = 0
         shopping,       // shopping = 1
         goinghome,      // goinghome = 2
-        mugged          // mugged = 3
+        mugged,          // mugged = 3
+        preachedto      // preachedto = 4
     }
     private States _currentState = States.stopped;       //sets the starting enemy state
     public States currentState 
@@ -77,6 +81,11 @@ public class AIGrandma : MonoBehaviour
                 purse.SetActive(false);
                 AudioManager.instance.GrandmaMugged();
                 break;
+            case States.preachedto:
+                Debug.Log("I am " + currentState);
+                timer = 0;
+                preachedToCount++;
+                break;
         }
     }
     // OnUpdatedState is for things that occur during the state (main actions)
@@ -85,6 +94,7 @@ public class AIGrandma : MonoBehaviour
         switch (state) 
         {
             case States.stopped:
+                AdvancePreachMechanics();
                 if (isMugged)
                 {
                     currentState = States.mugged;
@@ -95,6 +105,7 @@ public class AIGrandma : MonoBehaviour
                 }
                 break;
             case States.shopping:
+                AdvancePreachMechanics();
                 if (isMugged)
                 {
                     currentState = States.mugged;
@@ -108,7 +119,7 @@ public class AIGrandma : MonoBehaviour
                     AudioManager.instance.GrandmaShops();
                     currentState = States.stopped;
                 }
-                else if (shopsVisited == shopList)
+                else if (shopsVisited == shopList || shopsVisited > shopList)
                 {
                     currentState = States.goinghome;
                 }
@@ -132,9 +143,24 @@ public class AIGrandma : MonoBehaviour
                 }
                 break;
             case States.mugged:
+                AdvancePreachMechanics();
                 if (!isMugged)
                 {
                     currentState = States.stopped;
+                }
+                break;
+            case States.preachedto:
+                if (isMugged)
+                {
+                    currentState = States.mugged;
+                }
+                else if (shopsVisited == shopList || shopsVisited > shopList)
+                {
+                    currentState = States.goinghome;
+                }
+                else
+                {
+                   currentState = States.stopped;
                 }
                 break;
         }
@@ -155,13 +181,15 @@ public class AIGrandma : MonoBehaviour
                 grandma.isStopped = false;
                 purse.SetActive(true);
                 break;
+            case States.preachedto:
+                ConsequencesOfPreachToMe();
+                break;
         }
     }
     
     void Start()
     {
-        shopList = LevelManager.instance.GetLevel().requiredVisits;
-        
+        shopList = LevelManager.instance.GetLevel().requiredVisits;        
         escapePoint = GameObject.FindWithTag("EscapePoint");
         grandmaGO = gameObject;
         if (UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").isUnlocked)
@@ -232,8 +260,36 @@ public class AIGrandma : MonoBehaviour
 
     public void PreachToMe()
     {
-        Debug.Log("Grandma preached to");
-        preachedToCount++;
+        if (canBePreachedTo)
+        {
+            canBePreachedTo = false;
+            currentState = States.preachedto;
+        }
+    }
+
+    private void AdvancePreachMechanics()
+    {
+        if (!canBePreachedTo)
+        {
+            timer += Time.deltaTime;
+            if (timer >= timeBetweenPreach)
+            {
+                canBePreachedTo = true;
+            }
+        }
+    }
+
+    private void ConsequencesOfPreachToMe()
+    {
+        if (preachedToCount >= maxPreachedTo)
+        {
+            Debug.Log("shopList is " + shopList);
+            // Reduces the amount of shops Grandma can visit by 1
+            shopList -= 1;
+            Debug.Log("shopList is now " + shopList);
+            // Resets the preachedToCount
+            preachedToCount = 0;
+        }        
     }
 
     public float DistanceCheck(GameObject checker, GameObject target)

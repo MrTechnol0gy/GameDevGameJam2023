@@ -20,7 +20,7 @@ public class AICultist : AIVillainBase
     private GameObject closestCivilian;         // placeholder for the closest civilian 
     private Vector3 destination;                // placeholder for any destination the agent needs
     private float timer;                        // placeholder for timer
-    // event for when the mugger is clicked
+    // event for when the agent is clicked
     public delegate void CultistClicked();
     public static event CultistClicked cultistClicked;
     public enum States
@@ -143,6 +143,7 @@ public class AICultist : AIVillainBase
                     agent.SetDestination(target.transform.position);
                     if (GetDistanceToTarget(thisGameObject, target) < 3)
                     {
+                        Debug.Log("preaching to Grandma");
                         // let the target know they've been preached to
                         target.GetComponent<AIGrandma>().PreachToMe();
                         currentState = States.preached;

@@ -117,10 +117,10 @@ public class AISniper : MonoBehaviour
         List<GameObject> enemies = AIManager.instance.GetEnemies();
         if (enemies == null)
         {
-            Debug.Log("Enemies is null.");
+            // Debug.Log("Enemies is null.");
             return - 1;
         }
-        Debug.Log("Enemy list length: " + enemies.Count);
+        // Debug.Log("Enemy list length: " + enemies.Count);
         if (enemies.Count > 0)
         {
             // Pick a random enemy from the list
@@ -138,7 +138,7 @@ public class AISniper : MonoBehaviour
         // Calculate the adjusted shot delay
         float adjustedShotDelay = shotDelay * (1.0f - reduction);
         shotDelay = adjustedShotDelay;
-        Debug.Log("Adjusted shot delay: " + shotDelay);
+        // Debug.Log("Adjusted shot delay: " + shotDelay);
     }
     public float DistanceCheck(GameObject checker, GameObject target)
     {

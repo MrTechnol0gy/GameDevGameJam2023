@@ -87,11 +87,11 @@ public class AIGuard : MonoBehaviour
                 if (timer <= 0f)
                 {
                     timer = searchTimer;
-                    Debug.Log("Checking for enemies.");
+                    // Debug.Log("Checking for enemies.");
                     spottedEnemy = CheckForEnemies();
                     if (spottedEnemy != null)
                     {
-                        Debug.Log("Spotted enemy." + spottedEnemy.name);
+                        // Debug.Log("Spotted enemy." + spottedEnemy.name);
                         currentState = States.spotted;
                     }
                 } 
@@ -158,17 +158,17 @@ public class AIGuard : MonoBehaviour
     {
         // Get the list of enemies from the AIManager script
         List<GameObject> enemies = AIManager.instance.GetEnemies();
-        Debug.Log("Enemy list length: " + enemies.Count);
+        // Debug.Log("Enemy list length: " + enemies.Count);
         // Loop through the list of enemies
         foreach (GameObject enemy in enemies)
         {
             // Debug distance
-            Debug.Log("Distance to enemy: " + DistanceCheck(guardGO, enemy));
+            // Debug.Log("Distance to enemy: " + DistanceCheck(guardGO, enemy));
             // Check if the enemy is within the search radius
             if (DistanceCheck(guardGO, enemy) <= searchRadius)
             {
                 
-                Debug.Log("Enemy spotted!");
+                // Debug.Log("Enemy spotted!");
                 return enemy;
             }
         }

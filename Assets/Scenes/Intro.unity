@@ -1598,7 +1598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f61d73bbccbf4b5498a303565cab8214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalShopsToVisitForVictory: 1
+  totalShopsToVisitForVictory: 10
 --- !u!4 &206615480
 Transform:
   m_ObjectHideFlags: 0
