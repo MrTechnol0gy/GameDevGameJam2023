@@ -93,9 +93,6 @@ public class LevelLoadManager : MonoBehaviour
 
     public void LoadVictoryLevel()
     {
-        // Tells the UI Manager to change UIs
-        UIManager.instance.ContinueFromResults();
-
         // Loads the victory scene
         SceneManager.LoadScene("Victory");
 

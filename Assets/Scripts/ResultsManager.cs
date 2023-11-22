@@ -33,7 +33,6 @@ public class ResultsManager : MonoBehaviour
     {
         // Subscribe to the scene change event
         LevelLoadManager.GameStarted += StartTracking;
-        LevelLoadManager.GameEnded += VictoryCheck;
         // Subscribe to villain clicked events
         AIMugger.muggerClicked += MuggerClicked;
         AICultist.cultistClicked += CultistClicked;
@@ -57,7 +56,7 @@ public class ResultsManager : MonoBehaviour
         clownsClicked = 0;
     }
 
-    private void VictoryCheck()
+    public void VictoryCheck()
     {
         if (totalShopsVisited >= GameManager.instance.totalShopsToVisitForVictory)
         {

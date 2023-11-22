@@ -75,7 +75,7 @@ public class AIManager : MonoBehaviour
     private void Update()
     {
         // If the current scene is not the Main Menu...
-        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("MainMenu"))
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("MainMenu") && SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Victory"))
         {  
             // Increment the timer
             timer += Time.deltaTime;
@@ -91,7 +91,7 @@ public class AIManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // If the current scene is not the main menu scene...
-        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("MainMenu"))
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("MainMenu") && SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Victory"))
         {
             // Find the floor object by tag
             mallFloor = GameObject.FindGameObjectWithTag("Floor");

@@ -110,6 +110,8 @@ public class UIManager : MonoBehaviour
                 Time.timeScale = 0f;
                 // update the UI elements
                 UpdateResultsScreenUI();
+                // Check if the player is victorious
+                ResultsManager.instance.VictoryCheck();
                 break;
             case States.upgrades:
                 //Debug.Log("I am upgrades.");   
@@ -131,6 +133,7 @@ public class UIManager : MonoBehaviour
         switch (state) 
         {
             case States.mainmenu:
+                //Debug.Log("I am the main menu."); 
                 mainMenuUI.SetActive(false);
                 // Sets the previous state variable to this state
                 previousState = States.mainmenu;
@@ -198,7 +201,6 @@ public class UIManager : MonoBehaviour
         // Sets all UI to false
         SetAllUIToFalse();
         LevelLoadManager.GameStarted += GameplayUI;
-        LevelLoadManager.GameEnded += MainMenu;
         UpgradeManager.OnUpgradeButtonClickedEvent += UpdateUpgradeScreenUI;
         AIMugger.muggerClicked += UpdateGameplayUI;
         AICultist.cultistClicked += UpdateGameplayUI;
@@ -321,6 +323,8 @@ public class UIManager : MonoBehaviour
     {
         if (ResultsManager.instance.GetPlayerVictory() == true)
         {
+            currentState = States.victorious;
+            
             // Load the victory level
             LevelLoadManager.instance.LoadVictoryLevel();
         }
