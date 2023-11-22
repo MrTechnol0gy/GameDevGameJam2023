@@ -34,6 +34,7 @@ public class UpgradeManager : MonoBehaviour
     public int muggerValue = 10;
     public int cultistValue = 20;
     public int clownValue = 30;
+    public int balloonValue = 1;
     [Header("Upgrades")]
     // Array of upgrades
     public Upgrade[] upgrades;
@@ -61,6 +62,7 @@ public class UpgradeManager : MonoBehaviour
         AIMugger.muggerClicked += OnMuggerClicked;
         AICultist.cultistClicked += OnCultistClicked;
         AIBalloonClown.clownClicked += OnClownClicked;
+        SphereSpawner.sphereClicked += OnSphereClicked;
     }
 
     // listener for the MuggerClicked event
@@ -84,6 +86,14 @@ public class UpgradeManager : MonoBehaviour
         // add to the cash
         cash += clownValue;
     }
+
+    private void OnSphereClicked()
+    {
+        Debug.Log("Sphere Clicked");
+        // add to the cash
+        cash += balloonValue;
+    }
+    
     // listener for the upgrade button
     // buttonName is the name of the button that was clicked
     // must be manually set when you assign the button in the inspector

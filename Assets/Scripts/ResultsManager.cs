@@ -12,6 +12,7 @@ public class ResultsManager : MonoBehaviour
     private int muggersClicked = 0;
     private int cultistsClicked = 0;
     private int clownsClicked = 0;
+    private int balloonsClicked = 0;
     private bool villainVictory = false;
     private bool playerVictory = false;
 
@@ -37,6 +38,7 @@ public class ResultsManager : MonoBehaviour
         AIMugger.muggerClicked += MuggerClicked;
         AICultist.cultistClicked += CultistClicked;
         AIBalloonClown.clownClicked += ClownClicked;
+        SphereSpawner.sphereClicked += SphereClicked;
 
         // Subscribe to the villain victory conditions
         AIMugger.muggerEscaped += VillainVictory;
@@ -51,6 +53,7 @@ public class ResultsManager : MonoBehaviour
         muggersClicked = 0;
         cultistsClicked = 0;
         clownsClicked = 0;
+        balloonsClicked = 0;
     }
 
     public void VictoryCheck()
@@ -84,6 +87,12 @@ public class ResultsManager : MonoBehaviour
         clownsClicked++;
     }
 
+    private void SphereClicked()
+    {
+        // Debug.Log("Sphere clicked!");
+        balloonsClicked++;
+    }
+
     private void VillainVictory()
     {
         // Debug.Log("Villain victory!");
@@ -103,6 +112,11 @@ public class ResultsManager : MonoBehaviour
     public int GetClownAmountClicked()
     {
         return clownsClicked;
+    }
+
+    public int GetBalloonAmountClicked()
+    {
+        return balloonsClicked;
     }
 
     public bool GetVillainVictory()

@@ -16,6 +16,8 @@ public class AIBalloonClown : AIVillainBase
     private float timer;                        // placeholder for timer
     // Placeholder for the list of clown stops in the scene
     private List<GameObject> clownStops = new List<GameObject>();
+    private SphereSpawner sphereSpawner;
+    private bool spheresRemaining = true;
     // event for when the agent is clicked
     public delegate void ClownClicked();
     public static event ClownClicked clownClicked;
@@ -128,6 +130,8 @@ public class AIBalloonClown : AIVillainBase
         OnStartedState(currentState);
         // Get all the clown stops in the scene
         clownStops.AddRange(GameObject.FindGameObjectsWithTag("ClownStop"));
+        // Get the SphereSpawner component from a child
+        sphereSpawner = GetComponentInChildren<SphereSpawner>();
     }
 
     protected override void Update()
@@ -148,6 +152,20 @@ public class AIBalloonClown : AIVillainBase
     {
         if (!isLaunched)
         {
+            // This if statement checks for remaining balloons and prevents the clown from being launched
+            if (spheresRemaining)
+            {   
+                // If there are spheres remaining
+                if (sphereSpawner.GetNumberOfSpheres() > 0)
+                {
+                    sphereSpawner.DestroyRandomSphere();
+                    if (sphereSpawner.GetNumberOfSpheres() == 0)
+                    {
+                        spheresRemaining = false;
+                    }
+                    return;
+                }                
+            }
             // Get the index of this Clown in the list of enemies
             int index = AIManager.instance.GetEnemies().IndexOf(thisGameObject);
             
@@ -175,7 +193,7 @@ public class AIBalloonClown : AIVillainBase
             // Play sfx
             AudioManager.instance.ClownCaught();
 
-            // Let the UpgradeManager know the Mugger has been clicked
+            // Let the UpgradeManager know the agent has been clicked
             clownClicked?.Invoke();
         }        
     }    

@@ -3009,7 +3009,8 @@ MonoBehaviour:
   cash: 0
   muggerValue: 10
   cultistValue: 5
-  clownValue: 30
+  clownValue: 15
+  balloonValue: 1
   upgrades:
   - name: GrandmaSpritzer
     cost: 25
@@ -4322,7 +4323,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 553532312}
         m_TargetAssemblyTypeName: LevelLoadManager, Assembly-CSharp
-        m_MethodName: LoadMainMenu
+        m_MethodName: LoadMainMenuFromVictory
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

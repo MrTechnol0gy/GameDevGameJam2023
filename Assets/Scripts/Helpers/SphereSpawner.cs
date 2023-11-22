@@ -9,6 +9,8 @@ public class SphereSpawner : MonoBehaviour
     public float sphereScale = 1f;      // 1 is a good number.
     // List of the spheres
     private List<GameObject> spheres = new List<GameObject>();
+    public delegate void SphereClicked();
+    public static event SphereClicked sphereClicked;
 
     void Start()
     {
@@ -47,6 +49,12 @@ public class SphereSpawner : MonoBehaviour
         return spheres;
     }
 
+    // Return the number of spheres
+    public int GetNumberOfSpheres()
+    {
+        return spheres.Count;
+    }
+
     // Pick a random sphere from the list and destroy it
     public void DestroyRandomSphere()
     {
@@ -56,6 +64,8 @@ public class SphereSpawner : MonoBehaviour
             GameObject sphere = spheres[randomIndex];
             spheres.RemoveAt(randomIndex);
             Destroy(sphere);
+            AudioManager.instance.BalloonPop();
+            sphereClicked?.Invoke();
         }
     }
 }

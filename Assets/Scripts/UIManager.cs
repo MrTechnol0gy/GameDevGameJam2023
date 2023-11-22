@@ -220,6 +220,7 @@ public class UIManager : MonoBehaviour
         AIMugger.muggerClicked += UpdateGameplayUI;
         AICultist.cultistClicked += UpdateGameplayUI;
         AIBalloonClown.clownClicked += UpdateGameplayUI;
+        SphereSpawner.sphereClicked += UpdateGameplayUI;
     }
     void Start()
     {
@@ -392,7 +393,9 @@ public class UIManager : MonoBehaviour
         cultistsClickedText.text = "$" + totalCultistValue.ToString("D3");
         int clownsClicked = ResultsManager.instance.GetClownAmountClicked();
         int clownValue = UpgradeManager.instance.clownValue;
-        int totalClownValue = clownsClicked * clownValue;
+        int balloonsClicked = ResultsManager.instance.GetBalloonAmountClicked();
+        int balloonValue = UpgradeManager.instance.balloonValue;
+        int totalClownValue = (clownsClicked * clownValue) + (balloonsClicked * balloonValue);
         clownsClickedText.text = "$" + totalClownValue.ToString("D3");
         // other villain scores go here
         int finalResultsValue = totalMuggerValue + totalCultistValue + totalClownValue;

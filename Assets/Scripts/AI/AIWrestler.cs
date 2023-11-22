@@ -132,6 +132,13 @@ public class AIWrestler : MonoBehaviour
         // Choose a random enemy from the list
         int randomEnemy = Random.Range(0, enemies.Count);
 
+        // if the enemy is a Balloon Clown, find a new enemy
+        if (enemies[randomEnemy].GetComponent<AIBalloonClown>() != null)
+        {
+            FindEnemyToPursue();
+            return;
+        }
+        
         // Set the target enemy to the random enemy
         targetEnemy = enemies[randomEnemy];
     }

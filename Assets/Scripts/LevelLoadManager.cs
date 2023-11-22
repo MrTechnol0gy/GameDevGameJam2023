@@ -46,6 +46,13 @@ public class LevelLoadManager : MonoBehaviour
         GameEnded?.Invoke();
     }
 
+    public void LoadMainMenuFromVictory()
+    {
+        UIManager.instance.MainMenu();
+        // Loads the main menu scene
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void LoadMainMenuFromIntro()
     {
         UIManager.instance.MainMenu();
@@ -100,13 +107,14 @@ public class LevelLoadManager : MonoBehaviour
 
     public void LoadVictoryLevel()
     {
+        // Reset player progress
+        ResultsManager.instance.SetProgress(0);
+
         // Loads the victory scene
         SceneManager.LoadScene("Victory");
 
         // Invoke the event
         GameEnded?.Invoke();
 
-        // Reset player progress
-        ResultsManager.instance.SetProgress(0);
     }
 }
