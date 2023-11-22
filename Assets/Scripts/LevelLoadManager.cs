@@ -105,5 +105,8 @@ public class LevelLoadManager : MonoBehaviour
 
         // Invoke the event
         GameEnded?.Invoke();
+
+        // Reset player progress
+        ResultsManager.instance.SetProgress(0);
     }
 }

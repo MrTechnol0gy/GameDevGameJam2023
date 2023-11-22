@@ -5052,7 +5052,7 @@ MonoBehaviour:
   stoppedTime: 3
   searchTime: 12
   searchTimer: 3
-  launchForce: 10
+  launchForce: 20
   spinForce: 100
 --- !u!195 &8924146530344591170
 NavMeshAgent:

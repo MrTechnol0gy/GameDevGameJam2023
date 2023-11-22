@@ -556,4 +556,4 @@ MonoBehaviour:
   stoppedTime: 3
   searchTime: 12
   searchRadius: 30
-  searchTimer: 3
+  searchTimer: 5
