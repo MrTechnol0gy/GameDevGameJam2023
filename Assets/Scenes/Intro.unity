@@ -1598,7 +1598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f61d73bbccbf4b5498a303565cab8214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalShopsToVisitForVictory: 10
+  totalShopsToVisitForVictory: 100
 --- !u!4 &206615480
 Transform:
   m_ObjectHideFlags: 0
@@ -3608,11 +3608,11 @@ MonoBehaviour:
   muggerSpawnIntervalCeiling: 12
   cultistPrefab: {fileID: 7034959676482038231, guid: 9383c0b750bf22e41ba98d4260000587,
     type: 3}
-  cultistSpawnIntervalFloor: 10
+  cultistSpawnIntervalFloor: 6
   cultistSpawnIntervalCeiling: 15
   clownPrefab: {fileID: 2311623920022094256, guid: c6f9aaf7fcd24da48bb0be983fc3663f,
     type: 3}
-  clownSpawnIntervalFloor: 6
+  clownSpawnIntervalFloor: 10
   clownSpawnIntervalCeiling: 12
   grandmaPrefab: {fileID: 3292484367672847996, guid: 588391179bea86b4fb0c6e93a8b0f45a,
     type: 3}
