@@ -75,13 +75,15 @@ public class LevelManager : MonoBehaviour
         return null;
     }
 
+    // Returns the amount of cameras needed for the current level
+    // TODO: This should be moved to the MainCamera script
     public int DetermineCameraAmount()
     {
         Level level = GetLevel();
         switch (level.size)
         {
             case LevelSize.Small:
-                return 1;
+                return 2;
             case LevelSize.Medium:
                 return 2;
             case LevelSize.Large:

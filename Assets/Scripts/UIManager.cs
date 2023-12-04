@@ -21,7 +21,10 @@ public class UIManager : MonoBehaviour
     public GameObject resultsScreenUI;
     // reference to the upgrades UI
     public GameObject upgradesUI;
+    // reference to the victory UI
     public GameObject victoryUI;
+    // reference to the how to play UI
+    public GameObject howToPlayUI;
     // Header
     [Header("Upgrade Screen UI Elements")]
     public TMPro.TextMeshProUGUI cashText;
@@ -56,7 +59,8 @@ public class UIManager : MonoBehaviour
         results = 4,
         upgrades = 5,
         victorious = 6,
-        intro = 7
+        intro = 7, 
+        howtoplay = 8
     }
     private States _currentState = States.intro;       //sets the starting state    
     public States currentState 
@@ -135,6 +139,10 @@ public class UIManager : MonoBehaviour
             case States.intro:
                 //Debug.Log("I am the intro.");
                 break;
+            case States.howtoplay:
+                //Debug.Log("I am the how to play screen.");
+                howToPlayUI.SetActive(true);
+                break;
         }
     }
 
@@ -196,6 +204,10 @@ public class UIManager : MonoBehaviour
             case States.intro:
                 //Debug.Log("I am the intro.");
                 break;
+            case States.howtoplay:
+                //Debug.Log("I am the how to play screen.");
+                howToPlayUI.SetActive(false);
+                break;
         }
     }
 
@@ -238,6 +250,7 @@ public class UIManager : MonoBehaviour
         resultsScreenUI.SetActive(false);
         upgradesUI.SetActive(false);
         victoryUI.SetActive(false);
+        howToPlayUI.SetActive(false);
     }
 
     void Update()
@@ -298,6 +311,12 @@ public class UIManager : MonoBehaviour
         currentState = States.upgrades;
     }
 
+    // This method activates the how to play UI
+    public void HowToPlay()
+    {
+        currentState = States.howtoplay;
+    }
+
     // This method returns to the state prior to the current state
     // Functions as a back/return button for the UI
     public void Return()
@@ -332,6 +351,10 @@ public class UIManager : MonoBehaviour
         else if (previousState == States.upgrades)
         {
             currentState = States.upgrades;
+        }
+        else if (previousState == States.howtoplay)
+        {
+            currentState = States.howtoplay;
         }
     }
 
