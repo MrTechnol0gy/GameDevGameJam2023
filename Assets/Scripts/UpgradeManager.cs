@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UpgradeManager : MonoBehaviour
 {    
@@ -16,8 +17,9 @@ public class UpgradeManager : MonoBehaviour
         public int amount;
         public bool isUnlocked = false;
         public string description;
+        public Sprite image;
 
-        public Upgrade(string name, int cost, int maxUpgrade, int amount, bool isUnlocked, string description)
+        public Upgrade(string name, int cost, int maxUpgrade, int amount, bool isUnlocked, string description, Sprite image)
         {
             this.name = name;
             this.cost = cost;
@@ -25,6 +27,7 @@ public class UpgradeManager : MonoBehaviour
             this.amount = amount;
             this.isUnlocked = isUnlocked;
             this.description = description;
+            this.image = image;
         }
     }
     [Header("Cash")]
@@ -124,7 +127,8 @@ public class UpgradeManager : MonoBehaviour
             // Debug.Log("Checking upgrade " + upgrade.name);
             if (upgrade.name == name)
             {
-                // Debug.Log("Found upgrade " + upgrade.name);
+                Debug.Log("Found upgrade " + upgrade.name);
+                Debug.Log("Upgrade image is " + upgrade.image);
                 return upgrade;
             }
         }

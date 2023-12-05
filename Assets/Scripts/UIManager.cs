@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
@@ -23,26 +25,29 @@ public class UIManager : MonoBehaviour
     public GameObject upgradesUI;
     // reference to the victory UI
     public GameObject victoryUI;
-    // reference to the how to play UI
-    public GameObject howToPlayUI;
+    // reference to the level select UI
+    public GameObject levelSelectUI;
     // Header
     [Header("Upgrade Screen UI Elements")]
-    public TMPro.TextMeshProUGUI cashText;
-    public TMPro.TextMeshProUGUI progressText;
-    public TMPro.TextMeshProUGUI informationText;
-    public TMPro.TextMeshProUGUI grandmaSpritzerText;
-    public TMPro.TextMeshProUGUI securityGuardText;
-    public TMPro.TextMeshProUGUI rooftopSniperText;
-    public TMPro.TextMeshProUGUI rocketPoweredScooterText;
-    public TMPro.TextMeshProUGUI localWrestlerText;
+    public TextMeshProUGUI cashText;
+    public TextMeshProUGUI progressText;
+    public TextMeshProUGUI informationText;
+    public TextMeshProUGUI grandmaSpritzerText;
+    public TextMeshProUGUI securityGuardText;
+    public TextMeshProUGUI rooftopSniperText;
+    public TextMeshProUGUI rocketPoweredScooterText;
+    public TextMeshProUGUI localWrestlerText;
+    public Image upgradeImage;
+
+
     [Header("Gameplay UI Elements")]
-    public TMPro.TextMeshProUGUI cashTextGameplay;
+    public TextMeshProUGUI cashTextGameplay;
     [Header("Results Screen UI Elements")]
-    public TMPro.TextMeshProUGUI muggersClickedText;
-    public TMPro.TextMeshProUGUI cultistsClickedText;
-    public TMPro.TextMeshProUGUI clownsClickedText;
-    public TMPro.TextMeshProUGUI finalResultsText;
-    public TMPro.TextMeshProUGUI progressTrackerText;
+    public TextMeshProUGUI muggersClickedText;
+    public TextMeshProUGUI cultistsClickedText;
+    public TextMeshProUGUI clownsClickedText;
+    public TextMeshProUGUI finalResultsText;
+    public TextMeshProUGUI progressTrackerText;
     public GameObject victory;
     public GameObject defeat;
     // float for the time the state started
@@ -60,7 +65,7 @@ public class UIManager : MonoBehaviour
         upgrades = 5,
         victorious = 6,
         intro = 7, 
-        howtoplay = 8
+        levelselect = 8
     }
     private States _currentState = States.intro;       //sets the starting state    
     public States currentState 
@@ -139,9 +144,9 @@ public class UIManager : MonoBehaviour
             case States.intro:
                 //Debug.Log("I am the intro.");
                 break;
-            case States.howtoplay:
+            case States.levelselect:
                 //Debug.Log("I am the how to play screen.");
-                howToPlayUI.SetActive(true);
+                levelSelectUI.SetActive(true);
                 break;
         }
     }
@@ -204,9 +209,9 @@ public class UIManager : MonoBehaviour
             case States.intro:
                 //Debug.Log("I am the intro.");
                 break;
-            case States.howtoplay:
+            case States.levelselect:
                 //Debug.Log("I am the how to play screen.");
-                howToPlayUI.SetActive(false);
+                levelSelectUI.SetActive(false);
                 break;
         }
     }
@@ -250,7 +255,7 @@ public class UIManager : MonoBehaviour
         resultsScreenUI.SetActive(false);
         upgradesUI.SetActive(false);
         victoryUI.SetActive(false);
-        howToPlayUI.SetActive(false);
+        levelSelectUI.SetActive(false);
     }
 
     void Update()
@@ -312,9 +317,9 @@ public class UIManager : MonoBehaviour
     }
 
     // This method activates the how to play UI
-    public void HowToPlay()
+    public void LevelSelectUI()
     {
-        currentState = States.howtoplay;
+        currentState = States.levelselect;
     }
 
     // This method returns to the state prior to the current state
@@ -352,9 +357,9 @@ public class UIManager : MonoBehaviour
         {
             currentState = States.upgrades;
         }
-        else if (previousState == States.howtoplay)
+        else if (previousState == States.levelselect)
         {
-            currentState = States.howtoplay;
+            currentState = States.levelselect;
         }
     }
 
@@ -387,21 +392,21 @@ public class UIManager : MonoBehaviour
     {
         Debug.Log("Updating upgrade screen UI");
         // update the cash text
-        cashText.text = "Cash: $" + UpgradeManager.instance.GetCash().ToString("D3");
+        cashText.text = "Cash: $" + UpgradeManager.instance.GetCash().ToString("D2");
         // update the progress text
-        progressText.text = "Presents To Party: " + ResultsManager.instance.GetProgress().ToString("D1") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D1");
+        // progressText.text = "Presents To Party: " + ResultsManager.instance.GetProgress().ToString("D1") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D1");
         // update the upgrade text
-        grandmaSpritzerText.text = "$" + UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").cost.ToString("D3");
-        securityGuardText.text = "$" + UpgradeManager.instance.GetUpgrade("SecurityGuard").cost.ToString("D3");
-        rooftopSniperText.text = "$" + UpgradeManager.instance.GetUpgrade("RooftopSniper").cost.ToString("D3");
-        rocketPoweredScooterText.text = "$" + UpgradeManager.instance.GetUpgrade("RocketPoweredScooter").cost.ToString("D3");
-        localWrestlerText.text = "$" + UpgradeManager.instance.GetUpgrade("LocalWrestler").cost.ToString("D3");
+        grandmaSpritzerText.text = "$" + UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").cost.ToString("D2");
+        securityGuardText.text = "$" + UpgradeManager.instance.GetUpgrade("SecurityGuard").cost.ToString("D2");
+        rooftopSniperText.text = "$" + UpgradeManager.instance.GetUpgrade("RooftopSniper").cost.ToString("D2");
+        rocketPoweredScooterText.text = "$" + UpgradeManager.instance.GetUpgrade("RocketPoweredScooter").cost.ToString("D2");
+        localWrestlerText.text = "$" + UpgradeManager.instance.GetUpgrade("LocalWrestler").cost.ToString("D2");
     }
 
     public void UpdateGameplayUI()
     {
         // update the cash text
-        cashTextGameplay.text = "Cash: $" + UpgradeManager.instance.cash.ToString("D3");
+        cashTextGameplay.text = "Cash: $" + UpgradeManager.instance.cash.ToString("D2");
     }
 
     public void UpdateResultsScreenUI()
@@ -409,23 +414,23 @@ public class UIManager : MonoBehaviour
         int muggersClicked = ResultsManager.instance.GetMuggerAmountClicked();
         int muggerValue = UpgradeManager.instance.muggerValue;
         int totalMuggerValue = muggersClicked * muggerValue;
-        muggersClickedText.text = "$" + totalMuggerValue.ToString("D3");
+        muggersClickedText.text = "$" + totalMuggerValue.ToString("D2");
         int cultistsClicked = ResultsManager.instance.GetCultistAmountClicked();
         int cultistValue = UpgradeManager.instance.cultistValue;
         int totalCultistValue = cultistsClicked * cultistValue;
-        cultistsClickedText.text = "$" + totalCultistValue.ToString("D3");
+        cultistsClickedText.text = "$" + totalCultistValue.ToString("D2");
         int clownsClicked = ResultsManager.instance.GetClownAmountClicked();
         int clownValue = UpgradeManager.instance.clownValue;
         int balloonsClicked = ResultsManager.instance.GetBalloonAmountClicked();
         int balloonValue = UpgradeManager.instance.balloonValue;
         int totalClownValue = (clownsClicked * clownValue) + (balloonsClicked * balloonValue);
-        clownsClickedText.text = "$" + totalClownValue.ToString("D3");
+        clownsClickedText.text = "$" + totalClownValue.ToString("D2");
         // other villain scores go here
         int finalResultsValue = totalMuggerValue + totalCultistValue + totalClownValue;
-        finalResultsText.text = "$" + finalResultsValue.ToString("D3");
+        finalResultsText.text = "$" + finalResultsValue.ToString("D2");
         // update the total progress tracker
         int totalProgressTracker = ResultsManager.instance.GetProgress();
-        progressTrackerText.text = totalProgressTracker.ToString("D3") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D3");
+        progressTrackerText.text = totalProgressTracker.ToString("D2") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D3");
         // If the player is victorious, display the victory screen
         if (ResultsManager.instance.GetVillainVictory() == true)
         {
@@ -441,7 +446,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // This method is called when the player hovers over an upgrade button, and displays the upgrade's description
+    // This method is called when the player hovers over an upgrade button, and displays the upgrade's description and image
     void UpgradeHover(string elementName)
     {
         UpgradeManager.Upgrade upgrade = UpgradeManager.instance.GetUpgrade(elementName);
@@ -452,6 +457,15 @@ public class UIManager : MonoBehaviour
         else
         {
             informationText.text = "No description available.";
+        }
+        if (upgrade.image != null)
+        {
+            upgradeImage.sprite = upgrade.image;
+        }
+        else
+        {
+            Debug.Log("No image available.");
+            upgradeImage.sprite = null;
         }
     }
 
