@@ -18,7 +18,9 @@ public class SaveLoadManager : MonoBehaviour
         public int cash;
         public int progress;
         public List<UpgradeManager.Upgrade> upgrades;
+        public List<LevelManager.Level> levels;
     }
+
 
     private string savePath;
     private string defaultSavePath = Application.dataPath + "/DefaultSaveData/defaultSave.json";
@@ -37,6 +39,10 @@ public class SaveLoadManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+
+        // Subscribe to events
+        UIManager.OnSaveGameEvent += SaveGame;
+        UIManager.OnLoadGameEvent += LoadGame;
     }
     private void Start()
     {
@@ -52,7 +58,8 @@ public class SaveLoadManager : MonoBehaviour
         {
             cash = UpgradeManager.instance.GetCash(),
             progress = ResultsManager.instance.GetProgress(),
-            upgrades = new List<UpgradeManager.Upgrade>(UpgradeManager.instance.upgrades)
+            upgrades = new List<UpgradeManager.Upgrade>(UpgradeManager.instance.upgrades),
+            levels = new List<LevelManager.Level>(LevelManager.instance.levels)
         };
 
         string json = JsonUtility.ToJson(data);
@@ -69,10 +76,12 @@ public class SaveLoadManager : MonoBehaviour
             UpgradeManager.instance.cash = data.cash;
             ResultsManager.instance.SetProgress(data.progress);
             UpgradeManager.instance.upgrades = data.upgrades.ToArray();
+            LevelManager.instance.levels = data.levels.ToArray();
         }
         else
         {
             Debug.LogWarning("No save data found.");
+            RestoreDefaults();
         }
     }
 
@@ -103,6 +112,7 @@ public class SaveLoadManager : MonoBehaviour
             UpgradeManager.instance.cash = data.cash;
             ResultsManager.instance.SetProgress(data.progress);
             UpgradeManager.instance.upgrades = data.upgrades.ToArray();
+            LevelManager.instance.levels = data.levels.ToArray();
         }
         else
         {

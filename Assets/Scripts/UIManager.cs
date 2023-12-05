@@ -37,8 +37,14 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI rooftopSniperText;
     public TextMeshProUGUI rocketPoweredScooterText;
     public TextMeshProUGUI localWrestlerText;
+    public TextMeshProUGUI biggerMallText;
     public Image upgradeImage;
-
+    [Header("Level Select UI Elements")]
+    public string selectedLevel;
+    public Button startButton;
+    public Button convenienceStore;
+    public Button mediumMall;
+    public Button largeMall;
 
     [Header("Gameplay UI Elements")]
     public TextMeshProUGUI cashTextGameplay;
@@ -50,6 +56,11 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI progressTrackerText;
     public GameObject victory;
     public GameObject defeat;
+
+    public delegate void SaveGame();
+    public static event SaveGame OnSaveGameEvent;
+    public delegate void LoadGame();
+    public static event LoadGame OnLoadGameEvent;
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -95,7 +106,13 @@ public class UIManager : MonoBehaviour
         {
             case States.mainmenu:
                 //Debug.Log("I am the main menu."); 
-                mainMenuUI.SetActive(true);   
+                mainMenuUI.SetActive(true);  
+                
+                // Announce that the game should be saved (for the default save)
+                // OnSaveGameEvent?.Invoke();
+
+                // announce that the game should be loaded
+                OnLoadGameEvent?.Invoke();
                 // Tell the audio manager to start playing the BGM
                 AudioManager.instance.PlayBackgroundMusic();
                 break;
@@ -147,6 +164,10 @@ public class UIManager : MonoBehaviour
             case States.levelselect:
                 //Debug.Log("I am the how to play screen.");
                 levelSelectUI.SetActive(true);
+                // Set the start button to not be interactable
+                startButton.interactable = false;
+                // Unlock levels
+                UnlockLevels();
                 break;
         }
     }
@@ -191,14 +212,16 @@ public class UIManager : MonoBehaviour
                 previousState = States.results; 
                 // resume time
                 Time.timeScale = 1f;
-                // Save the game
-                SaveLoadManager.instance.SaveGame();
+                // Announce that the game should be saved
+                OnSaveGameEvent?.Invoke();
                 break;
             case States.upgrades:
                 //Debug.Log("I am upgrades.");
                 upgradesUI.SetActive(false); 
                 // Sets the previous state variable to this state
-                previousState = States.upgrades;    
+                previousState = States.upgrades;  
+                // Announce that the game should be saved
+                OnSaveGameEvent?.Invoke();
                 // Stop listening for the event
                 HoverHandler.OnHoverEnter -= UpgradeHover;         
                 break;
@@ -212,6 +235,8 @@ public class UIManager : MonoBehaviour
             case States.levelselect:
                 //Debug.Log("I am the how to play screen.");
                 levelSelectUI.SetActive(false);
+                // Sets the previous state variable to this state
+                previousState = States.levelselect;
                 break;
         }
     }
@@ -359,7 +384,8 @@ public class UIManager : MonoBehaviour
         }
         else if (previousState == States.levelselect)
         {
-            currentState = States.levelselect;
+            // Returns to the main menu rather than the level select screen, as the level select screen is accessed from the main menu
+            currentState = States.mainmenu;
         }
     }
 
@@ -384,23 +410,37 @@ public class UIManager : MonoBehaviour
 
     public void ContinueFromUpgrades()
     {
+        currentState = States.levelselect;
+    }
+
+    public void ContinueFromLevelSelect()
+    {
         currentState = States.gameplay;
     }
 
     // Updates the various UI elements on the upgrade screen
     public void UpdateUpgradeScreenUI()
     {
-        Debug.Log("Updating upgrade screen UI");
+        // Debug.Log("Updating upgrade screen UI");
         // update the cash text
         cashText.text = "Cash: $" + UpgradeManager.instance.GetCash().ToString("D2");
+
         // update the progress text
         // progressText.text = "Presents To Party: " + ResultsManager.instance.GetProgress().ToString("D1") + "/" + GameManager.instance.totalShopsToVisitForVictory.ToString("D1");
+        
         // update the upgrade text
         grandmaSpritzerText.text = "$" + UpgradeManager.instance.GetUpgrade("GrandmaSpritzer").cost.ToString("D2");
         securityGuardText.text = "$" + UpgradeManager.instance.GetUpgrade("SecurityGuard").cost.ToString("D2");
         rooftopSniperText.text = "$" + UpgradeManager.instance.GetUpgrade("RooftopSniper").cost.ToString("D2");
         rocketPoweredScooterText.text = "$" + UpgradeManager.instance.GetUpgrade("RocketPoweredScooter").cost.ToString("D2");
         localWrestlerText.text = "$" + UpgradeManager.instance.GetUpgrade("LocalWrestler").cost.ToString("D2");
+        biggerMallText.text = "$" + UpgradeManager.instance.GetUpgrade("BiggerMall").cost.ToString("D2");    
+    }
+
+    // Updates the various UI elements on the level select screen
+    public void UpdateLevelSelectScreenUI()
+    {
+        UnlockLevels();
     }
 
     public void UpdateGameplayUI()
@@ -468,6 +508,48 @@ public class UIManager : MonoBehaviour
             upgradeImage.sprite = null;
         }
     }
+
+    void UnlockLevels()
+    {
+        // Loop through the levels array
+        foreach (LevelManager.Level level in LevelManager.instance.levels)
+        {
+            // If the level is unlocked
+            if (level.isUnlocked)
+            {
+                // If the level is the convenience store
+                if (level.name == "Convenience Store")
+                {
+                    // Set the button to be interactable
+                    convenienceStore.interactable = true;
+                }
+                // If the level is the medium mall
+                else if (level.name == "Medium Mall")
+                {
+                    // Set the button to be interactable
+                    mediumMall.interactable = true;
+                }
+                // If the level is the large mall
+                else if (level.name == "Large Mall")
+                {
+                    // Set the button to be interactable
+                    largeMall.interactable = true;
+                }
+            }
+        }
+    }
+
+    // Called when a level button is clicked
+    public void LevelButtonClicked(string levelName)
+    {
+        // Set the selected level to the level name
+        selectedLevel = levelName;
+        // Set the start button to be interactable
+        startButton.interactable = true;
+    }
+
+    // Return the levelName
+    public string GetSelectedLevel() => selectedLevel;
 
     // Returns the current state
     public States GetCurrentState() => currentState;

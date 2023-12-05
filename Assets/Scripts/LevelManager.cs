@@ -93,6 +93,22 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void UnlockNextLevel()
+    {
+        // Loop through the levels array
+        foreach (Level level in levels)
+        {
+            // If the level is not unlocked
+            if (!level.isUnlocked)
+            {
+                // Unlock the level
+                level.isUnlocked = true;
+                // Break out of the loop
+                break;
+            }
+        }
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Get the current scenes name

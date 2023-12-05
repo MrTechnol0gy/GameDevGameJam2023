@@ -33,11 +33,13 @@ public class UpgradeManager : MonoBehaviour
     [Header("Cash")]
     // int to store cash amount
     public int cash = 0;
+    
     [Header("EnemyValues")]
     public int muggerValue = 10;
     public int cultistValue = 20;
     public int clownValue = 30;
     public int balloonValue = 1;
+
     [Header("Upgrades")]
     // Array of upgrades
     public Upgrade[] upgrades;
@@ -71,28 +73,32 @@ public class UpgradeManager : MonoBehaviour
     // listener for the MuggerClicked event
     private void OnMuggerClicked()
     {
-        Debug.Log("Mugger Clicked");
+        // Debug.Log("Mugger Clicked");
+
         // add to the cash
         cash += muggerValue;
     }
 
     private void OnCultistClicked()
     {
-        Debug.Log("Cultist Clicked");
+        // Debug.Log("Cultist Clicked");
+
         // add to the cash
         cash += cultistValue;
     }
 
     private void OnClownClicked()
     {
-        Debug.Log("Clown Clicked");
+        // Debug.Log("Clown Clicked");
+
         // add to the cash
         cash += clownValue;
     }
 
     private void OnSphereClicked()
     {
-        Debug.Log("Sphere Clicked");
+        // Debug.Log("Sphere Clicked");
+
         // add to the cash
         cash += balloonValue;
     }
@@ -103,18 +109,23 @@ public class UpgradeManager : MonoBehaviour
     public void OnUpgradeButtonClicked(string buttonName)
     {
         // Find the corresponding upgrade
-        Upgrade upgrade = GetUpgrade(buttonName);
+        Upgrade upgrade = GetUpgrade(buttonName);        
 
         if (upgrade.amount < upgrade.maxUpgrade && cash >= upgrade.cost)
         {
             cash -= upgrade.cost;
             upgrade.amount++;
             upgrade.cost *= 2;
-            Debug.Log("Upgraded " + upgrade.name + " to " + upgrade.amount);
+            // If the upgrade is the bigger mall, unlock the next level via the LevelManager
+            if (upgrade.name == "BiggerMall")
+            {
+                LevelManager.instance.UnlockNextLevel();
+            }
+            // Debug.Log("Upgraded " + upgrade.name + " to " + upgrade.amount);
             if (upgrade.isUnlocked == false)
             {
                 upgrade.isUnlocked = true;
-                Debug.Log("Unlocked " + upgrade.name);
+                // Debug.Log("Unlocked " + upgrade.name);
             }
             // announce that the upgrade click was successful
             OnUpgradeButtonClickedEvent();
@@ -127,8 +138,8 @@ public class UpgradeManager : MonoBehaviour
             // Debug.Log("Checking upgrade " + upgrade.name);
             if (upgrade.name == name)
             {
-                Debug.Log("Found upgrade " + upgrade.name);
-                Debug.Log("Upgrade image is " + upgrade.image);
+                // Debug.Log("Found upgrade " + upgrade.name);
+                // Debug.Log("Upgrade image is " + upgrade.image);
                 return upgrade;
             }
         }

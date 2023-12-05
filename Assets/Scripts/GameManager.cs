@@ -29,12 +29,6 @@ public class GameManager : MonoBehaviour
         // Make sure this object persists between scenes
         DontDestroyOnLoad(gameObject);
     }
-    private void Start()
-    {
-        // Load the game data
-        SaveLoadManager.instance.LoadGame();
-        Debug.Log("Game loaded");
-    }
     
     // Quits the application
     public void QuitGame()

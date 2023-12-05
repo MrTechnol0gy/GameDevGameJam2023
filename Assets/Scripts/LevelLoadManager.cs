@@ -60,47 +60,15 @@ public class LevelLoadManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void StartLargeMall()
-    {
+    public void LoadLevel()
+    {        
+        string selectedLevel = UIManager.instance.GetSelectedLevel();
         // Tells the UI Manager to change UIs
-        UIManager.instance.ContinueFromUpgrades();
-
+        UIManager.instance.ContinueFromLevelSelect();
         // Loads the gameplay scene
-        SceneManager.LoadScene("Large Mall");
-        
+        SceneManager.LoadScene(selectedLevel);
         // Save the game
         SaveLoadManager.instance.SaveGame();
-
-        // Invoke the event
-        GameStarted?.Invoke();
-    }
-
-    public void StartMediumMall()
-    {
-        // Tells the UI Manager to change UIs
-        UIManager.instance.ContinueFromUpgrades();
-
-        // Loads the gameplay scene
-        SceneManager.LoadScene("Medium Mall");
-        
-        // Save the game
-        SaveLoadManager.instance.SaveGame();
-
-        // Invoke the event
-        GameStarted?.Invoke();
-    }
-
-    public void StartConvenienceStore()
-    {
-        // Tells the UI Manager to change UIs
-        UIManager.instance.ContinueFromUpgrades();
-        
-        // Loads the gameplay scene
-        SceneManager.LoadScene("Convenience Store");
-        
-        // Save the game
-        SaveLoadManager.instance.SaveGame();
-
         // Invoke the event
         GameStarted?.Invoke();
     }
