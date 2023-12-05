@@ -292,6 +292,8 @@ MonoBehaviour:
   stoppedTime: 3
   shopTime: 12
   isMugged: 0
+  maxPreachedTo: 3
+  timeBetweenPreach: 5
   outlineScript: {fileID: 1791118833256527590}
 --- !u!114 &1791118833256527590
 MonoBehaviour:

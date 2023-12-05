@@ -113,6 +113,7 @@ public class UIManager : MonoBehaviour
 
                 // announce that the game should be loaded
                 OnLoadGameEvent?.Invoke();
+
                 // Tell the audio manager to start playing the BGM
                 AudioManager.instance.PlayBackgroundMusic();
                 break;
@@ -498,9 +499,10 @@ public class UIManager : MonoBehaviour
         {
             informationText.text = "No description available.";
         }
-        if (upgrade.image != null)
+        if (upgrade.imageName != null)
         {
-            upgradeImage.sprite = upgrade.image;
+            Debug.Log("Image is " + upgrade.imageName + ".");
+            upgradeImage.sprite = Resources.Load<Sprite>("UpgradeImages/" + upgrade.imageName);
         }
         else
         {

@@ -3701,7 +3701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3842,45 +3842,45 @@ MonoBehaviour:
     isUnlocked: 0
     description: Applies a highlight to Grandma so she can be seen through obstacles
       and other characters.
-    image: {fileID: 21300000, guid: bf7535963ecf95f429c0a02476edf23a, type: 3}
+    imageName: DGGSpritzer
   - name: SecurityGuard
-    cost: 35
+    cost: 50
     maxUpgrade: 3
     amount: 0
     isUnlocked: 0
     description: Creates Security Guards who will wander the mall and highlight nearby
       Villains for a time.
-    image: {fileID: 21300000, guid: 2ca13977d252f584088ef5f9ebb4afd2, type: 3}
+    imageName: DGGSecGuard
   - name: RooftopSniper
-    cost: 100
+    cost: 200
     maxUpgrade: 3
     amount: 0
     isUnlocked: 0
     description: Creates a Rooftop Sniper who will periodically remove a random Villain
       from the mall.
-    image: {fileID: 21300000, guid: f92172f939a11e648a873b1b7443ec05, type: 3}
+    imageName: DGGSniper
   - name: LocalWrestler
-    cost: 200
+    cost: 300
     maxUpgrade: 3
     amount: 0
     isUnlocked: 0
     description: Periodically releases a Local Wrestler into the mall who will find
       and remove the nearest Villain from the mall.
-    image: {fileID: 21300000, guid: 095cfb9cf0d5fac4c9e38e50767ea3ad, type: 3}
+    imageName: DGGWrestler
   - name: BiggerMall
-    cost: 100
+    cost: 250
     maxUpgrade: 2
     amount: 0
     isUnlocked: 0
     description: Unlocks larger malls with more enemies and larger rewards.
-    image: {fileID: 21300000, guid: f488170e4bfb2fc418edaf248ab2b6d0, type: 3}
+    imageName: DGGLrgMall
   - name: RocketPoweredScooter
     cost: 50
     maxUpgrade: 5
     amount: 0
     isUnlocked: 0
     description: Provides Grandma with an incrementally larger speed boost.
-    image: {fileID: 21300000, guid: 2059a0d26ef4cf645acb8dab1017763b, type: 3}
+    imageName: DGGRocketScooter
 --- !u!4 &475176320
 Transform:
   m_ObjectHideFlags: 0

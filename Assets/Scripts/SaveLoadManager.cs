@@ -48,8 +48,6 @@ public class SaveLoadManager : MonoBehaviour
     {
         savePath = Application.persistentDataPath + "/save.json";        
         Debug.Log(savePath);
-        // Load the game
-        LoadGame();
     }
 
     public void SaveGame()
@@ -81,7 +79,8 @@ public class SaveLoadManager : MonoBehaviour
         else
         {
             Debug.LogWarning("No save data found.");
-            RestoreDefaults();
+            // Start a new save file
+            SaveGame();
         }
     }
 

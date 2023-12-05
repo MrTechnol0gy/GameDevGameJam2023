@@ -17,9 +17,9 @@ public class UpgradeManager : MonoBehaviour
         public int amount;
         public bool isUnlocked = false;
         public string description;
-        public Sprite image;
+        public string imageName; // name of the image file, since Instance ID won't maintain between sessions
 
-        public Upgrade(string name, int cost, int maxUpgrade, int amount, bool isUnlocked, string description, Sprite image)
+        public Upgrade(string name, int cost, int maxUpgrade, int amount, bool isUnlocked, string description, string imageName)
         {
             this.name = name;
             this.cost = cost;
@@ -27,7 +27,7 @@ public class UpgradeManager : MonoBehaviour
             this.amount = amount;
             this.isUnlocked = isUnlocked;
             this.description = description;
-            this.image = image;
+            this.imageName = imageName;
         }
     }
     [Header("Cash")]
