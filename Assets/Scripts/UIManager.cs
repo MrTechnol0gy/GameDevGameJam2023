@@ -27,6 +27,8 @@ public class UIManager : MonoBehaviour
     public GameObject victoryUI;
     // reference to the level select UI
     public GameObject levelSelectUI;
+    // reference to the instructions UI
+    public GameObject instructionsUI;
     // Header
     [Header("Upgrade Screen UI Elements")]
     public TextMeshProUGUI cashText;
@@ -59,6 +61,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI progressTrackerText;
     public GameObject victory;
     public GameObject defeat;
+    private bool firstTimePlayer = true;
 
     public delegate void SaveGame();
     public static event SaveGame OnSaveGameEvent;
@@ -80,7 +83,8 @@ public class UIManager : MonoBehaviour
         upgrades = 5,
         victorious = 6,
         intro = 7, 
-        levelselect = 8
+        levelselect = 8,
+        tutorial = 9
     }
     private States _currentState = States.intro;       //sets the starting state    
     public States currentState 
@@ -174,6 +178,12 @@ public class UIManager : MonoBehaviour
                 // Unlock levels
                 UnlockLevels();
                 break;
+            case States.tutorial:
+                //Debug.Log("I am the tutorial.");
+                instructionsUI.SetActive(true);
+                // flip the first time player bool
+                firstTimePlayer = !firstTimePlayer;
+                break;
         }
     }
 
@@ -243,6 +253,10 @@ public class UIManager : MonoBehaviour
                 // Sets the previous state variable to this state
                 previousState = States.levelselect;
                 break;
+            case States.tutorial:
+                //Debug.Log("I am the tutorial.");
+                instructionsUI.SetActive(false);
+                break;
         }
     }
 
@@ -287,6 +301,7 @@ public class UIManager : MonoBehaviour
         upgradesUI.SetActive(false);
         victoryUI.SetActive(false);
         levelSelectUI.SetActive(false);
+        instructionsUI.SetActive(false);
     }
 
     void Update()
@@ -344,7 +359,14 @@ public class UIManager : MonoBehaviour
     // This method activates the upgrades UI
     public void Upgrades()
     {
-        currentState = States.upgrades;
+        if (firstTimePlayer == true)
+        {
+            currentState = States.tutorial;
+        }
+        else
+        {
+            currentState = States.upgrades;
+        }
     }
 
     // This method activates the how to play UI
@@ -587,6 +609,12 @@ public class UIManager : MonoBehaviour
     public void OpenWebsite()
     {
         Application.OpenURL(myWebsiteURL);
+    }
+
+    // Resets the first time player bool
+    public void ResetFirstTimePlayer()
+    {
+        firstTimePlayer = true;
     }
 
     // Return the levelName
