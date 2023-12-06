@@ -263,6 +263,7 @@ public class UIManager : MonoBehaviour
         // Sets all UI to false
         SetAllUIToFalse();
         LevelLoadManager.GameStarted += GameplayUI;
+        LevelLoadManager.GameEnded += MainMenu;
         UpgradeManager.OnUpgradeButtonClickedEvent += UpdateUpgradeScreenUI;
         AIMugger.muggerClicked += UpdateGameplayUI;
         AICultist.cultistClicked += UpdateGameplayUI;
@@ -407,9 +408,6 @@ public class UIManager : MonoBehaviour
         else 
         {
             currentState = States.mainmenu;
-
-            // Load the main menu level
-            SceneManager.LoadScene("MainMenu");
         }
     }
 

@@ -36,14 +36,13 @@ public class LevelLoadManager : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
         // Tell the UI Manager to change UIs
         UIManager.instance.ContinueFromResults();
 
         // Loads the main menu scene
         SceneManager.LoadScene("MainMenu");
-
-        // Invoke the event
-        GameEnded?.Invoke();
     }
 
     public void LoadMainMenuFromVictory()
@@ -84,5 +83,14 @@ public class LevelLoadManager : MonoBehaviour
         // Invoke the event
         GameEnded?.Invoke();
 
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Unsubscribe from the event to prevent multiple calls
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        // Invoke the event
+        GameEnded?.Invoke();
     }
 }
