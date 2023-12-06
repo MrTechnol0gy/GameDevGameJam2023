@@ -2451,8 +2451,11 @@ MonoBehaviour:
   mediumMall: {fileID: 200064751}
   largeMall: {fileID: 104574184}
   cashTextGameplay: {fileID: 26855087}
+  muggerImage: {fileID: 2000579870}
   muggersClickedText: {fileID: 137745045}
+  cultistImage: {fileID: 1939098057}
   cultistsClickedText: {fileID: 1772276437}
+  clownImage: {fileID: 1485836916}
   clownsClickedText: {fileID: 1534601878}
   finalResultsText: {fileID: 1756199113}
   progressTrackerText: {fileID: 1324945742}

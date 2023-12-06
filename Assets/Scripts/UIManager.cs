@@ -49,8 +49,11 @@ public class UIManager : MonoBehaviour
     [Header("Gameplay UI Elements")]
     public TextMeshProUGUI cashTextGameplay;
     [Header("Results Screen UI Elements")]
+    public Image muggerImage;
     public TextMeshProUGUI muggersClickedText;
+    public Image cultistImage;
     public TextMeshProUGUI cultistsClickedText;
+    public Image clownImage;
     public TextMeshProUGUI clownsClickedText;
     public TextMeshProUGUI finalResultsText;
     public TextMeshProUGUI progressTrackerText;
@@ -452,6 +455,37 @@ public class UIManager : MonoBehaviour
 
     public void UpdateResultsScreenUI()
     {
+        // update the UI elements
+
+        // Check the level and remove the appropriate UI elements
+        if (SceneManager.GetActiveScene().name == "Convenience Store")
+        {
+            muggerImage.gameObject.SetActive(true);
+            muggersClickedText.gameObject.SetActive(true);
+            cultistImage.gameObject.SetActive(false);
+            cultistsClickedText.gameObject.SetActive(false);
+            clownImage.gameObject.SetActive(false);
+            clownsClickedText.gameObject.SetActive(false);
+        }
+        else if (SceneManager.GetActiveScene().name == "Medium Mall")
+        {
+            muggerImage.gameObject.SetActive(true);
+            muggersClickedText.gameObject.SetActive(true);
+            cultistImage.gameObject.SetActive(true);
+            cultistsClickedText.gameObject.SetActive(true);
+            clownImage.gameObject.SetActive(false);
+            clownsClickedText.gameObject.SetActive(false);
+        }
+        else if (SceneManager.GetActiveScene().name == "Large Mall")
+        {
+            muggerImage.gameObject.SetActive(true);
+            muggersClickedText.gameObject.SetActive(true);
+            cultistImage.gameObject.SetActive(true);
+            cultistsClickedText.gameObject.SetActive(true);
+            clownImage.gameObject.SetActive(true);
+            clownsClickedText.gameObject.SetActive(true);
+        }
+
         int muggersClicked = ResultsManager.instance.GetMuggerAmountClicked();
         int muggerValue = UpgradeManager.instance.muggerValue;
         int totalMuggerValue = muggersClicked * muggerValue;
