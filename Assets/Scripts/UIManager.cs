@@ -64,6 +64,7 @@ public class UIManager : MonoBehaviour
     public static event SaveGame OnSaveGameEvent;
     public delegate void LoadGame();
     public static event LoadGame OnLoadGameEvent;
+    private string myWebsiteURL = "https://www.MrTechnol0gy.com/";
     // float for the time the state started
     private float TimeStartedState;
     // reference to the previous state
@@ -582,6 +583,12 @@ public class UIManager : MonoBehaviour
         selectedLevel = levelName;
         // Set the start button to be interactable
         startButton.interactable = true;
+    }
+
+    // Opens my website
+    public void OpenWebsite()
+    {
+        Application.OpenURL(myWebsiteURL);
     }
 
     // Return the levelName
