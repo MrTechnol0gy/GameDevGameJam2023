@@ -7,6 +7,13 @@ TagManager:
   - EscapePoint
   - Mugger
   - Civilian
+  - ShopStop
+  - Floor
+  - Managers
+  - SecurityCamera
+  - Cultist
+  - BalloonClown
+  - ClownStop
   layers:
   - Default
   - TransparentFX

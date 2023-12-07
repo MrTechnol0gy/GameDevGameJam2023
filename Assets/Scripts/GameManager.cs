@@ -1,45 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager get;
-    public List<Vector3> shopPositions = new List<Vector3>();
-
-    void Awake()
+    public static GameManager instance;
+    
+    // Game Victory Conditions
+    [Header("Game Victory Conditions")]
+    public int totalShopsToVisitForVictory = 100;
+    
+    private void Awake()
     {
-        get = this;
-    }
-
-    void Start()
-    {
-        CollectshopPositionsRecursive(transform);
-    }
-
-    void CollectshopPositionsRecursive(Transform parent)
-    {
-        int childCount = parent.childCount;
-        for (int i = 0; i < childCount; i++)
+        // Check if there is an instance of the GameManager
+        if (instance == null)
         {
-            Transform child = parent.GetChild(i);
-            shopPositions.Add(child.position);
-
-            // Recursively collect positions of child's children
-            CollectshopPositionsRecursive(child);
+            // If not, set the instance to this
+            instance = this;
         }
-    }
-
-    void PrintshopPositions()
-    {
-        foreach (Vector3 position in shopPositions)
+        else
         {
-            Debug.Log("Child position: " + position);
+            // If there is, destroy this object
+            Destroy(gameObject);
         }
+        
+        // Make sure this object persists between scenes
+        DontDestroyOnLoad(gameObject);
     }
-
-    public List<Vector3> GetShopPositions()
+    
+    // Quits the application
+    public void QuitGame()
     {
-        return shopPositions;
+        Application.Quit();
     }
 }
