@@ -4941,7 +4941,7 @@ MonoBehaviour:
   cash: 0
   muggerValue: 10
   cultistValue: 5
-  clownValue: 15
+  clownValue: 3
   balloonValue: 1
   upgrades:
   - name: GrandmaSpritzer
@@ -4961,7 +4961,7 @@ MonoBehaviour:
       Villains for a time.
     imageName: DGGSecGuard
   - name: RooftopSniper
-    cost: 200
+    cost: 150
     maxUpgrade: 3
     amount: 0
     isUnlocked: 0
@@ -4969,7 +4969,7 @@ MonoBehaviour:
       from the mall.
     imageName: DGGSniper
   - name: LocalWrestler
-    cost: 300
+    cost: 200
     maxUpgrade: 3
     amount: 0
     isUnlocked: 0
@@ -4977,7 +4977,7 @@ MonoBehaviour:
       and remove the nearest Villain from the mall.
     imageName: DGGWrestler
   - name: BiggerMall
-    cost: 250
+    cost: 125
     maxUpgrade: 2
     amount: 0
     isUnlocked: 0
